@@ -1,0 +1,20 @@
+{
+  "name": "zabo-sdk-js",
+  "version": "0.1.0",
+  "description": "Zabo Javascript SDK",
+  "main": "index.js",
+  "directories": {},
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zabo-api/zabo-sdk-js.git"
+  },
+  "author": "Zabo",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/zabo-api/zabo-sdk-js/issues"
+  },
+  "homepage": "https://github.com/zabo-api/zabo-sdk-js/zabo-js-sdk#readme",
+  "dependencies": {},
+  "devDependencies": {}
+}
