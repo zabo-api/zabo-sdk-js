@@ -57,9 +57,10 @@
       }).then(() => {
         Zabo.accounts.getAccount().then(account => {
           printOutput(account)
-
             document.querySelector('.methods').style.display = 'block'
             bindOtherMethods()
+        }).catch(e => {
+          console.log("Not connected yet")
         })
       })
       // Bind "connect" button
