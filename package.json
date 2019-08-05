@@ -24,6 +24,7 @@
     "coinbase",
     "binance",
     "bitfinex",
+    "kraken",
     "api"
   ],
   "author": "Zabo",
