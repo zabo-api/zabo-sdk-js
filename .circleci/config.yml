@@ -1,0 +1,181 @@
+version: 2
+jobs:
+  checkout:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:10.15
+      
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-repo-
+
+      - checkout
+
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/repo
+
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:10.15
+
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      
+      - run:
+          name: "Install tools"
+          command: sudo apt-get update && sudo apt-get install -y python-dev moreutils
+
+      - run:
+          name: "Get AWS"
+          command: |
+            if [ -d "awsdir" ]; then
+                echo "AWS Exists"
+            else
+              mkdir awsdir
+              curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awsdir/awscli-bundle.zip"
+              cd awsdir && unzip awscli-bundle.zip
+            fi
+
+      - run: npm ci
+
+      - save_cache:
+          paths:
+            - ~/repo/node_modules
+            - ~/repo/awsdir
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+  
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:10.15
+
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+
+      - restore_cache:
+          keys:
+            - v1-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+
+      - run: npm run test
+  
+  compile:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:10.15
+
+    steps:
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+
+      - restore_cache:
+          keys:
+            - v1-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-{{ .Environment.CIRCLE_BRANCH }}-
+      
+      - run:
+          name: "Compile static files"
+          command: npm run build
+
+      - save_cache:
+          paths:
+            - ~/repo/dist
+          key: v1-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+  
+  deploy:
+    docker:
+      - image: circleci/node:10.15
+
+    working_directory: ~/repo
+
+    steps:
+      - run:
+          name: "Check if we want to deploy"
+          command: |
+          if [[ "$CIRCLE_BRANCH" =~ ^(develop|stage|master|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "Continuing with build"
+          else
+            circleci step halt
+          fi
+
+      - run:
+          name: "Install tools"
+          command: sudo apt-get update && sudo apt-get install -y jq python-dev moreutils
+
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      
+      - restore_cache:
+          keys:
+            - v1-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+
+      - run:
+          name: "Get version"
+          command: |
+            echo 'export THISVER="$(npm run getv | tail -1)"' >> $BASH_ENV
+      
+      - run:
+          name: "Install AWS"
+          command: |
+            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            unzip awscli-bundle.zip
+            sudo ./awsdir/awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+      
+      - run:
+          name: "Deploy code"
+          command: |
+            cd dist
+            if [ $CIRCLE_BRANCH == 'develop' ]; then
+              aws s3 sync ./ "s3://cdn.zabo.com/develop/$THISVER"
+            elif [[ "$CIRCLE_BRANCH" =~ ^(master|stage|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+              if [ $CIRCLE_BRANCH == 'master' ]; then
+                aws s3 sync ./ "s3://cdn.zabo.com/$THISVER"
+                aws s3 sync ./ "s3://cdn.zabo.com/latest"
+              else
+                aws s3 sync ./ "s3://cdn.zabo.com/$CIRCLE_BRANCH"
+              fi
+            else
+              echo "no build"
+            fi
+
+workflows:
+  version: 2
+  build-compile-deploy:
+    jobs:
+      - checkout
+      - build:
+          requires:
+            - checkout
+      - test:
+          requires:
+            - build
+      - compile:
+          requires:
+            - build
+      - deploy:
+          context: zabo-cdn
+          requires:
+            - compile
