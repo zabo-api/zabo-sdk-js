@@ -37,17 +37,6 @@ jobs:
           name: "Install tools"
           command: sudo apt-get update && sudo apt-get install -y python-dev moreutils
 
-      - run:
-          name: "Get AWS"
-          command: |
-            if [ -d "awsdir" ]; then
-                echo "AWS Exists"
-            else
-              mkdir awsdir
-              curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awsdir/awscli-bundle.zip"
-              cd awsdir && unzip awscli-bundle.zip
-            fi
-
       - run: npm ci
 
       - save_cache:
@@ -122,7 +111,11 @@ jobs:
 
       - run:
           name: "Install tools"
-          command: sudo apt-get update && sudo apt-get install -y jq python-dev moreutils
+          command: |
+            sudo apt-get update && sudo apt-get install -y jq python-dev moreutils
+            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            unzip awscli-bundle.zip
+            sudo awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 
       - restore_cache:
           keys:
@@ -136,13 +129,6 @@ jobs:
           name: "Get version"
           command: |
             echo 'export THISVER="$(npm run getv | tail -1)"' >> $BASH_ENV
-      
-      - run:
-          name: "Install AWS"
-          command: |
-            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-            unzip awscli-bundle.zip
-            sudo ./awsdir/awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
       
       - run:
           name: "Deploy code"
