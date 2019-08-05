@@ -114,11 +114,11 @@ jobs:
       - run:
           name: "Check if we want to deploy"
           command: |
-          if [[ "$CIRCLE_BRANCH" =~ ^(develop|stage|master|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
-            echo "Continuing with build"
-          else
-            circleci step halt
-          fi
+            if [[ "$CIRCLE_BRANCH" =~ ^(develop|stage|master|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+              echo "Continuing with build"
+            else
+              circleci step halt
+            fi
 
       - run:
           name: "Install tools"
