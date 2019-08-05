@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Zabo Connect Playground</title>
+
+  <link href="https://zabo.com/docs/images/favicon.ico" rel="icon" type="image/ico">
+  <link rel="stylesheet" href="example.css" type="text/css" />
+</head>
+
+<body>
+  <section class="content-holder">
+    <header>
+      <img src="https://zabo.com/docs/images/logo.png" align="left" />
+      <h2>Zabo Connect Playground</h2>
+    </header>
+    <p>
+      This is a <strong>sandbox demo</strong> of Zabo Connect capabilities. Use this as a guideline to write your own
+      production-ready code.
+      <br />
+      Please visit the <a href="https://zabo.com/docs" target="_blank">Zabo SDK docs</a> for a full API documentation
+      and
+      more details.
+    </p>
+
+    <button id="connect" type="button" name="button">Connect</button>
+
+    <div class="methods">
+      <h4>Other SDK methods</h4>
+      <button id="getBalance" type="button" name="button">Crypto Balances</button>
+      <button id="getHistory" type="button" name="button">Account History</button>
+      <button id="getExchangeRates" type="button" name="button">Exchange Rates</button>
+    </div>
+
+    <h3>Output:</h3>
+
+    <div id="output"></div>
+  </section>
+
+  <script type="text/javascript" src="zabo.js"></script>
+  <script>window.Zabo || document.write('<script src="https://cdn.zabo.com/develop/0.2.0/zabo.js">\x3C/script>')</script>
+
+  <script type="text/javascript">
+    // Wait for document to fully load
+    document.onreadystatechange = () => {
+      if (document.readyState !== 'complete') { return }
+
+      const output = document.querySelector('#output')
+
+      // Initiate Zabo SDK, replace the `clientId` field with your app key generated at {LINK}.
+      Zabo.init({
+        clientId: '99E88F9AbF8d4eAf4D59f83c3DA47C97233D97FFBB08F47F4b8Ec29D28eaE193',
+        baseUrl: 'http://localhost:1325',
+        connectUrl: 'http://localhost:3010',
+        env: 'sandbox'
+      }).then(() => {
+        Zabo.accounts.getAccount().then(account => {
+          printOutput(account)
+
+            document.querySelector('.methods').style.display = 'block'
+            bindOtherMethods()
+        })
+      })
+      // Bind "connect" button
+      document.querySelector('#connect').addEventListener('click', ev => {
+        // Call default .connect() window. For an embedded iframe, please see https://zabo.com/docs#connect-an-account
+        Zabo.connect().onConnection(account => {
+          console.log('account connected:', account)
+          printOutput(account)
+
+          document.querySelector('.methods').style.display = 'block'
+          bindOtherMethods()
+        }).onError(error => {
+          console.error('account connection error:', error)
+          printOutput(error)
+        })
+      })
+    }
+
+    // Bind buttons for the other SDK example methods [Requires a successful Zabo.connect() first]
+    const bindOtherMethods = () => {
+      document.querySelector('#getBalance').addEventListener('click', ev => {
+        // Get ETH balance
+        Zabo.accounts.getBalances({tickers: ["ETH"]}).then(balances => {
+          printOutput(balances)
+        }).catch(error => {
+          /* User has not yet connected or doesn't have an ether wallet */
+          printOutput(error)
+        })
+      })
+
+      document.querySelector('#getHistory').addEventListener('click', ev => {
+        // Get account transactions history
+        Zabo.transactions.getTransactionHistory({ currencyTicker: 'ETH' }).then(history => {
+          printOutput(history)
+        }).catch(error => {
+          /* User has not yet connected */
+          printOutput(error)
+        })
+      })
+
+      document.querySelector('#getExchangeRates').addEventListener('click', ev => {
+        // Get crypto USD exchange rates
+        Zabo.currencies.getExchangeRates().then(rates => {
+          printOutput(rates)
+        }).catch(error => {
+          /* Something went wrong */
+          printOutput(error)
+        })
+      })
+    }
+
+    // Output print helper function
+    const printOutput = (obj) => {
+      output.innerHTML = `<pre>${JSON.stringify(obj, null, 2)}</pre>`
+    }
+  </script>
+</body>
+
+</html>

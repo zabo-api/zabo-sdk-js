@@ -1,20 +1,46 @@
 {
   "name": "zabo-sdk-js",
-  "version": "0.1.0",
-  "description": "Zabo Javascript SDK",
-  "main": "index.js",
-  "directories": {},
-  "scripts": {},
+  "version": "0.3.0",
+  "description": "Zabo SDK for JS",
+  "main": "src/index.js",
+  "scripts": {
+    "getv": "echo $npm_package_version",
+    "test": "./node_modules/mocha/bin/mocha test/*.spec.js",
+    "build": "npx webpack --config webpack.config.js --progress --colors",
+    "examples": "npm run build && ln -sf ../dist/zabo.js examples/zabo.js && live-server --host=localhost --port=8080 examples/"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zabo-api/zabo-sdk-js.git"
   },
+  "keywords": [
+    "zabo",
+    "cryptocurrency",
+    "wallets",
+    "bitcoin",
+    "ethereum",
+    "metamask",
+    "ledger",
+    "coinbase",
+    "binance",
+    "bitfinex",
+    "api"
+  ],
   "author": "Zabo",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/zabo-api/zabo-sdk-js/issues"
   },
-  "homepage": "https://github.com/zabo-api/zabo-sdk-js/zabo-js-sdk#readme",
-  "dependencies": {},
-  "devDependencies": {}
+  "homepage": "https://github.com/zabo-api/zabo-sdk-js#readme",
+  "devDependencies": {
+    "mocha": "^6.2.0",
+    "should": "^13.2.3",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.3"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "lodash": "^4.17.11",
+    "mocha": "^6.1.4"
+  }
 }
