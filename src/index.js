@@ -110,7 +110,15 @@ class ZaboSDK {
       this.setEndpointAliases()
       return this
     }
-    return
+
+    this.status = 'connecting'
+
+    return this.api.connect().then(appId => {
+      this.status = 'online'
+      return appId
+    }).catch(err => {
+      throw err
+    })
   }
 
   onConnection(fn) {

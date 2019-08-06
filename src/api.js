@@ -63,6 +63,7 @@ class API {
         }
 
         this.resources.applications.setId(appId)
+        return appId
       } catch (err) {
         throw err
       }
