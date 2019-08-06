@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * @description: Zabo API communication library
  */
 
@@ -34,29 +34,35 @@ class API {
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios
     this.axios.defaults.baseURL = this.baseUrl
+
     if (utils.isNode()) {
       this.axios.defaults.headers.common['X-Zabo-Key'] = this.apiKey
+      this.resources = resources(this, true)
     } else {
       this.interfaces = {}
       this.connectUrl = urls.CONNECT_BASE_URL
       this._setEventListeners()
+
       if (utils.getZaboSession()) {
-        this.resources = resources(this, false, '')
+        this.resources = resources(this, false)
       }
     }
   }
 
   async connect(interfaceType, attachTo) {
-    let appID
+    let appId
     let isNode = utils.isNode()
+
     if (isNode) {
       try {
         let res = await this.request('GET', '/applications/id')
-        appID = res.id
+        appId = res.id
 
-        if (!appID) {
+        if (!appId) {
           throw new SDKError(500, 'Something went wrong on our end. Please note the time and let us know')
         }
+
+        this.resources.applications.setId(appId)
       } catch (err) {
         throw err
       }
@@ -71,8 +77,6 @@ class API {
         this.connector = window.open(url, 'Zabo Connect', 'width=600,height=960,resizable,scrollbars=yes,status=1')
       }
     }
-
-    this.resources = resources(this, isNode, appID)
   }
 
   async request(method, path, data) {

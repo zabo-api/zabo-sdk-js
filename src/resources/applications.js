@@ -19,9 +19,13 @@
 const { SDKError } = require('../err')
 
 class Applications {
-  constructor(api, appId) {
+  constructor(api) {
     this.api = api
-    this.id = appId
+    this.id = null
+  }
+
+  setId (id) {
+    this.id = id
   }
 
   async getApplication() {

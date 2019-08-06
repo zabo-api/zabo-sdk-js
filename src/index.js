@@ -25,6 +25,7 @@ class ZaboSDK {
   constructor() {
     this.status = 'offline'
     this.api = null
+    this.autoConnect = true
   }
 
   async init(o) {
@@ -34,13 +35,19 @@ class ZaboSDK {
     if (!env || !acceptedEnvs.includes(env)) {
       return this.throwConnectError(400, '[Zabo] Please provide a valid env, should be \'sandbox\' or \'live\'. More details at: https://zabo.com/docs')
     }
+
     this.env = env
+
+    if (typeof o.autoConnect !== 'undefined') {
+      this.autoConnect = o.autoConnect
+    }
+
     let isNode = utils.isNode()
     if (isNode) {
       if (!o.apiKey || !o.secretKey || typeof o.apiKey !== 'string' || typeof o.secretKey !== 'string') {
         return this.throwConnectError(401, '[Zabo] Please provide a valid Zabo app API and Secret keys. More details at: https://zabo.com/docs#app-server-authentication')
       }
-      this.status = 'connecting'
+
       try {
         this.api = new API({
           baseUrl: o.baseUrl,
@@ -49,27 +56,35 @@ class ZaboSDK {
           env: this.env
         })
 
-        await this.api.connect()
-        this.status = 'online'
-
         this.setEndpointAliases()
 
-        return this.applications.id
+        if (this.autoConnect) {
+          this.status = 'connecting'
+          await this.api.connect()
+          this.status = 'online'
+          return this.applications.id
+        }
+
+        return
       } catch (err) {
         throw err
       }
     }
+
     if (!o.clientId || typeof o.clientId !== 'string') {
       throw new SDKError(400, '[Zabo] Please provide a valid Zabo app clientId. More details at: https://zabo.com/docs')
     }
+
     this.api = new API({
       baseUrl: o.baseUrl,
       connectUrl: o.connectUrl,
       clientId: o.clientId,
       env: this.env
     })
+
     if (this.api.resources) {
       this.setEndpointAliases()
+
       try {
         let account = await this.accounts.getAccount()
         console.log(account)

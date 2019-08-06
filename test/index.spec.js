@@ -9,12 +9,12 @@ describe('Zabo SDK Module', () => {
     sdk = require('../src/index.js')
   })
 
-  it('should init properly', function () {
-    sdk.init({
+  it('should init properly', async function () {
+    await sdk.init({
       apiKey: 'some-api-key',
       secretKey: 'some-secret-key',
       env: 'sandbox'
-    })
+    }).should.be.rejected()
 
     sdk.status.should.be.ok()
     sdk.status.should.equal('connecting')
@@ -25,24 +25,23 @@ describe('Zabo SDK Module', () => {
 
     await sdk.init({
       apiKey: 'some-api-key',
-      env: 'sandbox'
+      env: 'sandbox',
     }).should.be.rejected()
 
     sdk.status.should.equal('offline')
   })
-  /* Need a better way to test this in ci
+
   it('setEndpointAliases() should append API endpoints on the main SDK instance', async function () {
     this.timeout(1000)
 
     sdk.init({
       apiKey: 'some-api-key',
       secretKey: 'some-secret-key',
-      env: 'sandbox'
+      env: 'sandbox',
+      autoConnect: false
     })
 
     sdk.status.should.be.ok()
-
-    sdk.setEndpointAliases()
 
     // users
     sdk.users.should.have.property('create')
@@ -56,7 +55,6 @@ describe('Zabo SDK Module', () => {
     // wallet providers
     sdk.walletProviders.should.have.property('getWalletProviders')
     sdk.walletProviders.should.have.property('getWalletProvider')
-    sdk.walletProviders.should.have.property('getScopes')
 
     // currencies
     sdk.currencies.should.have.property('getCurrency')
@@ -67,5 +65,5 @@ describe('Zabo SDK Module', () => {
     sdk.transactions.should.have.property('getTransaction')
     sdk.transactions.should.have.property('getTransactionHistory')
   })
-  */
+
 })
