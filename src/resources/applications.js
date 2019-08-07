@@ -16,6 +16,7 @@
 
 'use strict'
 
+const uuidValidate = require('uuid-validate')
 const { SDKError } = require('../err')
 
 class Applications {
@@ -25,12 +26,16 @@ class Applications {
   }
 
   setId (id) {
+    if (!uuidValidate(id, 4)) {
+      throw new SDKError(400, '[Zabo] Application id must be a valid UUID version 4. See: https://zabo.com/docs#about-the-api')
+    }
+
     this.id = id
   }
 
   async getApplication() {
     if (!this.id) {
-      throw new SDKError(400, '[Zabo] SDK not properly initialized.')
+      throw new SDKError(401, '[Zabo] SDK not properly initialized.')
     }
     try {
       return this.api.request('GET', `/applications/${this.id}`)
