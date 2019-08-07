@@ -16,15 +16,15 @@ describe('Zabo SDK API', () => {
 
     sdk.api.should.be.ok()
     sdk.api.connect.should.be.a.Function()
+    sdk.api.resources.should.be.an.Object()
 
-    sdk.api.resources.should.have.property('users')
     sdk.api.resources.should.have.property('applications')
     sdk.api.resources.should.have.property('transactions')
     sdk.api.resources.should.have.property('walletProviders')
     sdk.api.resources.should.have.property('currencies')
   })
 
-  it('should build a proper request object', async function () {
+  it('should build a proper request object', function () {
     let request = sdk.api._buildRequest('GET', '/sessions')
 
     request.should.be.instanceof(Object)
@@ -36,7 +36,7 @@ describe('Zabo SDK API', () => {
     request.headers.should.have.property('X-Zabo-Timestamp')
   })
 
-  it('should embed a valid timestamp in the request headers', async function () {
+  it('should embed a valid timestamp in the request headers', function () {
     let request = sdk.api._buildRequest('GET', '/sessions')
 
     request.headers.should.have.property('X-Zabo-Timestamp')
@@ -46,7 +46,7 @@ describe('Zabo SDK API', () => {
     date.getTime().should.be.above(0)
   })
 
-  it('should embed a valid HMAC signature in the request headers', async function () {
+  it('should embed a valid HMAC signature in the request headers', function () {
     let request = sdk.api._buildRequest('GET', '/users?limit=25')
 
     request.should.be.instanceof(Object)
