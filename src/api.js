@@ -81,6 +81,17 @@ class API {
   }
 
   async request(method, path, data) {
+    let request = this._buildRequest(method, path, data)
+
+    try {
+      let response = await this.axios(request)
+      return response.data
+    } catch (err) {
+      throw new SDKError(err.response.status, err.response.data.message)
+    }
+  }
+
+  _buildRequest(method, path, data) {
     let timestamp = Date.now()
     let url = this.baseUrl + path
     let body = data ? JSON.stringify(data) : ''
@@ -96,12 +107,7 @@ class API {
     }
     method = method.toLowerCase()
 
-    try {
-      let response = await this.axios({ method, url, data, headers })
-      return response.data
-    } catch (err) {
-      throw new SDKError(err.response.status, err.response.data.message)
-    }
+    return { method, url, data, headers }
   }
 
   _setEventListeners() {
