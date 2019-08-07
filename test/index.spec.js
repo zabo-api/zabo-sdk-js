@@ -1,13 +1,9 @@
 'use strict'
 
 const should = require('should')
+const sdk = require('../src/index.js')
 
 describe('Zabo SDK Module', () => {
-  let sdk = null
-
-  beforeEach(() => {
-    sdk = require('../src/index.js')
-  })
 
   it('should init properly', async function () {
     await sdk.init({
