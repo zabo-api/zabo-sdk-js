@@ -24,7 +24,7 @@ describe('Zabo SDK Users Resource', () => {
     sdk.api.resources.users.should.have.property('getBalances')
   })
 
-  it('users.create() should fail if an account id is missing', async function () {
+  it('users.create() should fail if an account `id` is missing', async function () {
     let response = await sdk.users.create({ token: 'token' }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -32,7 +32,7 @@ describe('Zabo SDK Users Resource', () => {
     response.message.should.containEql('id')
   })
 
-  it('users.create() should fail if an account session token is missing', async function () {
+  it('users.create() should fail if an account session `token` is missing', async function () {
     let response = await sdk.users.create({ id: 'id' }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -48,13 +48,46 @@ describe('Zabo SDK Users Resource', () => {
     response.message.should.containEql('id')
   })
 
-  it('users.getUsers() should fail if an invalid cursor is provided', async function () {
+  it('users.getUsers() should fail if an invalid `cursor` is provided', async function () {
     let response = await sdk.users.getUsers({ cursor: 'not_a_valid_id' }).should.be.rejected()
 
     response.should.be.an.Error()
 
     response.error_type.should.be.equal(400)
     response.message.should.containEql('cursor')
+  })
+
+  it('users.getBalances() should fail if a `userId` is not provided', async function () {
+    let response = await sdk.users.getBalances({
+      accountId: 'not_an_account_id',
+      tickers: ['BTC', 'ETH']
+    }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('userId')
+  })
+
+  it('users.getBalances() should fail if an `accountId` is not provided', async function () {
+    let response = await sdk.users.getBalances({
+      userId: 'not_a_user_id',
+      tickers: 'BTC'
+    }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('accountId')
+  })
+
+  it('users.getBalances() should fail if a string or array of `tickers` are not provided', async function () {
+    let response = await sdk.users.getBalances({
+      accountId: 'not_an_account_id',
+      userId: 'not_a_user_id'
+    }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('tickers')
   })
 
 })
