@@ -40,6 +40,8 @@ class ZaboSDK {
 
     if (typeof o.autoConnect !== 'undefined') {
       this.autoConnect = o.autoConnect
+    } else {
+      this.autoConnect = true
     }
 
     let isNode = utils.isNode()
@@ -62,6 +64,11 @@ class ZaboSDK {
           this.status = 'connecting'
           await this.api.connect()
           this.status = 'online'
+
+          if (!this.applications.id) {
+            return this.throwConnectError(400, '[Zabo] Unable to connect with Zabo API. Please check your credentials and try again. More details at: https://zabo.com/docs')
+          }
+
           return this.applications.id
         }
 
