@@ -48,6 +48,15 @@ describe('Zabo SDK Users Resource', () => {
     response.message.should.containEql('id')
   })
 
+  it('users.getUsers() should fail if an invalid `limit` is provided', async function () {
+    let response = await sdk.users.getUsers({ limit: 51 }).should.be.rejected()
+
+    response.should.be.an.Error()
+
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('limit')
+  })
+
   it('users.getUsers() should fail if an invalid `cursor` is provided', async function () {
     let response = await sdk.users.getUsers({ cursor: 'not_a_valid_id' }).should.be.rejected()
 

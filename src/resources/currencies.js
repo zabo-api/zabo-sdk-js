@@ -16,6 +16,7 @@
 
 'use strict'
 
+const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Currencies {
@@ -24,6 +25,8 @@ class Currencies {
   }
 
   async getCurrencies({ limit = 25, cursor = '' } = {}) {
+    utils.validateListParameters(limit, cursor)
+
     try {
       return this.api.request('GET', `/currencies?limit=${limit}&cursor=${cursor}`)
     } catch (err) {
@@ -33,7 +36,7 @@ class Currencies {
 
   async getCurrency(ticker) {
     if (!ticker) {
-      throw new SDKError(400, '[Zabo] Invalid input. See: https://zabo.com/docs#get-specific-currency')
+      throw new SDKError(400, '[Zabo] Missing `ticker` input. See: https://zabo.com/docs#get-specific-currency')
     }
 
     try {
@@ -44,6 +47,8 @@ class Currencies {
   }
 
   async getExchangeRates({ fiatCurrency = 'USD', cryptoCurrency = '', toCrypto = false, limit = 25, cursor = '' } = {}) {
+    utils.validateListParameters(limit, cursor)
+
     let url = '/exchange-rates'
 
     if (cryptoCurrency) {
