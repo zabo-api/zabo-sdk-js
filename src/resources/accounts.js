@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * @description: Zabo account-related functions
  */
 
@@ -45,6 +45,10 @@ class Accounts {
   async getBalances({ tickers } = {}) {
     if (!tickers) {
       throw new SDKError(400, '[Zabo] Missing `tickers` parameter. See: https://zabo.com/docs#get-balances')
+    }
+
+    if (!this.id) {
+      throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     }
 
     if (Array.isArray(tickers)) {

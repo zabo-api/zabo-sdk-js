@@ -33,4 +33,12 @@ describe('Zabo SDK Accounts Resource', () => {
     response.message.should.containEql('tickers')
   })
 
+  it('accounts.getBalances() should fail if an account has not connected yet', async function () {
+    let response = await accounts.getBalances({ tickers: 'BTC' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(401)
+    response.message.should.containEql('connected')
+  })
+
 })
