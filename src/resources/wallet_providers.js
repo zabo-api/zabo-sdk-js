@@ -16,6 +16,7 @@
 
 'use strict'
 
+const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class WalletProviders {
@@ -24,6 +25,8 @@ class WalletProviders {
   }
 
   async getWalletProviders({ limit = 25, cursor = '' } = {}) {
+    utils.validateListParameters(limit, cursor)
+
     try {
       return this.api.request('GET', `/wallet-providers?limit=${limit}&cursor=${cursor}`)
     } catch (err) {
@@ -33,7 +36,7 @@ class WalletProviders {
 
   async getWalletProvider(name) {
     if (!name) {
-      throw new SDKError(400, '[Zabo] Invalid input. See: https://zabo.com/docs#get-a-wallet-provider')
+      throw new SDKError(400, '[Zabo] Missing `name` input. See: https://zabo.com/docs#get-a-wallet-provider')
     }
 
     try {
