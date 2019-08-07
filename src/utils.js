@@ -17,6 +17,8 @@
 'use strict'
 
 const crypto = require('crypto')
+const uuidValidate = require('uuid-validate')
+const { SDKError } = require('./err')
 
 function generateHMACSignature(secretKey, url, body, timestamp) {
   let text = timestamp + url + body
@@ -27,12 +29,22 @@ function getZaboSession() {
   return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent('zabosession').replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null
 }
 
+function validateListParameters(limit, cursor) {
+  if (limit && limit > 50) {
+    throw new SDKError(400, '[Zabo] Values for `limit` must be 50 or below. See: https://zabo.com/docs#about-the-api')
+  }
+  if (cursor && !uuidValidate(cursor, 4)) {
+    throw new SDKError(400, '[Zabo] `cursor` must be a valid UUID version 4. See: https://zabo.com/docs#about-the-api')
+  }
+}
+
 const isBrowser = new Function("return typeof window !== 'undefined'")
 const isNode = new Function("return typeof global !== 'undefined'")
 
 module.exports = {
   generateHMACSignature,
   getZaboSession,
+  validateListParameters,
   isBrowser,
   isNode
 }
