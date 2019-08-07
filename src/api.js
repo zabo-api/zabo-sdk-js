@@ -50,10 +50,9 @@ class API {
   }
 
   async connect(interfaceType, attachTo) {
-    let appId
-    let isNode = utils.isNode()
+    let appId = null
 
-    if (isNode) {
+    if (utils.isNode()) {
       try {
         let res = await this.request('GET', '/applications/id')
         appId = res.id

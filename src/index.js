@@ -44,8 +44,7 @@ class ZaboSDK {
       this.autoConnect = true
     }
 
-    let isNode = utils.isNode()
-    if (isNode) {
+    if (utils.isNode()) {
       if (!o.apiKey || !o.secretKey || typeof o.apiKey !== 'string' || typeof o.secretKey !== 'string') {
         return this.throwConnectError(401, '[Zabo] Please provide a valid Zabo app API and Secret keys. More details at: https://zabo.com/docs#app-server-authentication')
       }

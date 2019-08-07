@@ -20,7 +20,7 @@ module.exports = (api, isNode) => {
       users: require('./users')(api),
       applications: require('./applications')(api),
       currencies: require('./currencies')(api),
-      transactions: require('./transactions')(api, isNode),
+      transactions: require('./transactions')(api),
       walletProviders: require('./wallet_providers')(api)
     }
   }
@@ -28,6 +28,6 @@ module.exports = (api, isNode) => {
   return {
     accounts: require('./accounts')(api),
     currencies: require('./currencies')(api),
-    transactions: require('./transactions')(api, isNode),
+    transactions: require('./transactions')(api),
   }
 }

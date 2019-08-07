@@ -16,12 +16,13 @@
 
 'use strict'
 
+const uuidValidate = require('uuid-validate')
+const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Transactions {
-  constructor(api, isNode) {
+  constructor(api) {
     this.api = api
-    this.isNode = isNode
     this.accountId = null
   }
 
@@ -30,10 +31,10 @@ class Transactions {
   }
 
   async getTransaction({ userId, accountId, txId } = {}) {
-    if (this.isNode) {
-      if (!userId) {
+    if (utils.isNode()) {
+      if (!userId || !uuidValidate(userId, 4)) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
-      } else if (!accountId) {
+      } else if (!accountId || !uuidValidate(accountId, 4)) {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
       } else if (!txId) {
         throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -45,8 +46,9 @@ class Transactions {
         throw new SDKError(err.error_type, err.message)
       }
     }
-    if (!this.accountId) {
-      throw new SDKError(400, '[Zabo] Not connectec. See: https://zabo.com/docs#get-a-specific-transaction')
+
+    if (!this.accountId || !uuidValidate(this.accountId, 4)) {
+      throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#get-a-specific-transaction')
     } else if (!txId) {
       throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
     }
@@ -59,11 +61,14 @@ class Transactions {
   }
 
   async getTransactionHistory({ userId, accountId, currencyTicker, limit = 25, cursor = '' } = {}) {
-    let url
-    if (this.isNode) {
-      if (!userId) {
+    utils.validateListParameters(limit, cursor)
+
+    let url = null
+
+    if (utils.isNode()) {
+      if (!userId || !uuidValidate(userId, 4)) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
-      } else if (!accountId) {
+      } else if (!accountId || !uuidValidate(userId, 4)) {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-account-history')
       } else if (!currencyTicker) {
         throw new SDKError(400, '[Zabo] Missing `currencyTicker` parameter. See: https://zabo.com/docs#get-account-history')
@@ -71,7 +76,7 @@ class Transactions {
 
       url = `/users/${userId}/accounts/${accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
     } else {
-      if (!this.accountId) {
+      if (!this.accountId || !uuidValidate(this.accountId, 4)) {
         throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#get-account-history')
       } else if (!currencyTicker) {
         throw new SDKError(400, '[Zabo] Missing `currencyTicker` parameter. See: https://zabo.com/docs#get-account-history')
@@ -79,6 +84,7 @@ class Transactions {
 
       url = `/accounts/${this.accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
     }
+
     try {
       return this.api.request('GET', url)
     } catch (err) {
