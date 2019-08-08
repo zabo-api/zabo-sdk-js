@@ -32,10 +32,14 @@ class Transactions {
 
   async getTransaction({ userId, accountId, txId } = {}) {
     if (utils.isNode()) {
-      if (!userId || !uuidValidate(userId, 4)) {
+      if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
-      } else if (!accountId || !uuidValidate(accountId, 4)) {
+      } else if (!uuidValidate(userId, 4)) {
+        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#get-a-specific-transaction')
+      } else if (!accountId) {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
+      } else if (!uuidValidate(accountId, 4)) {
+        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#get-a-specific-transaction')
       } else if (!txId) {
         throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
       }
@@ -47,7 +51,7 @@ class Transactions {
       }
     }
 
-    if (!this.accountId || !uuidValidate(this.accountId, 4)) {
+    if (!this.accountId) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#get-a-specific-transaction')
     } else if (!txId) {
       throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -66,17 +70,21 @@ class Transactions {
     let url = null
 
     if (utils.isNode()) {
-      if (!userId || !uuidValidate(userId, 4)) {
-        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
-      } else if (!accountId || !uuidValidate(userId, 4)) {
+      if (!userId) {
+        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-account-history')
+      } else if (!uuidValidate(userId, 4)) {
+        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#get-account-history')
+      } else if (!accountId) {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-account-history')
+      } else if (!uuidValidate(accountId, 4)) {
+        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#get-account-history')
       } else if (!currencyTicker) {
         throw new SDKError(400, '[Zabo] Missing `currencyTicker` parameter. See: https://zabo.com/docs#get-account-history')
       }
 
       url = `/users/${userId}/accounts/${accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
     } else {
-      if (!this.accountId || !uuidValidate(this.accountId, 4)) {
+      if (!this.accountId) {
         throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#get-account-history')
       } else if (!currencyTicker) {
         throw new SDKError(400, '[Zabo] Missing `currencyTicker` parameter. See: https://zabo.com/docs#get-account-history')
