@@ -177,7 +177,7 @@ While instantiating your new Zabo SDK instance, you have a few configuration opt
 | Key           | Description   | Platform   |
 | ------------- | ------------- |----------- |
 | clientId      | App Key acquired when registering a new application in [Zabo Dashboard](https://zabo.com/login/). | Browser |
-| env           | Zabo API environment the SDK is connecting with. Could be either `sandbox` or `live`. Currently only `sandbox` is available. | Both |
+| env           | Zabo API environment the SDK is connecting with. Could be either `sandbox` or `live`. Only `sandbox` is available unless a `live` connection is approved. | Both |
 | apiKey        | API Key generated via the Application "Keys" tab at [Zabo Dashboard](https://zabo.com/login/). | Node |
 | secretKey     | Secret Key generated via the Application "Keys" tab at [Zabo Dashboard](https://zabo.com/login/). | Node |
 | autoConnect   | Optional boolean useful if you want the SDK to call zabo.connect() during zabo.init() for you. Defaults to `true`. | Node |
