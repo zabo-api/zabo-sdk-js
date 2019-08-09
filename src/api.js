@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * @description: Zabo API communication library
  */
 
@@ -34,29 +34,35 @@ class API {
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios
     this.axios.defaults.baseURL = this.baseUrl
+
     if (utils.isNode()) {
       this.axios.defaults.headers.common['X-Zabo-Key'] = this.apiKey
+      this.resources = resources(this, true)
     } else {
       this.interfaces = {}
       this.connectUrl = urls.CONNECT_BASE_URL
       this._setEventListeners()
+
       if (utils.getZaboSession()) {
-        this.resources = resources(this, false, '')
+        this.resources = resources(this, false)
       }
     }
   }
 
   async connect(interfaceType, attachTo) {
-    let appID
-    let isNode = utils.isNode()
-    if (isNode) {
+    let appId = null
+
+    if (utils.isNode()) {
       try {
         let res = await this.request('GET', '/applications/id')
-        appID = res.id
+        appId = res.id
 
-        if (!appID) {
+        if (!appId) {
           throw new SDKError(500, 'Something went wrong on our end. Please note the time and let us know')
         }
+
+        this.resources.applications.setId(appId)
+        return appId
       } catch (err) {
         throw err
       }
@@ -71,11 +77,20 @@ class API {
         this.connector = window.open(url, 'Zabo Connect', 'width=600,height=960,resizable,scrollbars=yes,status=1')
       }
     }
-
-    this.resources = resources(this, isNode, appID)
   }
 
   async request(method, path, data) {
+    let request = this._buildRequest(method, path, data)
+
+    try {
+      let response = await this.axios(request)
+      return response.data
+    } catch (err) {
+      throw new SDKError(err.response.status, err.response.data.message)
+    }
+  }
+
+  _buildRequest(method, path, data) {
     let timestamp = Date.now()
     let url = this.baseUrl + path
     let body = data ? JSON.stringify(data) : ''
@@ -91,12 +106,7 @@ class API {
     }
     method = method.toLowerCase()
 
-    try {
-      let response = await this.axios({ method, url, data, headers })
-      return response.data
-    } catch (err) {
-      throw new SDKError(err.response.status, err.response.data.message)
-    }
+    return { method, url, data, headers }
   }
 
   _setEventListeners() {
@@ -121,7 +131,7 @@ class API {
       }
 
       if (event.data.account.wallet_provider_name == 'metamask') {
-        this.interfaces.metamask = new require('./resources/metamask')()
+        this.interfaces.metamask = require('./resources/metamask')()
         if (this.interfaces.metamask.isSupported()) {
           this.interfaces.metamask.onConnect(event.data.account)
         } else {
@@ -132,7 +142,7 @@ class API {
           }
         }
       } else if (event.data.account.wallet_provider_name == 'ledger') {
-        this.interfaces.ledger = new require('./resources/ledger')()
+        this.interfaces.ledger = require('./resources/ledger')()
         this.interfaces.ledger.onConnect(event.data.account)
       }
 
@@ -147,6 +157,8 @@ class API {
     }
 
     if (event.data.zabo && event.data.eventName == 'connectError') {
+      console.log('error data??', event.data)
+
       if (this._onError) {
         this._onError({ error_type: 400, message: "Error in the connection process: " + event.data.error.message })
       } else {

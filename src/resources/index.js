@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-module.exports = (api, isNode, id) => {
+module.exports = (api, isNode) => {
   if (isNode) {
     return {
       users: require('./users')(api),
-      applications: require('./applications')(api, id),
+      applications: require('./applications')(api),
       currencies: require('./currencies')(api),
-      transactions: require('./transactions')(api, isNode),
+      transactions: require('./transactions')(api),
       walletProviders: require('./wallet_providers')(api)
     }
   }
+
   return {
     accounts: require('./accounts')(api),
     currencies: require('./currencies')(api),
-    transactions: require('./transactions')(api, isNode),
+    transactions: require('./transactions')(api),
   }
 }

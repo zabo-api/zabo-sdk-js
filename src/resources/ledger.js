@@ -31,4 +31,6 @@ class Ledger {
   }
 }
 
-export default Ledger
+module.exports = () => {
+  return new Ledger()
+}

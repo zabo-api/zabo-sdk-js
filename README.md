@@ -159,6 +159,7 @@ zabo.connect().onConnection(account => {
 // Then in your server
 const zabo = require('zabo-sdk-js')
 let account = accountReceivedFromTheClient
+
 zabo.init({
   apiKey: 'YourPublicAPIKeyGeneratedInYourZaboDotComDashboard',
   secretKey: 'YourSecretAPIKey',
@@ -169,6 +170,17 @@ zabo.init({
   console.log(e.message)
 })
 ```
+
+### Zabo.init() Configuration
+While instantiating your new Zabo SDK instance, you have a few configuration options that can be changed to best suit your needs. Please note that some options are available only when running the SDK from the browser while others are available when running the SDK on your node.js code.
+
+| Key           | Description   | Platform   |
+| ------------- | ------------- |----------- |
+| clientId      | App Key acquired when registering a new application in [Zabo Dashboard](https://zabo.com/login/). | Browser |
+| env           | Zabo API environment the SDK is connecting with. Could be either `sandbox` or `live`. Only `sandbox` is available unless a `live` connection is approved. | Both |
+| apiKey        | API Key generated via the Application "Keys" tab at [Zabo Dashboard](https://zabo.com/login/). | Node |
+| secretKey     | Secret Key generated via the Application "Keys" tab at [Zabo Dashboard](https://zabo.com/login/). | Node |
+| autoConnect   | Optional boolean useful if you want the SDK to call zabo.connect() during zabo.init() for you. Defaults to `true`. | Node |
 
 ### Server vs Client
 The SDK can be used in either the client or server environment after a user connects their wallet, however, they have different functions available to them and utilize different authentication methods. See [the Zabo API docs](https://zabo.com/docs) for more information.

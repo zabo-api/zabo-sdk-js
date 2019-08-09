@@ -16,6 +16,7 @@
 
 'use strict'
 
+const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Users {
@@ -23,8 +24,7 @@ class Users {
     this.api = api
   }
 
-  async create(account) {
-
+  async create(account = {}) {
     if (!account.id) {
       throw new SDKError(400, '[Zabo] Missing `id` parameter in account object. See: https://zabo.com/docs#create-a-user')
     } else if (!account.token) {
@@ -51,6 +51,8 @@ class Users {
   }
 
   async getUsers({ limit = 25, cursor = '' } = {}) {
+    utils.validateListParameters(limit, cursor)
+
     try {
       return this.api.request('GET', `/users?limit=${limit}&cursor=${cursor}`)
     } catch (err) {
