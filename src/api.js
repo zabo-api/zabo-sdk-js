@@ -131,7 +131,7 @@ class API {
       }
 
       if (event.data.account.wallet_provider_name == 'metamask') {
-        this.interfaces.metamask = new require('./resources/metamask')()
+        this.interfaces.metamask = require('./resources/metamask')()
         if (this.interfaces.metamask.isSupported()) {
           this.interfaces.metamask.onConnect(event.data.account)
         } else {
@@ -142,7 +142,7 @@ class API {
           }
         }
       } else if (event.data.account.wallet_provider_name == 'ledger') {
-        this.interfaces.ledger = new require('./resources/ledger')()
+        this.interfaces.ledger = require('./resources/ledger')()
         this.interfaces.ledger.onConnect(event.data.account)
       }
 
@@ -157,6 +157,8 @@ class API {
     }
 
     if (event.data.zabo && event.data.eventName == 'connectError') {
+      console.log('error data??', event.data)
+
       if (this._onError) {
         this._onError({ error_type: 400, message: "Error in the connection process: " + event.data.error.message })
       } else {

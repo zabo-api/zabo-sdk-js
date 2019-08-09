@@ -7,6 +7,7 @@
     "getv": "echo $npm_package_version",
     "test": "./node_modules/mocha/bin/mocha --recursive test/",
     "build": "npx webpack --config webpack.config.js --progress --colors",
+    "build:local": "NODE_ENV=local npm run build",
     "examples": "npm run build && ln -sf ../dist/zabo.js examples/zabo.js && live-server --host=localhost --port=8080 examples/"
   },
   "repository": {

@@ -57,4 +57,6 @@ class Metamask {
   }
 }
 
-export default Metamask
+module.exports = () => {
+  return new Metamask()
+}
