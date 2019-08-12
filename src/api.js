@@ -157,8 +157,6 @@ class API {
     }
 
     if (event.data.zabo && event.data.eventName == 'connectError') {
-      console.log('error data??', event.data)
-
       if (this._onError) {
         this._onError({ error_type: 400, message: "Error in the connection process: " + event.data.error.message })
       } else {
