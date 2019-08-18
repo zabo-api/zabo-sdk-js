@@ -43,9 +43,7 @@ class API {
       this.connectUrl = urls.CONNECT_BASE_URL
       this._setEventListeners()
 
-      if (utils.getZaboSession()) {
-        this.resources = resources(this, false)
-      }
+      this.resources = resources(this, false)
     }
   }
 
@@ -146,9 +144,9 @@ class API {
         this.interfaces.ledger.onConnect(event.data.account)
       }
 
-      if (this.account) {
-        this.account._setAccount(event.data.account)
-        this.transactions._setAccount(event.data.account)
+      if (this.resources.accounts && this.resources.transactions) {
+        this.resources.accounts._setAccount(event.data.account)
+        this.resources.transactions._setAccount(event.data.account)
       }
 
       if (this._onConnection) {
