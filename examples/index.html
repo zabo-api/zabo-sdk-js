@@ -3,17 +3,40 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
   <title>Zabo Connect Playground</title>
 
-  <link href="https://zabo.com/docs/images/favicon.ico" rel="icon" type="image/ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://zabo.com/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://zabo.com/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://zabo.com/favicon/favicon-16x16.png">
+  <link rel="manifest" href="https://zabo.com/favicon/site.webmanifest">
+  <link rel="mask-icon" href="https://zabo.com/favicon/safari-pinned-tab.svg" color="#5c6fea">
+  <link rel="shortcut icon" href="https://zabo.com/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#603cba">
+  <meta name="msapplication-config" content="https://zabo.com/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <meta name="description" content="Add cryptocurrency to your app with Zabo. One API, any cryptocurrency wallet. Reduce your development time starting now." />
+  <meta name="author" content="Zabo" />
+
+  <meta property="og:image" content="https://zabo.com/img/og-image.jpg" />
+  <meta property="og:image:width" content="1199" />
+  <meta property="og:image:height" content="628" />
+  <meta property="og:title" content="Zabo" />
+  <meta property="og:description" content="Add cryptocurrency to your app with Zabo. One API, any cryptocurrency wallet. Reduce your development time starting now." />
+  <meta property="og:url" content="https://zabo.com" />
   <link rel="stylesheet" href="example.css" type="text/css" />
 </head>
 
 <body>
   <section class="content-holder">
     <header>
-      <img src="https://zabo.com/docs/images/logo.png" align="left" />
-      <h2>Zabo Connect Playground</h2>
+      <a href="https://zabo.com" style="text-decoration:none;">
+        <div style="display:block">
+          <img src="https://zabo.com/docs/images/logo.png" align="left" />
+          <h2>Zabo Connect Playground</h2>
+        </div>
+      </a>
     </header>
     <p>
       This is a <strong>sandbox demo</strong> of Zabo Connect capabilities. Use this as a guideline to write your own
@@ -40,6 +63,7 @@
 
   <script type="text/javascript" src="zabo.js"></script>
   <script>window.Zabo || document.write('<script src="https://cdn.zabo.com/develop/0.2.0/zabo.js">\x3C/script>')</script>
+  <!-- <script type="text/javascript" src="https://cdn.zabo.com/latest/zabo.js"></script> -->
 
   <script type="text/javascript">
     // Wait for document to fully load
@@ -51,14 +75,14 @@
       // Initiate Zabo SDK, replace the `clientId` field with your app key generated at {LINK}.
       Zabo.init({
         clientId: '99E88F9AbF8d4eAf4D59f83c3DA47C97233D97FFBB08F47F4b8Ec29D28eaE193',
-        baseUrl: 'http://localhost:1325',
-        connectUrl: 'http://localhost:3010',
+        baseUrl: 'https://api.zabo.com',
+        connectUrl: 'https://connect.zabo.com',
         env: 'sandbox'
       }).then(() => {
         Zabo.accounts.getAccount().then(account => {
           printOutput(account)
-            document.querySelector('.methods').style.display = 'block'
-            bindOtherMethods()
+          document.querySelector('.methods').style.display = 'block'
+          bindOtherMethods()
         }).catch(e => {
           console.log("Not connected yet")
         })
