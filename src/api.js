@@ -72,7 +72,7 @@ class API {
         this.connector.src = url
         document.querySelector(attachTo).appendChild(this.connector)
       } else {
-        this.connector = window.open(url, 'Zabo Connect', 'width=600,height=960,resizable,scrollbars=yes,status=1')
+        this.connector = window.open(url, 'Zabo Connect', 'width=540,height=960,resizable,scrollbars=yes,status=1')
       }
     }
   }
