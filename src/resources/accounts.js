@@ -17,6 +17,8 @@
  */
 
 'use strict'
+
+const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Accounts {
@@ -57,6 +59,27 @@ class Accounts {
 
     try {
       return this.api.request('GET', `/accounts/${this.id}/balances?currency=${tickers}`)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
+  async getCryptoTransferLink({ toAddress, amount, note } = {}) {
+    if (!this.id) {
+      throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
+    }
+    if (!toAddress) {
+      throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+    }
+    if (!amount) {
+      throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+    }
+    if (!note) {
+      note = ''
+    }
+
+    try {
+      return this.api.request('GET', `/accounts/${this.id}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

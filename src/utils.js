@@ -18,6 +18,7 @@
 
 const crypto = require('crypto')
 const uuidValidate = require('uuid-validate')
+const qrcode = require('qrcode-generator')
 const { SDKError } = require('./err')
 
 function generateHMACSignature(secretKey, url, body, timestamp) {
@@ -38,6 +39,40 @@ function validateListParameters(limit, cursor) {
   }
 }
 
+function createQRCode(url) {
+  let maxWindowHeight = 600
+  let maxQrcodeHeight = maxWindowHeight - 380
+  let qrLevels = ['L', 'M']
+  let qrModulesByVersion = {
+    1: 21,
+    2: 25,
+    3: 29,
+    4: 33,
+    5: 37,
+    6: 41,
+    7: 45,
+    8: 49,
+    9: 53,
+    10: 57
+  }
+  let qrMargin = 4
+  for (let levelIndex in qrLevels) {
+    for (let typeNum = 8; typeNum <= 10; typeNum++) {
+      let qr_cellsize = Math.floor(
+        maxQrcodeHeight / qrModulesByVersion[typeNum]
+      )
+      try {
+        let qr = qrcode(typeNum, qrLevels[levelIndex])
+        qr.addData(url)
+        qr.make()
+        return qr.createImgTag(qr_cellsize, qrMargin)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
+}
+
 const isBrowser = new Function("return typeof window !== 'undefined'")
 const isNode = new Function("return typeof global !== 'undefined'")
 
@@ -45,6 +80,7 @@ module.exports = {
   generateHMACSignature,
   getZaboSession,
   validateListParameters,
+  createQRCode,
   isBrowser,
   isNode
 }
