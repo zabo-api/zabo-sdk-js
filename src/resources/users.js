@@ -60,6 +60,20 @@ class Users {
     }
   }
 
+  async getAccount({ userId, accountId } = {}) {
+    if (!userId) {
+      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-balances')
+    } else if (!accountId) {
+      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-balances')
+    }
+
+    try {
+      return this.api.request('GET', `/users/${userId}/accounts/${accountId}`)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
   async getBalances({ userId, accountId, tickers } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-balances')
@@ -74,7 +88,7 @@ class Users {
     }
 
     try {
-      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/balances?currency=${tickers}`)
+      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/balances?currencies=${tickers}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
