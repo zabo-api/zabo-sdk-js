@@ -30,7 +30,7 @@ class Transactions {
     this.accountId = account.id
   }
 
-  async getTransaction({ userId, accountId, txId } = {}) {
+  async getTransaction({ userId, accountId, txId, currency } = {}) {
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -45,7 +45,7 @@ class Transactions {
       }
 
       try {
-        return this.api.request('GET', `/users/${userId}/accounts/${accountId}/transactions/${txId}`)
+        return this.api.request('GET', `/users/${userId}/accounts/${accountId}/transactions/${txId}?currency=${currency}`)
       } catch (err) {
         throw new SDKError(err.error_type, err.message)
       }
