@@ -76,6 +76,8 @@ class Accounts {
     }
     if (!note) {
       note = ''
+    } else {
+      note = encodeURIComponent(note)
     }
 
     try {

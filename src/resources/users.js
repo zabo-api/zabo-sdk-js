@@ -109,6 +109,8 @@ class Users {
     }
     if (!note) {
       note = ''
+    } else {
+      note = encodeURIComponent(note)
     }
 
     try {
