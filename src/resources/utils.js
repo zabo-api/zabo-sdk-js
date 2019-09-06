@@ -12,23 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @description: Zabo API utilities
  */
 
-module.exports = (api, isNode) => {
-  if (isNode) {
-    return {
-      users: require('./users')(api),
-      applications: require('./applications')(api),
-      currencies: require('./currencies')(api),
-      transactions: require('./transactions')(api),
-      walletProviders: require('./wallet_providers')(api)
-    }
+'use strict'
+
+const utils = require('../utils')
+
+class Utils {
+  constructor(api) {
+    this.api = api
   }
 
-  return {
-    utils: require('./utils')(api),
-    accounts: require('./accounts')(api),
-    currencies: require('./currencies')(api),
-    transactions: require('./transactions')(api),
+  getQRCode(url) {
+    return utils.createQRCode(url)
   }
+}
+
+module.exports = (api) => {
+  return new Utils(api)
 }
