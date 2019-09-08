@@ -94,31 +94,6 @@ class Users {
     }
   }
 
-  async getCryptoTransferLink({ userId, accountId, toAddress, amount, note } = {}) {
-    if (!userId) {
-      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-    }
-    if (!accountId) {
-      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-    }
-    if (!toAddress) {
-      throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-    }
-    if (!amount) {
-      throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-    }
-    if (!note) {
-      note = ''
-    } else {
-      note = encodeURIComponent(note)
-    }
-
-    try {
-      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`)
-    } catch (err) {
-      throw new SDKError(err.error_type, err.message)
-    }
-  }
 }
 
 module.exports = (api) => {

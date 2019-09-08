@@ -52,7 +52,7 @@ class Transactions {
     }
 
     if (!this.accountId) {
-      throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#get-a-specific-transaction')
+      throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!txId) {
       throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
     }
@@ -85,12 +85,56 @@ class Transactions {
       url = `/users/${userId}/accounts/${accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
     } else {
       if (!this.accountId) {
-        throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#get-account-history')
+        throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
       } else if (!currencyTicker) {
         throw new SDKError(400, '[Zabo] Missing `currencyTicker` parameter. See: https://zabo.com/docs#get-account-history')
       }
 
       url = `/accounts/${this.accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
+    }
+
+    try {
+      return this.api.request('GET', url)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
+  async getCryptoTransferLink({ userId, accountId, toAddress, amount, note } = {}) {
+    if (utils.isNode()) {
+      if (!userId) {
+        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+      } else if (!uuidValidate(userId, 4)) {
+        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#request-crypto-transfer')
+      } else if (!accountId) {
+        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+      } else if (!uuidValidate(accountId, 4)) {
+        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#request-crypto-transfer')
+      } else if (!toAddress) {
+        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+      } else if (!amount) {
+        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+      } else if (!note) {
+        note = ''
+      } else {
+        note = encodeURIComponent(note)
+      }
+
+      url = `/users/${userId}/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
+    } else {
+      if (!this.accountId) {
+        throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
+      } else if (!toAddress) {
+        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+      } else if (!amount) {
+        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+      } else if (!note) {
+        note = ''
+      } else {
+        note = encodeURIComponent(note)
+      }
+
+      url = `/accounts/${this.accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
     }
 
     try {
