@@ -35,10 +35,28 @@ class Applications {
 
   async getApplication() {
     if (!this.id) {
-      throw new SDKError(401, '[Zabo] SDK not properly initialized.')
+      throw new SDKError(401, '[Zabo] SDK has not initialized properly.')
     }
     try {
       return this.api.request('GET', `/applications/${this.id}`)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
+  async getApplicationInfo() {
+    if (!this.api.clientId) {
+      throw new SDKError(401, '[Zabo] SDK has not initialized properly.')
+    }
+
+    let origin = encodeURIComponent(window ? window.location.host : '')
+
+    if (!origin) {
+      throw new SDKError(401, '[Zabo] Method available only for client SDK. On the server-side, please use Zabo.getApplication() instead.')
+    }
+
+    try {
+      return this.api.request('GET', `/applications/info?app_key=${this.api.clientId}&origin=${origin}`, {}, true)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
