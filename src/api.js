@@ -77,8 +77,8 @@ class API {
     }
   }
 
-  async request(method, path, data) {
-    let request = this._buildRequest(method, path, data)
+  async request(method, path, data, isPublic = false) {
+    let request = this._buildRequest(method, path, data, isPublic)
 
     try {
       let response = await this.axios(request)
@@ -88,18 +88,19 @@ class API {
     }
   }
 
-  _buildRequest(method, path, data) {
+  _buildRequest(method, path, data, isPublic) {
     let timestamp = Date.now()
     let url = this.baseUrl + path
     let body = data ? JSON.stringify(data) : ''
-    let headers
+    let headers = {}
+
     if (utils.isNode()) {
       let signature = utils.generateHMACSignature(this.secretKey, url, body, timestamp)
       headers = {
         'X-Zabo-Sig': signature,
         'X-Zabo-Timestamp': timestamp
       }
-    } else {
+    } else if (!isPublic) {
       headers = { 'Authorization': 'Bearer ' + utils.getZaboSession() }
     }
     method = method.toLowerCase()
