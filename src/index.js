@@ -93,10 +93,13 @@ class ZaboSDK {
 
       try {
         let account = await this.accounts.getAccount()
-        console.log(account)
         this.transactions._setAccount(account)
       } catch (e) {
-        console.log(e)
+        console.error(e)
+      }
+
+      if (this.autoConnect) {
+        return this.applications.getApplicationInfo()
       }
     }
   }

@@ -27,6 +27,7 @@ module.exports = (api, isNode) => {
 
   return {
     utils: require('./utils')(api),
+    applications: require('./applications')(api),
     accounts: require('./accounts')(api),
     currencies: require('./currencies')(api),
     transactions: require('./transactions')(api),
