@@ -180,7 +180,7 @@ While instantiating your new Zabo SDK instance, you have a few configuration opt
 | env           | Zabo API environment the SDK is connecting with. Could be either `sandbox` or `live`. Only `sandbox` is available unless a `live` connection is approved. | Both |
 | apiKey        | API Key generated via the Application "Keys" tab at [Zabo Dashboard](https://zabo.com/login/). | Node |
 | secretKey     | Secret Key generated via the Application "Keys" tab at [Zabo Dashboard](https://zabo.com/login/). | Node |
-| autoConnect   | Optional boolean useful if you want the SDK to call zabo.connect() during zabo.init() for you. Defaults to `true`. | Node |
+| autoConnect   | Optional boolean useful if you wish to stop the SDK from fetching the application data during Zabo.init(). Defaults to `true`. | Both |
 
 ### Server vs Client
 The SDK can be used in either the client or server environment after a user connects their wallet, however, they have different functions available to them and utilize different authentication methods. See [the Zabo API docs](https://zabo.com/docs) for more information.
