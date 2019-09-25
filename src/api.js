@@ -47,7 +47,7 @@ class API {
     }
   }
 
-  async connect(interfaceType, attachTo) {
+  async connect(interfaceType, attachTo, width, height) {
     let appId = null
 
     if (utils.isNode()) {
@@ -69,10 +69,12 @@ class API {
       this.isWaitingForConnector = true
       if (interfaceType == 'iframe') {
         this.connector = document.createElement('iframe')
+        this.connector.width = width
+        this.connector.height = height
         this.connector.src = url
         document.querySelector(attachTo).appendChild(this.connector)
       } else {
-        this.connector = window.open(url, 'Zabo Connect', 'width=540,height=960,resizable,scrollbars=yes,status=1')
+        this.connector = window.open(url, 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
       }
     }
   }

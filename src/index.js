@@ -113,9 +113,9 @@ class ZaboSDK {
     Object.assign(this, this.api.resources)
   }
 
-  connect(interfaceType = 'popup', attachTo = 'body') {
+  connect({ interfaceType = 'popup', attachTo = 'body', width = 540, height = 960  } = {}) {
     if (this.api && utils.isBrowser()) {
-      this.api.connect(interfaceType, attachTo)
+      this.api.connect(interfaceType, attachTo, width, height)
       this.setEndpointAliases()
       return this
     }
