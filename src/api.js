@@ -164,12 +164,24 @@ class API {
         throw new SDKError(400, "Error in the connection process: " + event.data.error.message)
       }
     }
+
+    if (event.data.zabo && event.data.eventName == 'closeIFrame') {
+      this._closeIframe()
+    }
   }
 
   _setSession(cookie) {
     let sExpires = "; expires=" + cookie.exp_time
     document.cookie = encodeURIComponent(cookie.key) + "=" + encodeURIComponent(cookie.value) + sExpires
     return true;
+  }
+
+  _closeIframe() {
+    if (this.connector) {
+      this.connector.parentNode.removeChild(this.connector)
+    }
+
+    return this
   }
 }
 
