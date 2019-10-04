@@ -40,6 +40,51 @@ describe('Zabo SDK Users Resource', () => {
     response.message.should.containEql('token')
   })
 
+  it('users.addAccount() should fail if a user `id` is missing', async function () {
+    let response = await sdk.users.addAccount({}, { id: 'account id', token: 'token' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('user')
+    response.message.should.containEql('id')
+  })
+
+  it('users.addAccount() should fail if an account `id` is missing', async function () {
+    let response = await sdk.users.addAccount({ id: 'user id' }, { token: 'token' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('account')
+    response.message.should.containEql('id')
+  })
+
+  it('users.addAccount() should fail if an account session `token` is missing', async function () {
+    let response = await sdk.users.addAccount({ id: 'user id' }, { id: 'account id' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('account')
+    response.message.should.containEql('token')
+  })
+
+  it('users.removeAccount() should fail if a user `id` is missing', async function () {
+    let response = await sdk.users.removeAccount({}, { id: 'account id' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('user')
+    response.message.should.containEql('id')
+  })
+
+  it('users.removeAccount() should fail if an account `id` is missing', async function () {
+    let response = await sdk.users.removeAccount({ id: 'user id' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('account')
+    response.message.should.containEql('id')
+  })
+
   it('users.getUser() should fail if an account id is missing', async function () {
     let response = await sdk.users.getUser().should.be.rejected()
 
