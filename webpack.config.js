@@ -1,5 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
+const fs = require('fs')
+const pkg = fs.readFileSync('./package.json')
+const version = JSON.parse(pkg).version || 0
 
 module.exports = () => {
   return {
@@ -10,6 +13,9 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist')
     },
     plugins: [
+      new webpack.EnvironmentPlugin({
+        PACKAGE_VERSION: version
+      }),
       new webpack.BannerPlugin({
         banner: `
           @Copyright (c) 2019-present, Zabo & Modular, Inc. All rights reserved.

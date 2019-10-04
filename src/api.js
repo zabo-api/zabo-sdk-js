@@ -65,8 +65,9 @@ class API {
         throw err
       }
     } else {
-      const url = `${this.connectUrl}/connect?clientId=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}`
+      const url = `${this.connectUrl}/connect?clientId=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
       this.isWaitingForConnector = true
+
       if (interfaceType == 'iframe') {
         this.connector = document.createElement('iframe')
         this.connector.width = width
@@ -74,7 +75,7 @@ class API {
         this.connector.src = url
         document.querySelector(attachTo).appendChild(this.connector)
       } else {
-        this.connector = window.open(url, 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
+        this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
       }
     }
   }
