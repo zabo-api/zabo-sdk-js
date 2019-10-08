@@ -48,8 +48,7 @@ class Users {
     }
 
     try {
-      let data = { user_id: user.id, account_id: account.id, token }
-      return this.api.request('POST', `/users/${user.id}/accounts`, data)
+      return this.api.request('POST', `/users/${user.id}/accounts`, account)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
