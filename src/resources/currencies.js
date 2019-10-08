@@ -25,7 +25,7 @@ class Currencies {
   }
 
   async getCurrencies({ limit = 25, cursor = '' } = {}) {
-    utils.validateListParameters(limit, cursor)
+    utils.validateListParameters(limit)
 
     try {
       return this.api.request('GET', `/currencies?limit=${limit}&cursor=${cursor}`)
@@ -47,14 +47,14 @@ class Currencies {
   }
 
   async getExchangeRates({ fiatCurrency = 'USD', cryptoCurrency = '', toCrypto = false, limit = 25, cursor = '' } = {}) {
-    utils.validateListParameters(limit, cursor)
+    utils.validateListParameters(limit)
 
     let url = '/exchange-rates'
 
     if (cryptoCurrency) {
-      url = `${url}?crypto_currency=${cryptoCurrency}&to_crypto=${toCrypto}&limit=${limit}&cursor=${cursor}`
+      url = `${url}?crypto_currency=${cryptoCurrency}&to_crypto=${toCrypto}`
     } else {
-      url = `${url}?to_crypto=${toCrypto}`
+      url = `${url}?to_crypto=${toCrypto}&limit=${limit}&cursor=${cursor}`
     }
 
     return this.api.request('GET', url)
