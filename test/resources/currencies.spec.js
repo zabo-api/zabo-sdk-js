@@ -32,15 +32,6 @@ describe('Zabo SDK Currencies Resource', () => {
     response.message.should.containEql('limit')
   })
 
-  it('currencies.getCurrencies() should fail if an invalid `cursor` is provided', async function () {
-    let response = await sdk.currencies.getCurrencies({ cursor: 'not_a_valid_id' }).should.be.rejected()
-
-    response.should.be.an.Error()
-
-    response.error_type.should.be.equal(400)
-    response.message.should.containEql('cursor')
-  })
-
   it('currencies.getCurrency() should fail if a ticker is not provided', async function () {
     let response = await sdk.currencies.getCurrency().should.be.rejected()
 
@@ -59,18 +50,6 @@ describe('Zabo SDK Currencies Resource', () => {
 
     response.error_type.should.be.equal(400)
     response.message.should.containEql('limit')
-  })
-
-  it('currencies.getExchangeRates() should fail if an invalid `cursor` is provided', async function () {
-    let response = await sdk.currencies.getExchangeRates({
-      cryptoCurrency: 'BTC',
-      cursor: 'not_a_valid_id'
-    }).should.be.rejected()
-
-    response.should.be.an.Error()
-
-    response.error_type.should.be.equal(400)
-    response.message.should.containEql('cursor')
   })
 
 })

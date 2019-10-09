@@ -64,6 +64,53 @@ class Accounts {
     }
   }
 
+  async createDepositAddress(account = {}, ticker) {
+    if (!account.id) {
+      throw new SDKError(400, '[Zabo] Missing `id` property in `account` object. See: https://zabo.com/docs#create-a-deposit-address')
+    } else if (!account.token) {
+      throw new SDKError(400, '[Zabo] Missing `token` property in `account` object. See: https://zabo.com/docs#create-a-deposit-address')
+    } else if (!ticker || typeof ticker !== 'string') {
+      throw new SDKError(400, '[Zabo] Missing or invalid `ticker` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+    }
+
+    const providersWithStaticDepositAddresses = [
+      'metamask',
+      'ledger',
+      'hedera',
+      'address-only',
+      'binance',
+    ]
+
+    for (provider of providersWithStaticDepositAddresses) {
+      if (provider === account.wallet_provider_name) {
+        console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddress()... More details: https://zabo.com/docs#get-deposit-address`)
+        return this.getDepositAddress(account, ticker)
+      }
+    }
+
+    try {
+      return this.api.request('POST', `/accounts/${account.id}/deposit-adresses?currency=${ticker}`)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
+  async getDepositAddress(account = {}, ticker) {
+    if (!account.id) {
+      throw new SDKError(400, '[Zabo] Missing `id` property in `account` object. See: https://zabo.com/docs#create-a-deposit-address')
+    } else if (!account.token) {
+      throw new SDKError(400, '[Zabo] Missing `token` property in `account` object. See: https://zabo.com/docs#create-a-deposit-address')
+    } else if (!ticker || typeof ticker !== 'string') {
+      throw new SDKError(400, '[Zabo] Invalid `ticker` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+    }
+
+    try {
+      return this.api.request('GET', `/accounts/${account.id}/deposit-adresses?currency=${ticker}`)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
 }
 
 module.exports = (api) => {

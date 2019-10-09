@@ -26,13 +26,43 @@ class Users {
 
   async create(account = {}) {
     if (!account.id) {
-      throw new SDKError(400, '[Zabo] Missing `id` parameter in account object. See: https://zabo.com/docs#create-a-user')
+      throw new SDKError(400, '[Zabo] Missing `id` property in account object. See: https://zabo.com/docs#create-a-user')
     } else if (!account.token) {
-      throw new SDKError(400, '[Zabo] Missing `token` parameter in account object. See: https://zabo.com/docs#create-a-user')
+      throw new SDKError(400, '[Zabo] Missing `token` property in account object. See: https://zabo.com/docs#create-a-user')
     }
 
     try {
       return this.api.request('POST', '/users', account)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
+  async addAccount(user = {}, account = {}) {
+    if (!user.id) {
+      throw new SDKError(400, '[Zabo] Missing `id` property in user object. See: https://zabo.com/docs#add-account-to-existing-user')
+    } else if (!account.id) {
+      throw new SDKError(400, '[Zabo] Missing `id` property in account object. See: https://zabo.com/docs#add-account-to-existing-user')
+    } else if (!account.token) {
+      throw new SDKError(400, '[Zabo] Missing `token` property in account object. See: https://zabo.com/docs#add-account-to-existing-use')
+    }
+
+    try {
+      return this.api.request('POST', `/users/${user.id}/accounts`, account)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
+  async removeAccount(user = {}, account = {}) {
+    if (!user.id) {
+      throw new SDKError(400, '[Zabo] Missing `id` property in user object. See: https://zabo.com/docs#remove-account-from-user')
+    } else if (!account.id) {
+      throw new SDKError(400, '[Zabo] Missing `id` property in account object. See: https://zabo.com/docs#remove-account-from-user')
+    }
+
+    try {
+      return this.api.request('DELETE', `/users/${user.id}/accounts/${account.id}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

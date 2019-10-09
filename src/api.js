@@ -47,7 +47,7 @@ class API {
     }
   }
 
-  async connect(interfaceType, attachTo) {
+  async connect(interfaceType, attachTo, width, height) {
     let appId = null
 
     if (utils.isNode()) {
@@ -65,20 +65,23 @@ class API {
         throw err
       }
     } else {
-      const url = `${this.connectUrl}/connect?clientId=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}`
+      const url = `${this.connectUrl}/connect?clientId=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
       this.isWaitingForConnector = true
+
       if (interfaceType == 'iframe') {
         this.connector = document.createElement('iframe')
+        this.connector.width = width
+        this.connector.height = height
         this.connector.src = url
         document.querySelector(attachTo).appendChild(this.connector)
       } else {
-        this.connector = window.open(url, 'Zabo Connect', 'width=540,height=960,resizable,scrollbars=yes,status=1')
+        this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
       }
     }
   }
 
-  async request(method, path, data) {
-    let request = this._buildRequest(method, path, data)
+  async request(method, path, data, isPublic = false) {
+    let request = this._buildRequest(method, path, data, isPublic)
 
     try {
       let response = await this.axios(request)
@@ -88,18 +91,19 @@ class API {
     }
   }
 
-  _buildRequest(method, path, data) {
+  _buildRequest(method, path, data, isPublic) {
     let timestamp = Date.now()
     let url = this.baseUrl + path
     let body = data ? JSON.stringify(data) : ''
-    let headers
+    let headers = {}
+
     if (utils.isNode()) {
       let signature = utils.generateHMACSignature(this.secretKey, url, body, timestamp)
       headers = {
         'X-Zabo-Sig': signature,
         'X-Zabo-Timestamp': timestamp
       }
-    } else {
+    } else if (!isPublic) {
       headers = { 'Authorization': 'Bearer ' + utils.getZaboSession() }
     }
     method = method.toLowerCase()
@@ -161,12 +165,24 @@ class API {
         throw new SDKError(400, "Error in the connection process: " + event.data.error.message)
       }
     }
+
+    if (event.data.zabo && event.data.eventName == 'closeIFrame') {
+      this._closeIframe()
+    }
   }
 
   _setSession(cookie) {
     let sExpires = "; expires=" + cookie.exp_time
     document.cookie = encodeURIComponent(cookie.key) + "=" + encodeURIComponent(cookie.value) + sExpires
     return true;
+  }
+
+  _closeIframe() {
+    if (this.connector) {
+      this.connector.parentNode.removeChild(this.connector)
+    }
+
+    return this
   }
 }
 

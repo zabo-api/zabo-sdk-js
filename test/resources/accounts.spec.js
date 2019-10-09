@@ -41,4 +41,52 @@ describe('Zabo SDK Accounts Resource', () => {
     response.message.should.containEql('connected')
   })
 
+  it('accounts.createDepositAddress() should fail if an account `id` is missing', async function () {
+    let response = await accounts.createDepositAddress({ token: 'token' }, 'ETH').should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('id')
+  })
+
+  it('accounts.createDepositAddress() should fail if an account session `token` is missing', async function () {
+    let response = await accounts.createDepositAddress({ id: 'id' }, 'BTC').should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('token')
+  })
+
+  it('accounts.createDepositAddress() should fail if a currency ticker is missing', async function () {
+    let response = await accounts.createDepositAddress({ id: 'id', token: 'token' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('ticker')
+  })
+
+  it('accounts.getDepositAddress() should fail if an account `id` is missing', async function () {
+    let response = await accounts.getDepositAddress({ token: 'token' }, 'BAT').should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('id')
+  })
+
+  it('accounts.getDepositAddress() should fail if an account session `token` is missing', async function () {
+    let response = await accounts.getDepositAddress({ id: 'id' }, 'DAI').should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('token')
+  })
+
+  it('accounts.getDepositAddress() should fail if a currency ticker is missing', async function () {
+    let response = await accounts.getDepositAddress({ id: 'id', token: 'token' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('ticker')
+  })
+
 })
