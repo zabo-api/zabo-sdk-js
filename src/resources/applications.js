@@ -56,7 +56,7 @@ class Applications {
     }
 
     try {
-      return this.api.request('GET', `/applications/info?app_key=${this.api.clientId}&origin=${origin}`, {}, true)
+      return this.api.request('GET', `/applications/info?client_id=${this.api.clientId}&origin=${origin}`, {}, true)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

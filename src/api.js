@@ -65,7 +65,7 @@ class API {
         throw err
       }
     } else {
-      const url = `${this.connectUrl}/connect?clientId=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
+      const url = `${this.connectUrl}/connect?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
       this.isWaitingForConnector = true
 
       if (interfaceType == 'iframe') {
