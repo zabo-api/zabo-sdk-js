@@ -25,14 +25,6 @@ describe('Zabo SDK Accounts Resource', () => {
     accounts.should.have.property('getBalances')
   })
 
-  it('accounts.getBalances() should fail if a string or array of `currencies` are not provided', async function () {
-    let response = await accounts.getBalances().should.be.rejected()
-
-    response.should.be.an.Error()
-    response.error_type.should.be.equal(400)
-    response.message.should.containEql('currencies')
-  })
-
   it('accounts.getBalances() should fail if an account has not connected yet', async function () {
     let response = await accounts.getBalances({ currencies: 'BTC' }).should.be.rejected()
 

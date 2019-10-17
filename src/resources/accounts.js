@@ -45,20 +45,21 @@ class Accounts {
   }
 
   async getBalances({ currencies } = {}) {
-    if (!currencies) {
-      throw new SDKError(400, '[Zabo] Missing `currencies` parameter. See: https://zabo.com/docs#get-balances')
-    }
-
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     }
 
-    if (Array.isArray(currencies)) {
-      currencies = currencies.join(',')
+    let url = `/accounts/${this.id}/balances`
+
+    if (currencies) {
+      if (Array.isArray(currencies)) {
+        currencies = currencies.join(',')
+      }
+      url = `${url}?currencies=${currencies}`
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.id}/balances?currencies=${currencies}`)
+      return this.api.request('GET', url)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
