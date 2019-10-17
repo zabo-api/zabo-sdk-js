@@ -23,11 +23,11 @@ const { SDKError } = require('../err')
 class Transactions {
   constructor(api) {
     this.api = api
-    this.accountId = null
+    this.account = null
   }
 
   _setAccount(account) {
-    this.accountId = account.id
+    this.account = account
   }
 
   async getTransaction({ userId, accountId, txId, currency } = {}) {
@@ -51,14 +51,14 @@ class Transactions {
       }
     }
 
-    if (!this.accountId) {
+    if (!this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!txId) {
       throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.accountId}/transactions/${txId}?currency=${currency}`)
+      return this.api.request('GET', `/accounts/${this.account.id}/transactions/${txId}?currency=${currency}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
@@ -84,13 +84,13 @@ class Transactions {
 
       url = `/users/${userId}/accounts/${accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
     } else {
-      if (!this.accountId) {
+      if (!this.account.id) {
         throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
       } else if (!currencyTicker) {
         throw new SDKError(400, '[Zabo] Missing `currencyTicker` parameter. See: https://zabo.com/docs#get-account-history')
       }
 
-      url = `/accounts/${this.accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
+      url = `/accounts/${this.account.id}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
     }
 
     try {
@@ -100,51 +100,73 @@ class Transactions {
     }
   }
 
-  async getCryptoTransferLink({ userId, accountId, toAddress, amount, note } = {}) {
+  async send({ userId, accountId, currency, toAddress, bytecode, amount }) {
+    let url = ''
+
     if (utils.isNode()) {
       if (!userId) {
-        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!uuidValidate(userId, 4)) {
-        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
       } else if (!accountId) {
-        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!uuidValidate(accountId, 4)) {
-        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#request-crypto-transfer')
-      } else if (!toAddress) {
-        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
       } else if (!amount) {
-        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-      } else if (!note) {
-        note = ''
-      } else {
-        note = encodeURIComponent(note)
+        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
       }
 
-      url = `/users/${userId}/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
+      if (currency.toLowerCase() == 'hbar') {
+        let hederaAccount = await this.api.resources.users.getAccount({ userId, accountId })
+
+        if (hederaAccount.wallet_provider.name == 'hedera') {
+          url = getCryptoTransferLink({ userId, accountId, toAddress, amount })
+        } else {
+          throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
+        }
+      }
     } else {
-      if (!this.accountId) {
+      if (!this.account.id) {
         throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
       } else if (!toAddress) {
-        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!amount) {
-        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-      } else if (!note) {
-        note = ''
-      } else {
-        note = encodeURIComponent(note)
+        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
+      } else if (!amount) {
+        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
       }
 
-      url = `/accounts/${this.accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
+      if (currency.toLowerCase() == 'hbar') {
+        if (this.account.wallet_provider.name == 'hedera') {
+          url = getCryptoTransferLink({ accountId, toAddress, amount })
+        } else {
+          throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
+        }
+      }
     }
 
-    try {
-      return this.api.request('GET', url)
-    } catch (err) {
-      throw new SDKError(err.error_type, err.message)
-    }
+    return this.api.request('GET', url)
   }
 }
 
+// Private functions
+const getCryptoTransferLink = async function ({ userId, accountId, toAddress, amount, note } = {}) {
+  if (!note) {
+    note = ''
+  } else {
+    note = encodeURIComponent(note)
+  }
+
+  if (utils.isNode()) {
+    url = `/users/${userId}/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
+  } else {
+    url = `/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
+  }
+
+  return url
+}
+
+// Export class instance
 module.exports = (api) => {
   return new Transactions(api)
 }
