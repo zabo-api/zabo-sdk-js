@@ -20,7 +20,7 @@ describe('Zabo SDK Transactions Resource', () => {
 
     sdk.api.resources.transactions.should.have.property('getTransaction')
     sdk.api.resources.transactions.should.have.property('getTransactionHistory')
-    sdk.api.resources.transactions.should.have.property('getCryptoTransferLink')
+    sdk.api.resources.transactions.should.have.property('send')
   })
 
   it('transactions.getTransaction() should fail if `userId` is not provided', async function () {
