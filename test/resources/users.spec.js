@@ -114,7 +114,7 @@ describe('Zabo SDK Users Resource', () => {
   it('users.getBalances() should fail if a `userId` is not provided', async function () {
     let response = await sdk.users.getBalances({
       accountId: 'not_an_account_id',
-      tickers: ['BTC', 'ETH']
+      currencies: ['BTC', 'ETH']
     }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -125,7 +125,7 @@ describe('Zabo SDK Users Resource', () => {
   it('users.getBalances() should fail if an `accountId` is not provided', async function () {
     let response = await sdk.users.getBalances({
       userId: 'not_a_user_id',
-      tickers: 'BTC'
+      currencies: 'BTC'
     }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -133,7 +133,7 @@ describe('Zabo SDK Users Resource', () => {
     response.message.should.containEql('accountId')
   })
 
-  it('users.getBalances() should fail if a string or array of `tickers` are not provided', async function () {
+  it('users.getBalances() should fail if a string or array of `currencies` are not provided', async function () {
     let response = await sdk.users.getBalances({
       accountId: 'not_an_account_id',
       userId: 'not_a_user_id'
@@ -141,7 +141,7 @@ describe('Zabo SDK Users Resource', () => {
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
-    response.message.should.containEql('tickers')
+    response.message.should.containEql('currencies')
   })
 
 })

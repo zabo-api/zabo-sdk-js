@@ -44,21 +44,21 @@ class Accounts {
     }
   }
 
-  async getBalances({ tickers } = {}) {
-    if (!tickers) {
-      throw new SDKError(400, '[Zabo] Missing `tickers` parameter. See: https://zabo.com/docs#get-balances')
+  async getBalances({ currencies } = {}) {
+    if (!currencies) {
+      throw new SDKError(400, '[Zabo] Missing `currencies` parameter. See: https://zabo.com/docs#get-balances')
     }
 
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     }
 
-    if (Array.isArray(tickers)) {
-      tickers = tickers.join(',')
+    if (Array.isArray(currencies)) {
+      currencies = currencies.join(',')
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.id}/balances?currency=${tickers}`)
+      return this.api.request('GET', `/accounts/${this.id}/balances?currencies=${currencies}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
