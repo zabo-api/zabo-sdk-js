@@ -54,15 +54,15 @@ class Users {
     }
   }
 
-  async removeAccount(user = {}, account = {}) {
-    if (!user.id) {
+  async removeAccount({ userId, accountId }) {
+    if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `id` property in user object. See: https://zabo.com/docs#remove-account-from-user')
-    } else if (!account.id) {
+    } else if (!accountId) {
       throw new SDKError(400, '[Zabo] Missing `id` property in account object. See: https://zabo.com/docs#remove-account-from-user')
     }
 
     try {
-      return this.api.request('DELETE', `/users/${user.id}/accounts/${account.id}`)
+      return this.api.request('DELETE', `/users/${userId}/accounts/${accountId}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

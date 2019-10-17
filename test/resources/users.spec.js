@@ -68,7 +68,7 @@ describe('Zabo SDK Users Resource', () => {
   })
 
   it('users.removeAccount() should fail if a user `id` is missing', async function () {
-    let response = await sdk.users.removeAccount({}, { id: 'account id' }).should.be.rejected()
+    let response = await sdk.users.removeAccount({ accountId: 'account id' }).should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
@@ -77,7 +77,7 @@ describe('Zabo SDK Users Resource', () => {
   })
 
   it('users.removeAccount() should fail if an account `id` is missing', async function () {
-    let response = await sdk.users.removeAccount({ id: 'user id' }).should.be.rejected()
+    let response = await sdk.users.removeAccount({ userId: 'user id' }).should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
