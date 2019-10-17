@@ -18,12 +18,12 @@ describe('Zabo SDK Wallet Providers Resource', () => {
 
     sdk.api.resources.should.have.property('walletProviders')
 
-    sdk.api.resources.walletProviders.should.have.property('getWalletProviders')
-    sdk.api.resources.walletProviders.should.have.property('getWalletProvider')
+    sdk.api.resources.walletProviders.should.have.property('getList')
+    sdk.api.resources.walletProviders.should.have.property('getOne')
   })
 
-  it('walletProviders.getWalletProviders() should fail if an invalid `limit` is provided', async function () {
-    let response = await sdk.walletProviders.getWalletProviders({ limit: 51 }).should.be.rejected()
+  it('walletProviders.getList() should fail if an invalid `limit` is provided', async function () {
+    let response = await sdk.walletProviders.getList({ limit: 51 }).should.be.rejected()
 
     response.should.be.an.Error()
 
@@ -31,8 +31,8 @@ describe('Zabo SDK Wallet Providers Resource', () => {
     response.message.should.containEql('limit')
   })
 
-  it('walletProviders.getWalletProviders() should fail if an invalid `cursor` is provided', async function () {
-    let response = await sdk.walletProviders.getWalletProviders({ cursor: 'not_a_valid_id' }).should.be.rejected()
+  it('walletProviders.getList() should fail if an invalid `cursor` is provided', async function () {
+    let response = await sdk.walletProviders.getList({ cursor: 'not_a_valid_id' }).should.be.rejected()
 
     response.should.be.an.Error()
 
@@ -40,8 +40,8 @@ describe('Zabo SDK Wallet Providers Resource', () => {
     response.message.should.containEql('cursor')
   })
 
-  it('walletProviders.getWalletProvider() should fail if a provider name is not provided', async function () {
-    let response = await sdk.walletProviders.getWalletProvider().should.be.rejected()
+  it('walletProviders.getOne() should fail if a provider name is not provided', async function () {
+    let response = await sdk.walletProviders.getOne().should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)

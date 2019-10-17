@@ -24,7 +24,7 @@ class WalletProviders {
     this.api = api
   }
 
-  async getWalletProviders({ limit = 25, cursor = '' } = {}) {
+  async getList({ limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit, cursor)
 
     try {
@@ -34,7 +34,7 @@ class WalletProviders {
     }
   }
 
-  async getWalletProvider(name) {
+  async getOne(name) {
     if (!name) {
       throw new SDKError(400, '[Zabo] Missing `name` input. See: https://zabo.com/docs#get-a-wallet-provider')
     }
