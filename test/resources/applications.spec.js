@@ -18,11 +18,12 @@ describe('Zabo SDK Applications Resource', () => {
 
     sdk.api.resources.should.have.property('applications')
 
-    sdk.api.resources.applications.should.have.property('getApplication')
+    sdk.api.resources.applications.should.have.property('get')
+    sdk.api.resources.applications.should.have.property('getInfo')
   })
 
-  it('applications.getApplication() should fail if an application id has not been set', async function () {
-    let response = await sdk.applications.getApplication().should.be.rejected()
+  it('applications.get() should fail if an application id has not been set', async function () {
+    let response = await sdk.applications.get().should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(401)

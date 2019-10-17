@@ -33,7 +33,7 @@ class Applications {
     this.id = id
   }
 
-  async getApplication() {
+  async get() {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] SDK has not initialized properly.')
     }
@@ -44,7 +44,7 @@ class Applications {
     }
   }
 
-  async getApplicationInfo() {
+  async getInfo() {
     if (!this.api.clientId) {
       throw new SDKError(401, '[Zabo] SDK has not initialized properly.')
     }
@@ -52,7 +52,7 @@ class Applications {
     let origin = encodeURIComponent(window ? window.location.host : '')
 
     if (!origin) {
-      throw new SDKError(401, '[Zabo] Method available only for client SDK. On the server-side, please use Zabo.getApplication() instead.')
+      throw new SDKError(401, '[Zabo] Method available only for client SDK. On the server-side, please use Zabo.applications.get() instead.')
     }
 
     try {

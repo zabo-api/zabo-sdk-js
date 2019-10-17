@@ -99,7 +99,7 @@ class ZaboSDK {
       }
 
       if (this.autoConnect) {
-        return this.applications.getApplicationInfo()
+        return this.applications.getInfo()
       }
     }
   }
