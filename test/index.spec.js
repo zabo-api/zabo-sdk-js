@@ -81,8 +81,8 @@ describe('Zabo SDK Module', () => {
     sdk.currencies.should.have.property('getExchangeRates')
 
     // transactions
-    sdk.transactions.should.have.property('getTransaction')
-    sdk.transactions.should.have.property('getTransactionHistory')
+    sdk.transactions.should.have.property('getOne')
+    sdk.transactions.should.have.property('getList')
   })
 
 })
