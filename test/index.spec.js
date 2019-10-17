@@ -64,8 +64,8 @@ describe('Zabo SDK Module', () => {
 
     // users
     sdk.users.should.have.property('create')
-    sdk.users.should.have.property('getUser')
-    sdk.users.should.have.property('getUsers')
+    sdk.users.should.have.property('getOne')
+    sdk.users.should.have.property('getList')
     sdk.users.should.have.property('getBalances')
 
     // applications

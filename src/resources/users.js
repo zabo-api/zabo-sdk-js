@@ -68,7 +68,7 @@ class Users {
     }
   }
 
-  async getUser(id) {
+  async getOne(id) {
     if (!id) {
       throw new SDKError(400, '[Zabo] Missing `id` input. See: https://zabo.com/docs#get-a-user')
     }
@@ -80,7 +80,7 @@ class Users {
     }
   }
 
-  async getUsers({ limit = 25, cursor = '' } = {}) {
+  async getList({ limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit, cursor)
 
     try {
