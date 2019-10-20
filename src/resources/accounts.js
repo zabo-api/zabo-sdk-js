@@ -58,7 +58,7 @@ class Accounts {
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.id}/balances?currency=${tickers}`)
+      return this.api.request('GET', `/accounts/${this.id}/balances?currencies=${tickers}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
