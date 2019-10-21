@@ -18,6 +18,7 @@
 
 const API = require('./api')
 const utils = require('./utils')
+const { ethereum } = require('./networks')
 const { SDKError } = require('./err')
 
 // SDK main class definition
@@ -29,6 +30,20 @@ class ZaboSDK {
   }
 
   async init(o) {
+    if (o.decentralized) {
+      try {
+        this.status = 'connecting'
+        this.status = await ethereum.connect(o.useNode)
+
+        if (!o.sendAppCryptoData) {
+          return
+        }
+      } catch (err) {
+        this.status = 'offline'
+        throw err
+      }
+    }
+
     let env = o.env ? o.env.toLowerCase() : null
     let acceptedEnvs = ['sandbox', 'live']
 
