@@ -32,12 +32,26 @@ class Ethereum {
       throw new SDKError(400, '[Zabo] For decentralized connections, please provide a valid node url as `useNode`. More details at: https://zabo.com/docs')
     }
 
-    this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
-
-    const network = await this.node.getNetwork()
-    console.log('>> NETWORK:', network)
+    try {
+      this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
+    } catch (err) {
+      throw new SDKError(400, `[Zabo] Failed to connect with geth or parity node. Error: ${err.message}`)
+    }
 
     return 'online'
+  }
+
+  async getBalance(address, currency = { ticker: 'ETH' }) {
+    if (!address || address.length !== 42) {
+      throw new SDKError(400, '[Zabo] Please provide a valid ethereum address. More details at: https://zabo.com/docs')
+    }
+
+    if (currency && currency.ticker != 'ETH') {
+      const obj =  utils.getDataObjectForEthereumRequest({ requestType: 'balanceOf', address, currency })
+      return this.node.call({ to: currency.address, data: obj.data })
+    }
+
+    return this.node.getBalance(address)
   }
 }
 
