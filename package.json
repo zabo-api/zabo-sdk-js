@@ -1,6 +1,6 @@
 {
   "name": "zabo-sdk-js",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Zabo SDK for JS",
   "main": "src/index.js",
   "scripts": {
@@ -43,6 +43,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "ethers": "^4.0.38",
+    "big-integer": "^1.6.47",
     "lodash": "^4.17.11",
     "mocha": "^6.1.4",
     "qrcode-generator": "^1.4.3",
