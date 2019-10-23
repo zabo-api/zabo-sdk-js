@@ -17,7 +17,6 @@
 'use strict'
 
 const crypto = require('crypto')
-const url = require('url')
 const bigInt = require("big-integer")
 const uuidValidate = require('uuid-validate')
 const qrcode = require('qrcode-generator')
@@ -95,8 +94,7 @@ function isValidNodeUrl(nodeUrl) {
   if (!nodeUrl) {
     return false
   }
-  const obj = url.parse(nodeUrl)
-  return obj.protocol && obj.host
+  return nodeUrl.includes('.ipc')
 }
 
 function getDataObjectForEthereumRequest({ requestType, address, currency, amount, options = {} }) {

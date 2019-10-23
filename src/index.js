@@ -32,12 +32,15 @@ class ZaboSDK {
   async init(o) {
     if (o.decentralized) {
       try {
+        console.log('connecting...')
+
         this.status = 'connecting'
         this.status = await ethereum.connect(o.useNode)
+        this.ethereum = ethereum
 
         // Just test metamask send tx
-        let metamask = require('./resources/metamask')()
-        await metamask.sendTransaction('0x0d7c1C957BE3fb3393979caF2454D580cC2C82b2', '0.0001')
+        // let metamask = require('./resources/metamask')()
+        // await metamask.sendTransaction('0x0d7c1C957BE3fb3393979caF2454D580cC2C82b2', '0.0001')
 
         if (!o.sendAppCryptoData) {
           return
