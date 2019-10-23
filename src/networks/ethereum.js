@@ -25,7 +25,7 @@ const { SDKError } = require('../err')
 class Ethereum {
   constructor(api) {
     this.node = null
-    this.account = null
+    // this.account = null
   }
 
   async connect (nodeUrl) {
@@ -36,11 +36,11 @@ class Ethereum {
     try {
       this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
 
-      const accounts = await this.node.listAccounts()
-      this.account = this.node.getSigner(accounts.shift())
-
-      // TODO: Handle geth/parity account unlocks with password files
-      await this.account.unlock('')
+      // const accounts = await this.node.listAccounts()
+      // this.account = this.node.getSigner(accounts.shift())
+      //
+      // // TODO: Handle geth/parity account unlocks with password files
+      // await this.account.unlock('')
     } catch (err) {
       throw new SDKError(400, `[Zabo] Failed to connect with geth or parity node. Error: ${err.message}`)
     }
@@ -64,28 +64,28 @@ class Ethereum {
     return ethers.utils.formatEther(result)
   }
 
-  async sendTransaction(address, amount, currency = { ticker: 'ETH' }) {
-    this.validateAddress(address)
-
-    let gasPrice = await this.node.getGasPrice()
-    let tx = { gasPrice, gasLimit: 250000 }
-
-    if (currency && currency.ticker != 'ETH') {
-      const obj = utils.getDataObjectForEthereumRequest({
-        requestType: 'transfer',
-        address,
-        amount,
-        currency
-      })
-      tx.to = currency.address
-      tx.data = obj.data
-    } else {
-      tx.to = address
-      tx.value = ethers.utils.parseEther(amount) // convert eth amount to wei
-    }
-
-    return this.account.sendTransaction(tx)
-  }
+  // async sendTransaction(tx) {
+  //   this.validateAddress(address)
+  //
+  //   let gasPrice = await this.node.getGasPrice()
+  //   let tx = { gasPrice, gasLimit: 250000 }
+  //
+  //   if (currency && currency.ticker != 'ETH') {
+  //     const obj = utils.getDataObjectForEthereumRequest({
+  //       requestType: 'transfer',
+  //       address,
+  //       amount,
+  //       currency
+  //     })
+  //     tx.to = currency.address
+  //     tx.data = obj.data
+  //   } else {
+  //     tx.to = address
+  //     tx.value = ethers.utils.parseEther(amount) // convert eth amount to wei
+  //   }
+  //
+  //   return this.account.sendTransaction(tx)
+  // }
 
   validateAddress (address) {
     if (address && address.length === 42) { return }
