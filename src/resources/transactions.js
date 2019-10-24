@@ -18,7 +18,7 @@
 
 const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
-const { ethereum } = require('./networks')
+const { ethereum } = require('../networks')
 const { SDKError } = require('../err')
 
 class Transactions {
