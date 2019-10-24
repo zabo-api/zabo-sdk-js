@@ -78,14 +78,17 @@ class Metamask {
 
     // Build and send transaction via Metamask. Note that, as of as Oct 24th 2019, 'nonce' is being ignored by Metamask.
     let { gasPrice, gasLimit, nonce } = options
-    let tx = { from: account, gasPrice: gasPrice, gas: gasLimit, nonce }
+    let tx = {
+      from: account,
+      gasPrice: gasPrice || '21000000000',
+      gas: gasLimit || '21000',
+      nonce
+    }
     tx = this._completeTransactionObject(tx, address, amount, currency)
 
     // Unforunately, web3 doesn't support promises just yet.
     return new Promise((resolve, reject) => {
       web3.eth.sendTransaction(tx, (err, txHash) => {
-        console.log('Metamask tx response:', err, txHash)
-
         if (err) {
           return reject(err)
         }
