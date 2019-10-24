@@ -68,6 +68,11 @@ class Ethereum {
     return ethers.utils.formatEther(result)
   }
 
+  async getTransaction(txHash) {
+    this.validateTxHash(txHash)
+    return this.node.getTransaction(txHash)
+  }
+
   async sendTransaction(address, amount, currency = { ticker: 'ETH' }) {
     this.validateAddress(address)
 
@@ -94,6 +99,11 @@ class Ethereum {
   validateAddress (address) {
     if (address && address.length === 42) { return }
     throw new SDKError(400, '[Zabo] Please provide a valid ethereum address. More details at: https://zabo.com/docs')
+  }
+
+  validateTxHash (txHash) {
+    if (address && address.length === 42) { return }
+    throw new SDKError(400, '[Zabo] Please provide a valid ethereum transaction hash. More details at: https://zabo.com/docs')
   }
 }
 

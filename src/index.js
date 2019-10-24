@@ -73,11 +73,16 @@ class ZaboSDK {
     }
 
     if (o.decentralized) {
-      this.status = 'connecting'
-      await ethereum.connect(o.useNode)
+      if (o.useNode) {
+        this.status = 'connecting'
+        await ethereum.connect(o.useNode)
+      }
 
       if (!o.sendAppCryptoData) {
-        this.api = new API({ sendAppCryptoData: false })
+        this.api = new API({
+          decentralized: true,
+          sendAppCryptoData: false
+        })
         this.api.resources.transactions._setTransport(ethereum.node)
         this.status = 'online'
         return
@@ -95,6 +100,7 @@ class ZaboSDK {
       connectUrl: o.connectUrl,
       clientId: o.clientId,
       env: this.env,
+      decentralized: o.decentralized,
       sendAppCryptoData: true
     })
 
@@ -130,7 +136,7 @@ class ZaboSDK {
   }
 
   checkZaboEnv(env) {
-    env = o.env ? o.env.toLowerCase() : null
+    env = env ? env.toLowerCase() : null
 
     let acceptedEnvs = ['sandbox', 'live']
     if (!env || !acceptedEnvs.includes(env)) {

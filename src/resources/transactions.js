@@ -18,6 +18,7 @@
 
 const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
+const { ethereum } = require('./networks')
 const { SDKError } = require('../err')
 
 class Transactions {
@@ -41,6 +42,10 @@ class Transactions {
   }
 
   async getOne({ userId, accountId, txId, currency } = {}) {
+    if (this.api.decentralized && ethereum.node) {
+      return ethereum.getTransaction(txId)
+    }
+
     if (!this.api.sendAppCryptoData) {
       throw new SDKError(403, '[Zabo] Cannot perform API calls while running Zabo SDK on decentralized mode')
     }
