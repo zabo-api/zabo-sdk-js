@@ -59,10 +59,12 @@
     <h3>Output:</h3>
 
     <div id="output"></div>
+
+    <div id="connect-widget"></div>
   </section>
 
   <script type="text/javascript" src="zabo.js"></script>
-  <script>window.Zabo || document.write('<script src="https://cdn.zabo.com/develop/0.2.0/zabo.js">\x3C/script>')</script>
+  <script>window.Zabo || document.write('<script src="https://cdn.zabo.com/develop/0.5.0/zabo.js">\x3C/script>')</script>
   <!-- <script type="text/javascript" src="https://cdn.zabo.com/latest/zabo.js"></script> -->
 
   <script type="text/javascript">
@@ -72,13 +74,28 @@
 
       const output = document.querySelector('#output')
 
-      // Initiate Zabo SDK, replace the `clientId` field with your app key generated at {LINK}.
+      // ** EXAMPLES **
+
+      // Zabo.init({
+      //   clientId: '<YOUR CLIENT ID>',
+      //   baseUrl: 'https://api.zabo.com',
+      //   connectUrl: 'https://connect.zabo.com',
+      //   env: 'sandbox'
+      // })
+
+      // Zabo.init({
+      //   decentralized: true,
+      //   sendAppCryptoData: false,
+      //   useNode: 'http://localhost:8545'
+      // })
+
+      // Initiate Zabo SDK, replace the `clientId` field with your app key generated at zabo.com
       Zabo.init({
         clientId: '99E88F9AbF8d4eAf4D59f83c3DA47C97233D97FFBB08F47F4b8Ec29D28eaE193',
         baseUrl: 'https://api.zabo.com',
         connectUrl: 'https://connect.zabo.com',
         env: 'sandbox'
-      }).then(() => {
+      }).then((app) => {
         Zabo.accounts.getAccount().then(account => {
           printOutput(account)
           document.querySelector('.methods').style.display = 'block'
@@ -90,7 +107,12 @@
       // Bind "connect" button
       document.querySelector('#connect').addEventListener('click', ev => {
         // Call default .connect() window. For an embedded iframe, please see https://zabo.com/docs#connect-an-account
-        Zabo.connect().onConnection(account => {
+        Zabo.connect({
+          // interfaceType: 'iframe',
+          // attachTo: '#connect-widget',
+          width: 540,
+          height: 960
+        }).onConnection(account => {
           console.log('account connected:', account)
           printOutput(account)
 
@@ -107,7 +129,7 @@
     const bindOtherMethods = () => {
       document.querySelector('#getBalance').addEventListener('click', ev => {
         // Get ETH balance
-        Zabo.accounts.getBalances({tickers: ["ETH"]}).then(balances => {
+        Zabo.accounts.getBalances({ currencies: ["ETH"] }).then(balances => {
           printOutput(balances)
         }).catch(error => {
           /* User has not yet connected or doesn't have an ether wallet */
@@ -117,7 +139,7 @@
 
       document.querySelector('#getHistory').addEventListener('click', ev => {
         // Get account transactions history
-        Zabo.transactions.getTransactionHistory({ currencyTicker: 'ETH' }).then(history => {
+        Zabo.transactions.getList({ currency: 'ETH' }).then(history => {
           printOutput(history)
         }).catch(error => {
           /* User has not yet connected */
