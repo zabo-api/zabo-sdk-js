@@ -28,14 +28,17 @@ class Ethereum {
     this.account = null
   }
 
-  async connect (nodeIpcPath) {
-    if (!utils.isValidNodeUrl(nodeIpcPath)) {
+  async connect (nodeUrl) {
+    if (!utils.isValidNodeUrl(nodeUrl)) {
       throw new SDKError(400, '[Zabo] For decentralized connections, please provide a valid node url as `useNode`. More details at: https://zabo.com/docs')
     }
 
     try {
-      // this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
-      this.node = new ethers.providers.IpcProvider(nodeIpcPath)
+      if (utils.isNode() && nodeUrl.includes('.ipc')) {
+        this.node = new ethers.providers.IpcProvider(nodeUrl)
+      } else {
+        this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
+      }
 
       const accounts = await this.node.listAccounts()
       this.account = this.node.getSigner(accounts.pop())

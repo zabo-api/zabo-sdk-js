@@ -30,7 +30,12 @@ class ZaboSDK {
   }
 
   async init(o) {
+    // Testing metamask send tx
+    // let metamask = require('./resources/metamask')()
+    // await metamask.sendTransaction('0x0d7c1C957BE3fb3393979caF2454D580cC2C82b2', '0.0001')
+
     if (utils.isBrowser() && o.decentralized) {
+      this.status = 'connecting'
       await ethereum.connect(o.useNode)
 
       if (!o.sendAppCryptoData) {
@@ -38,30 +43,10 @@ class ZaboSDK {
           sendAppCryptoData: false
         })
         this.api.resources.transactions._setTransport(ethereum.node)
+        this.status = 'online'
         return
       }
     }
-
-    // if (o.decentralized) {
-    //   try {
-    //     console.log('connecting...')
-    //
-    //     this.status = 'connecting'
-    //     this.status = await ethereum.connect(o.useNode)
-    //     this.ethereum = ethereum
-    //
-    //     // Just test metamask send tx
-    //     // let metamask = require('./resources/metamask')()
-    //     // await metamask.sendTransaction('0x0d7c1C957BE3fb3393979caF2454D580cC2C82b2', '0.0001')
-    //
-    //     if (!o.sendAppCryptoData) {
-    //       return
-    //     }
-    //   } catch (err) {
-    //     this.status = 'offline'
-    //     throw err
-    //   }
-    // }
 
     let env = o.env ? o.env.toLowerCase() : null
     let acceptedEnvs = ['sandbox', 'live']

@@ -36,6 +36,7 @@ class Transactions {
       throw new SDKError(403, '[Zabo] Decentralized node not connected properly. See: https://zabo.com/docs')
     }
 
+    // TODO: Check if it's a eth/btc node and make sure it's connected and synced to a main or test net.
     this.transport = node
   }
 

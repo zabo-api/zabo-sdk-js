@@ -76,60 +76,23 @@ class Metamask {
       throw new SDKError(400, '[Zabo] Unable to sign transaction on metamask. More details at: https://zabo.com/docs')
     }
 
+    // Build and send transaction via Metamask. Note that, as of as Oct 24th 2019, 'nonce' is being ignored by Metamask.
     let { gasPrice, gasLimit, nonce } = options
-    gasLimit = gasLimit || 250000
+    let tx = { from: account, gasPrice: gasPrice, gas: gasLimit, nonce }
+    tx = this._completeTransactionObject(tx, address, amount, currency)
 
-    if (ethereum.node) {
-      let network = await ethereum.node.getNetwork()
+    // Unforunately, web3 doesn't support promises just yet.
+    return new Promise((resolve, reject) => {
+      web3.eth.sendTransaction(tx, (err, txHash) => {
+        console.log('Metamask tx response:', err, txHash)
 
-      // Sign transaction and send signed hash via the connected node.
-      if (!gasPrice) {
-        gasPrice = await ethereum.node.getGasPrice()
-      }
-      if (!nonce) {
-        nonce = await ethereum.node.getTransactionCount(account)
-      }
+        if (err) {
+          return reject(err)
+        }
 
-      // Build ans serialize transaction object to sign
-      let tx = {
-        gasLimit,
-        gasPrice,
-        nonce,
-        chainId: network.chainId // Rinkeby
-      }
-      tx = this._completeTransactionObject(tx, address, amount, currency)
-
-      // Unforunately the web3 API doesn't support promises just yet
-      return new Promise(resolve => {
-        let txHex = ethers.utils.serializeTransaction(tx)
-
-        web3.personal.sign(txHex, account, async (err, signedTx) => {
-          if (err) {
-            throw new SDKError(400, `[Zabo] Unable to sign transaction on metamask. Error: ${err}`)
-          }
-
-          // let response = await ethereum.node.sendTransaction(signedTx)
-          web3.eth.sendRawTransaction(signedTx, (err, response) => {
-            if (err) {
-              throw new SDKError(400, `[Zabo] Unable to push transaction to the ethereum network. Error: ${err}`)
-            }
-
-            return resolve(response)
-          })
-        })
+        return resolve(txHash)
       })
-    } else {
-      // Sign and send transaction via default Metamask flow. Note that 'nonce' is ignored by Metamask.
-      if (!gasPrice) {
-        gasPrice = 21000000000
-      }
-
-      // Build ans send transaction via Metamask
-      let tx = { gasPrice, gasLimit, nonce }
-      tx = this._completeTransactionObject(tx, address, amount, currency)
-
-      // TODO: Push transaction to metamask using ethereum.sendAsync({ method: 'eth_sendTransaction' })
-    }
+    })
   }
 
   _completeTransactionObject (tx, address, amount, currency) {
