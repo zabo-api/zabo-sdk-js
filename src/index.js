@@ -30,33 +30,6 @@ class ZaboSDK {
   }
 
   async init(o) {
-    // Testing metamask send tx
-    // let metamask = require('./resources/metamask')()
-    // await metamask.sendTransaction('0x0d7c1C957BE3fb3393979caF2454D580cC2C82b2', '0.0001')
-
-    if (utils.isBrowser() && o.decentralized) {
-      this.status = 'connecting'
-      await ethereum.connect(o.useNode)
-
-      if (!o.sendAppCryptoData) {
-        this.api = new API({
-          sendAppCryptoData: false
-        })
-        this.api.resources.transactions._setTransport(ethereum.node)
-        this.status = 'online'
-        return
-      }
-    }
-
-    let env = o.env ? o.env.toLowerCase() : null
-    let acceptedEnvs = ['sandbox', 'live']
-
-    if (!env || !acceptedEnvs.includes(env)) {
-      return this.throwConnectError(400, '[Zabo] Please provide a valid env, should be \'sandbox\' or \'live\'. More details at: https://zabo.com/docs')
-    }
-
-    this.env = env
-
     if (typeof o.autoConnect !== 'undefined') {
       this.autoConnect = o.autoConnect
     } else {
@@ -67,6 +40,8 @@ class ZaboSDK {
       if (!o.apiKey || !o.secretKey || typeof o.apiKey !== 'string' || typeof o.secretKey !== 'string') {
         return this.throwConnectError(401, '[Zabo] Please provide a valid Zabo app API and Secret keys. More details at: https://zabo.com/docs#app-server-authentication')
       }
+
+      this.env = this.checkZaboEnv(o.env)
 
       try {
         this.api = new API({
@@ -79,11 +54,6 @@ class ZaboSDK {
 
         this.setEndpointAliases()
 
-        if (o.decentralized) {
-          await ethereum.connect(o.useNode)
-          this.transactions.setTransport(ethereum.node)
-        }
-
         if (this.autoConnect) {
           this.status = 'connecting'
           await this.api.connect()
@@ -95,12 +65,26 @@ class ZaboSDK {
 
           return this.applications.id
         }
-
-        return
       } catch (err) {
         throw err
       }
+
+      return
     }
+
+    if (o.decentralized) {
+      this.status = 'connecting'
+      await ethereum.connect(o.useNode)
+
+      if (!o.sendAppCryptoData) {
+        this.api = new API({ sendAppCryptoData: false })
+        this.api.resources.transactions._setTransport(ethereum.node)
+        this.status = 'online'
+        return
+      }
+    }
+
+    this.env = this.checkZaboEnv(o.env)
 
     if (!o.clientId || typeof o.clientId !== 'string') {
       throw new SDKError(400, '[Zabo] Please provide a valid Zabo app clientId. More details at: https://zabo.com/docs')
@@ -114,23 +98,25 @@ class ZaboSDK {
       sendAppCryptoData: true
     })
 
-    if (this.api.resources) {
-      this.setEndpointAliases()
+    if (!this.api.resources) {
+      return
+    }
 
-      if (ethereum.node) {
-        this.transactions._setTransport(ethereum.node)
-      }
+    this.setEndpointAliases()
 
-      try {
-        let account = await this.accounts.getAccount()
-        this.transactions._setAccount(account)
-      } catch (e) {
-        console.error(e)
-      }
+    if (ethereum.node) {
+      this.transactions._setTransport(ethereum.node)
+    }
 
-      if (this.autoConnect) {
-        return this.applications.getInfo()
-      }
+    try {
+      let account = await this.accounts.getAccount()
+      this.transactions._setAccount(account)
+    } catch (e) {
+      console.error(e)
+    }
+
+    if (this.autoConnect) {
+      return this.applications.getInfo()
     }
   }
 
@@ -141,6 +127,17 @@ class ZaboSDK {
 
   setEndpointAliases() {
     Object.assign(this, this.api.resources)
+  }
+
+  checkZaboEnv(env) {
+    env = o.env ? o.env.toLowerCase() : null
+
+    let acceptedEnvs = ['sandbox', 'live']
+    if (!env || !acceptedEnvs.includes(env)) {
+      return this.throwConnectError(400, '[Zabo] Please provide a valid env, should be \'sandbox\' or \'live\'. More details at: https://zabo.com/docs')
+    }
+
+    return env
   }
 
   connect({ interfaceType = 'popup', attachTo = 'body', width = 540, height = 960  } = {}) {
