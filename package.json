@@ -42,8 +42,8 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
-    "ethers": "^4.0.38",
     "big-integer": "^1.6.47",
+    "ethers": "^4.0.38",
     "lodash": "^4.17.11",
     "mocha": "^6.1.4",
     "qrcode-generator": "^1.4.3",

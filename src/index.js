@@ -30,26 +30,38 @@ class ZaboSDK {
   }
 
   async init(o) {
-    if (o.decentralized) {
-      try {
-        console.log('connecting...')
+    if (utils.isBrowser() && o.decentralized) {
+      await ethereum.connect(o.useNode)
 
-        this.status = 'connecting'
-        this.status = await ethereum.connect(o.useNode)
-        this.ethereum = ethereum
-
-        // Just test metamask send tx
-        // let metamask = require('./resources/metamask')()
-        // await metamask.sendTransaction('0x0d7c1C957BE3fb3393979caF2454D580cC2C82b2', '0.0001')
-
-        if (!o.sendAppCryptoData) {
-          return
-        }
-      } catch (err) {
-        this.status = 'offline'
-        throw err
+      if (!o.sendAppCryptoData) {
+        this.api = new API({
+          sendAppCryptoData: false
+        })
+        this.api.resources.transactions._setTransport(ethereum.node)
+        return
       }
     }
+
+    // if (o.decentralized) {
+    //   try {
+    //     console.log('connecting...')
+    //
+    //     this.status = 'connecting'
+    //     this.status = await ethereum.connect(o.useNode)
+    //     this.ethereum = ethereum
+    //
+    //     // Just test metamask send tx
+    //     // let metamask = require('./resources/metamask')()
+    //     // await metamask.sendTransaction('0x0d7c1C957BE3fb3393979caF2454D580cC2C82b2', '0.0001')
+    //
+    //     if (!o.sendAppCryptoData) {
+    //       return
+    //     }
+    //   } catch (err) {
+    //     this.status = 'offline'
+    //     throw err
+    //   }
+    // }
 
     let env = o.env ? o.env.toLowerCase() : null
     let acceptedEnvs = ['sandbox', 'live']
@@ -76,10 +88,16 @@ class ZaboSDK {
           baseUrl: o.baseUrl,
           apiKey: o.apiKey,
           secretKey: o.secretKey,
-          env: this.env
+          env: this.env,
+          sendAppCryptoData: true
         })
 
         this.setEndpointAliases()
+
+        if (o.decentralized) {
+          await ethereum.connect(o.useNode)
+          this.transactions.setTransport(ethereum.node)
+        }
 
         if (this.autoConnect) {
           this.status = 'connecting'
@@ -107,11 +125,16 @@ class ZaboSDK {
       baseUrl: o.baseUrl,
       connectUrl: o.connectUrl,
       clientId: o.clientId,
-      env: this.env
+      env: this.env,
+      sendAppCryptoData: true
     })
 
     if (this.api.resources) {
       this.setEndpointAliases()
+
+      if (ethereum.node) {
+        this.transactions._setTransport(ethereum.node)
+      }
 
       try {
         let account = await this.accounts.getAccount()

@@ -24,13 +24,26 @@ class Transactions {
   constructor(api) {
     this.api = api
     this.account = null
+    this.transport = null
   }
 
   _setAccount(account) {
     this.account = account
   }
 
+  async _setTransport(node) {
+    if (!node) {
+      throw new SDKError(403, '[Zabo] Decentralized node not connected properly. See: https://zabo.com/docs')
+    }
+
+    this.transport = node
+  }
+
   async getOne({ userId, accountId, txId, currency } = {}) {
+    if (!this.api.sendAppCryptoData) {
+      throw new SDKError(403, '[Zabo] Cannot perform API calls while running Zabo SDK on decentralized mode')
+    }
+
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -65,6 +78,10 @@ class Transactions {
   }
 
   async getList({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
+    if (!this.api.sendAppCryptoData) {
+      throw new SDKError(403, '[Zabo] Cannot perform API calls while running Zabo SDK on decentralized mode')
+    }
+
     utils.validateListParameters(limit, cursor)
 
     let url = null

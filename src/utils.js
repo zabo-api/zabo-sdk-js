@@ -17,7 +17,8 @@
 'use strict'
 
 const crypto = require('crypto')
-const bigInt = require("big-integer")
+const url = require('url')
+const bigInt = require('big-integer')
 const uuidValidate = require('uuid-validate')
 const qrcode = require('qrcode-generator')
 const { SDKError } = require('./err')
@@ -94,6 +95,12 @@ function isValidNodeUrl(nodeUrl) {
   if (!nodeUrl) {
     return false
   }
+
+  if (isBrowser()) {
+    const u = url.parse(nodeUrl)
+    return u.protocol && u.host
+  }
+
   return nodeUrl.includes('.ipc')
 }
 
