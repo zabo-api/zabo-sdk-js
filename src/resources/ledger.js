@@ -16,14 +16,45 @@
  *
  * @description: Zabo bridge with Ledger USB Wallet
  */
+const Btc = require('@ledgerhq/hw-app-btc').default
+const Eth = require('@ledgerhq/hw-app-eth').default
+const TransportWebUSB = require('@ledgerhq/hw-transport-webusb').default
 
 class Ledger {
   constructor() {
     this.accounts = []
+
+    this.eth = null
+    this.btc = null
   }
 
   onConnect(data) {
     console.log('[Zabo] Account connected with ledger.')
+  }
+
+  async signTransaction(rawTx, currency) {
+    try {
+      const transport = await TransportWebUSB.create()
+
+      if (currency.toLowerCase() == 'eth') {
+        if (!this.eth) {
+          this.eth = new Eth(transport)
+        }
+
+        return this.eth.signTransaction("44'/60'/0'/0/0", rawTx.replace(/^0x/, ''))
+      }
+
+      if (currency.toLowerCase() == 'btc') {
+        if (!this.btc) {
+          this.btc = new Btc(transport)
+        }
+
+        // TODO: this.btc.signP2SHTransaction()
+      }
+    } catch (err) {
+      console.log(`[Zabo] Ledger.signTransaction Error: ${err}`)
+      throw new SDKError(400, '[Zabo] Unable to sign transaction with ledger. More details at: https://zabo.com/docs')
+    }
   }
 
   _onAccountSwitch(account) {

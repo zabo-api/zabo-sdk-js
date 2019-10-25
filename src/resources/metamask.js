@@ -24,12 +24,15 @@ const { SDKError } = require('../err')
 
 class Metamask {
   constructor() {
-    this.ethereum = window.ethereum
     this.accounts = []
+
+    if (typeof window !== 'undefined') {
+      this.ethereum = window.ethereum
+    }
   }
 
   isSupported() {
-    return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask
+    return window && typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask
   }
 
   async connect() {
@@ -72,7 +75,7 @@ class Metamask {
       }
     }
 
-    if (!window.web3) {
+    if (!window || !window.web3) {
       throw new SDKError(400, '[Zabo] Unable to sign transaction on metamask. More details at: https://zabo.com/docs')
     }
 
