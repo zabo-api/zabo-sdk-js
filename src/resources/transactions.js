@@ -19,6 +19,7 @@
 const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
 const metamask = require('./metamask')()
+const ledger = require('./ledger')()
 const { ethereum } = require('../networks')
 const { SDKError } = require('../err')
 
@@ -205,11 +206,20 @@ class Transactions {
         throw new SDKError(500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
       }
     } else if (this.account.wallet_provider.name == 'ledger') {
-      if (currency.toLowerCase() == 'eth') {
-        // TODO: Call GET /bytecode for eth tx, sign it via ledger.sign() and then POST to /accounts/:id/transaction
-      } else if (currency.toLowerCase() == 'btc') {
-        // TODO: Call GET /bytecode for btc tx, sign it via ledger.sign() and then POST to /accounts/:id/transaction
+      if (currency.toLowerCase() == 'eth' || currency.toLowerCase() == 'btc') {
+        let response = await this.api.resources.utils.getBytecode({
+          fromAddress: this.account.address,
+          toAddress,
+          amount,
+          currency
+        })
+
+        let signedTx = await ledger.signTransaction(response.bytecode, currency)
+
+        // TODO: POST to /accounts/:id/transaction
+        return
       }
+      throw new SDKError(500, `[Zabo] Failed to send 'Ledger' transaction. Error: ${err}`)
     }
 
     return this.api.request('GET', url)

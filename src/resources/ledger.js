@@ -16,6 +16,7 @@
  *
  * @description: Zabo bridge with Ledger USB Wallet
  */
+const regeneratorRuntime = require('regenerator-runtime')
 const Btc = require('@ledgerhq/hw-app-btc').default
 const Eth = require('@ledgerhq/hw-app-eth').default
 const TransportWebUSB = require('@ledgerhq/hw-transport-webusb').default
