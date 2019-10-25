@@ -60,7 +60,7 @@ class Metamask {
     console.log('[Zabo] Account connected with metamask.')
   }
 
-  async sendTransaction(address, amount, currency = { ticker: 'ETH' }, options = {}) {
+  async sendTransaction({ address, amount, currency = { ticker: 'ETH' }, options = {} } = {}) {
     let account = null
 
     if (this.accounts[0]) {
@@ -72,7 +72,7 @@ class Metamask {
       }
     }
 
-    if (!web3) {
+    if (!window.web3) {
       throw new SDKError(400, '[Zabo] Unable to sign transaction on metamask. More details at: https://zabo.com/docs')
     }
 
@@ -88,12 +88,12 @@ class Metamask {
 
     // Unforunately, web3 doesn't support promises just yet.
     return new Promise((resolve, reject) => {
-      web3.eth.sendTransaction(tx, (err, txHash) => {
+      window.web3.eth.sendTransaction(tx, (err, txHash) => {
         if (err) {
           return reject(err)
         }
 
-        return resolve(txHash)
+        resolve(txHash)
       })
     })
   }

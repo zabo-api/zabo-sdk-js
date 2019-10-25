@@ -40,7 +40,7 @@ class Currencies {
     }
 
     try {
-      return this.api.request('GET', `/currencies/${ticker}`)
+      return this.api.request('GET', `/currencies/${currency}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

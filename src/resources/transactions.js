@@ -18,6 +18,7 @@
 
 const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
+const metamask = require('./metamask')()
 const { ethereum } = require('../networks')
 const { SDKError } = require('../err')
 
@@ -119,7 +120,7 @@ class Transactions {
     }
   }
 
-  async send({ userId, accountId, currency, toAddress, bytecode, amount }) {
+  async send({ userId, accountId, currency, toAddress, bytecode, amount } = {}) {
     let url = ''
 
     if (utils.isNode()) {
@@ -144,23 +145,70 @@ class Transactions {
           throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
         }
       }
-    } else {
-      if (!this.account.id) {
-        throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
-      } else if (!toAddress) {
-        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#send-a-transaction')
-      } else if (!amount) {
-        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
-      } else if (!amount) {
-        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
+
+      return this.api.request('GET', url)
+    }
+
+    if (!toAddress) {
+      throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#send-a-transaction')
+    } else if (!amount) {
+      throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
+    } else if (!currency) {
+      throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#send-a-transaction')
+    }
+
+    if (this.api.decentralized) {
+      const currencyObj = await this.api.resources.currencies.getOne(currency)
+      const tx = { address: toAddress, currency: currencyObj, amount }
+
+      // Check if user is connected to their own ethereum node
+      if (ethereum.node) {
+        return this.api.resources.transactions.sendTransaction(tx)
       }
 
-      if (currency.toLowerCase() == 'hbar') {
-        if (this.account.wallet_provider.name == 'hedera') {
-          url = getCryptoTransferLink({ accountId, toAddress, amount })
-        } else {
-          throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
+      // Check if a web3 provider is available (e.g. metamask or mist)
+      if (window.web3) {
+        try {
+          return metamask.sendTransaction(tx)
+        } catch (err) {
+          throw new SDKError(500, `[Zabo] Failed to send transaction. Error: ${err}`)
         }
+      }
+    }
+
+    if (!this.account.id) {
+      throw new SDKError(400, '[Zabo] Account not connected. See: https://zabo.com/docs#connecting-a-user')
+    }
+
+    if (currency.toLowerCase() == 'hbar') {
+      if (this.account.wallet_provider.name == 'hedera') {
+        url = getCryptoTransferLink({ accountId, toAddress, amount })
+      } else {
+        throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
+      }
+    }
+
+    if (this.account.wallet_provider.type != 'private_key') {
+      throw new SDKError(403, '[Zabo] At this moment we support transactions for self-custody wallets only. See: https://zabo.com/docs#send-a-transaction')
+    }
+
+    const currencyObj = await this.api.resources.currencies.getOne(currency)
+
+    if (this.account.wallet_provider.name == 'metamask') {
+      if (!metamask.isSupported()) {
+        throw new SDKError(403, '[Zabo] Metamask not installed.')
+      }
+
+      try {
+        return metamask.sendTransaction({ address: toAddress, currency: currencyObj, amount })
+      } catch (err) {
+        throw new SDKError(500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
+      }
+    } else if (this.account.wallet_provider.name == 'ledger') {
+      if (currency.toLowerCase() == 'eth') {
+        // TODO: Call GET /bytecode for eth tx, sign it via ledger.sign() and then POST to /accounts/:id/transaction
+      } else if (currency.toLowerCase() == 'btc') {
+        // TODO: Call GET /bytecode for btc tx, sign it via ledger.sign() and then POST to /accounts/:id/transaction
       }
     }
 
