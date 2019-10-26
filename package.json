@@ -50,6 +50,7 @@
     "lodash": "^4.17.11",
     "mocha": "^6.1.4",
     "qrcode-generator": "^1.4.3",
+    "regenerator-runtime": "^0.13.3",
     "uuid-validate": "0.0.3"
   }
 }

@@ -73,19 +73,23 @@ class ZaboSDK {
     }
 
     if (o.decentralized) {
-      if (o.useNode) {
-        this.status = 'connecting'
-        await ethereum.connect(o.useNode)
-      }
+      try {
+        if (o.useNode) {
+          this.status = 'connecting'
+          await ethereum.connect(o.useNode)
+        }
 
-      if (!o.sendAppCryptoData) {
-        this.api = new API({
-          decentralized: true,
-          sendAppCryptoData: false
-        })
-        this.api.resources.transactions._setTransport(ethereum.node)
-        this.status = 'online'
-        return
+        if (!o.sendAppCryptoData) {
+          this.api = new API({
+            decentralized: true,
+            sendAppCryptoData: false
+          })
+          this.api.resources.transactions._setTransport(ethereum.node)
+          this.status = 'online'
+          return
+        }
+      } catch (err) {
+        return this.throwConnectError(401, err)
       }
     }
 
