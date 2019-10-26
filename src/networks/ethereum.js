@@ -40,6 +40,7 @@ class Ethereum {
         this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
       }
 
+      const status = await this.node.getNetwork()
       const accounts = await this.node.listAccounts()
       this.account = this.node.getSigner(accounts.pop())
 

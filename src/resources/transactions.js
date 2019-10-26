@@ -122,8 +122,6 @@ class Transactions {
   }
 
   async send({ userId, accountId, currency, toAddress, bytecode, amount } = {}) {
-    let url = ''
-
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#send-a-transaction')
@@ -141,7 +139,8 @@ class Transactions {
         let hederaAccount = await this.api.resources.users.getAccount({ userId, accountId })
 
         if (hederaAccount.wallet_provider.name == 'hedera') {
-          url = getCryptoTransferLink({ userId, accountId, toAddress, amount })
+          let url = getCryptoTransferLink({ userId, accountId, toAddress, amount })
+          return this.api.request('GET', url)
         } else {
           throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
         }
@@ -168,7 +167,7 @@ class Transactions {
       }
 
       // Check if a web3 provider is available (e.g. metamask or mist)
-      if (window.web3) {
+      if (typeof window !== 'undefined' && window.web3) {
         try {
           return metamask.sendTransaction(tx)
         } catch (err) {
@@ -183,7 +182,8 @@ class Transactions {
 
     if (currency.toLowerCase() == 'hbar') {
       if (this.account.wallet_provider.name == 'hedera') {
-        url = getCryptoTransferLink({ accountId, toAddress, amount })
+        let url = getCryptoTransferLink({ accountId, toAddress, amount })
+        return this.api.request('GET', url)
       } else {
         throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
       }
@@ -216,13 +216,11 @@ class Transactions {
 
         let signedTx = await ledger.signTransaction(response.bytecode, currency)
 
-        // TODO: POST to /accounts/:id/transaction
-        return
+        return this.api.request('POST', `/accounts/${this.account.id}/transactions`)
       }
+
       throw new SDKError(500, `[Zabo] Failed to send 'Ledger' transaction. Error: ${err}`)
     }
-
-    return this.api.request('GET', url)
   }
 }
 
