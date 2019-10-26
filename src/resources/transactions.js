@@ -216,7 +216,11 @@ class Transactions {
 
         let signedTx = await ledger.signTransaction(response.bytecode, currency)
 
-        return this.api.request('POST', `/accounts/${this.account.id}/transactions`)
+        return this.api.request('POST', `/accounts/${this.account.id}/transactions`, {
+          currency,
+          bytecode: response.bytecode,
+          signature: signedTx
+        })
       }
 
       throw new SDKError(500, `[Zabo] Failed to send 'Ledger' transaction. Error: ${err}`)
