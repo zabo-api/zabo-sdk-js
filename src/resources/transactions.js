@@ -27,20 +27,10 @@ class Transactions {
   constructor(api) {
     this.api = api
     this.account = null
-    this.transport = null
   }
 
   _setAccount(account) {
     this.account = account
-  }
-
-  async _setTransport(node) {
-    if (!node) {
-      throw new SDKError(403, '[Zabo] Decentralized node not connected properly. See: https://zabo.com/docs')
-    }
-
-    // TODO: Check if it's a eth/btc node and make sure it's connected and synced to a main or test net.
-    this.transport = node
   }
 
   async getOne({ userId, accountId, txId, currency } = {}) {
@@ -146,7 +136,7 @@ class Transactions {
         }
       }
 
-      return this.api.request('GET', url)
+      return
     }
 
     if (!toAddress) {
@@ -158,12 +148,11 @@ class Transactions {
     }
 
     if (this.api.decentralized) {
-      const currencyObj = await this.api.resources.currencies.getOne(currency)
-      const tx = { address: toAddress, currency: currencyObj, amount }
+      const tx = { address: toAddress, amount, currency: { ticker: currency } }
 
       // Check if user is connected to their own ethereum node
       if (ethereum.node) {
-        return this.api.resources.transactions.sendTransaction(tx)
+        return ethereum.sendTransaction(tx)
       }
 
       // Check if a web3 provider is available (e.g. metamask or mist)

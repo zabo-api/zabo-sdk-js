@@ -23,7 +23,7 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Ethereum {
-  constructor(api) {
+  constructor() {
     this.node = null
     this.account = null
   }
@@ -42,6 +42,7 @@ class Ethereum {
 
       const status = await this.node.getNetwork()
       const accounts = await this.node.listAccounts()
+
       this.account = this.node.getSigner(accounts.pop())
 
       // TODO: Handle geth/parity account unlocks with password files
@@ -74,27 +75,32 @@ class Ethereum {
     return this.node.getTransaction(txHash)
   }
 
-  async sendTransaction(address, amount, currency = { ticker: 'ETH' }) {
-    this.validateAddress(address)
+  async sendTransaction({ address, amount, currency = { ticker: 'ETH', decimals: 18 }} = {}) {
+    try {
+      this.validateAddress(address)
 
-    let gasPrice = await this.node.getGasPrice()
-    let tx = { gasPrice, gasLimit: 250000 }
+      const gasPrice = await this.node.getGasPrice()
+      const txObj = { gasPrice, gasLimit: 250000 }
 
-    if (currency && currency.ticker != 'ETH') {
-      const obj = utils.getDataObjectForEthereumRequest({
-        requestType: 'transfer',
-        address,
-        amount,
-        currency
-      })
-      tx.to = currency.address
-      tx.data = obj.data
-    } else {
-      tx.to = address
-      tx.value = ethers.utils.parseEther(amount) // convert eth amount to wei
+      if (currency && currency.ticker.toLowerCase() != 'eth') {
+        const obj = utils.getDataObjectForEthereumRequest({
+          requestType: 'transfer',
+          address,
+          amount,
+          currency
+        })
+        txObj.to = currency.address
+        txObj.data = obj.data
+      } else {
+        txObj.to = address
+        txObj.value = ethers.utils.parseEther(amount) // convert eth amount to wei
+      }
+
+      return this.account.sendTransaction(txObj)
+    } catch (err) {
+      console.error(err)
+      throw new SDKError(400, '[Zabo] Unable to send transaction to ethereum node. Please review your inputs and try again.')
     }
-
-    return this.account.sendTransaction(tx)
   }
 
   validateAddress (address) {

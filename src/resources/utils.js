@@ -41,7 +41,7 @@ class Utils {
     }
 
     try {
-      return this.api.request('GET', `/bytecode?currency=${currency}&from_address=${fromAddress}&to_address=${toAddress}&amount=${amount}`)
+      return this.api.request('GET', `/bytecode?currency=${currency.toLowerCase()}&from_address=${fromAddress}&to_address=${toAddress}&amount=${amount}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
