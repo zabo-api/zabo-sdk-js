@@ -121,7 +121,7 @@ class ZaboSDK {
 
       try {
         const address = await ethereum.account.getAddress()
-        account = await this.api.resources.accounts.postAccount({
+        account = await this.api.resources.accounts.create({
           origin: window.location.host,
           clientId: o.clientId,
           provider: 'address-only',
@@ -132,7 +132,7 @@ class ZaboSDK {
       }
     } else {
       try {
-        account = await this.accounts.getAccount()
+        account = await this.accounts.get()
       } catch (err) {
         console.error(err)
       }

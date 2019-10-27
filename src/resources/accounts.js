@@ -33,7 +33,7 @@ class Accounts {
     this.data = account
   }
 
-  async getAccount() {
+  async get() {
     try {
       let response = await this.api.request('GET', `/sessions`)
       this._setAccount(response)
@@ -44,7 +44,7 @@ class Accounts {
     }
   }
 
-  async postAccount({ clientId, credentials, provider, origin } = {}) {
+  async create({ clientId, credentials, provider, origin } = {}) {
     let data = {
       client_id: clientId,
       wallet_provider_name: provider,
