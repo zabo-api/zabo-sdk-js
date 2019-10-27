@@ -196,20 +196,24 @@ class Transactions {
       }
     } else if (this.account.wallet_provider.name == 'ledger') {
       if (currency.toLowerCase() == 'eth' || currency.toLowerCase() == 'btc') {
-        let response = await this.api.resources.utils.getBytecode({
-          fromAddress: this.account.address,
-          toAddress,
-          amount,
-          currency
-        })
+        try {
+          let response = await this.api.resources.utils.getBytecode({
+            fromAddress: this.account.address,
+            toAddress,
+            amount,
+            currency
+          })
 
-        let signedTx = await ledger.signTransaction(response.bytecode, currency)
+          let signedTx = await ledger.signTransaction(response.bytecode.pop(), currency)
 
-        return this.api.request('POST', `/accounts/${this.account.id}/transactions`, {
-          currency,
-          bytecode: response.bytecode,
-          signature: signedTx
-        })
+          return this.api.request('POST', `/accounts/${this.account.id}/transactions`, {
+            currency,
+            bytecode: response.bytecode,
+            signature: signedTx
+          })
+        } catch (err) {
+          throw new SDKError(500, `[Zabo] Failed to send 'Ledger' transaction. Error: ${err}`)
+        }
       }
 
       throw new SDKError(500, `[Zabo] Failed to send 'Ledger' transaction. Error: ${err}`)

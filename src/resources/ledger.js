@@ -42,7 +42,8 @@ class Ledger {
           this.eth = new Eth(transport)
         }
 
-        return this.eth.signTransaction("44'/60'/0'/0/0", rawTx.replace(/^0x/, ''))
+        let result = await this.eth.signTransaction("44'/60'/0'/0/0", rawTx.replace(/^0x/, ''))
+        return result
       }
 
       if (currency.toLowerCase() == 'btc') {
