@@ -21,7 +21,8 @@ describe('Zabo SDK Accounts Resource', () => {
 
     accounts = require('../../src/resources/accounts')(sdk.api)
 
-    accounts.should.have.property('getAccount')
+    accounts.should.have.property('get')
+    accounts.should.have.property('create')
     accounts.should.have.property('getBalances')
   })
 
