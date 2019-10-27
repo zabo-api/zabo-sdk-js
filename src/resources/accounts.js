@@ -44,6 +44,17 @@ class Accounts {
     }
   }
 
+  async postAccount({ clientId, credentials, provider, origin } = {}) {
+    let data = {
+      client_id: clientId,
+      wallet_provider_name: provider,
+      credentials,
+      origin
+    }
+
+    return this.api.request('POST', `/accounts`, data)
+  }
+
   async getBalances({ currencies } = {}) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')

@@ -153,7 +153,7 @@ function _deriveEthereumDataForTransfer({ toAddress, amount, currency, options }
     // 21 gwei
     gasPrice = "0x4e3b29200"
   }
-  if (currency.ticker === 'ETH') {
+  if (currency.ticker.toLowerCase() === 'eth') {
     let dataObject = {
       value: "0x" + bigInt(_changeFloatToInt(amount, currency.decimals)).toString(16),
       // 21000

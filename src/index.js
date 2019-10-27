@@ -51,7 +51,6 @@ class ZaboSDK {
           env: this.env,
           sendAppCryptoData: true
         })
-
         this.setEndpointAliases()
 
         if (this.autoConnect) {
@@ -76,7 +75,7 @@ class ZaboSDK {
       try {
         if (o.useNode) {
           this.status = 'connecting'
-          await ethereum.connect(o.useNode)
+          this.status = await ethereum.connect(o.useNode)
         }
 
         if (!o.sendAppCryptoData) {
@@ -84,8 +83,7 @@ class ZaboSDK {
             decentralized: true,
             sendAppCryptoData: false
           })
-          this.api.resources.transactions._setTransport(ethereum.node)
-          this.status = 'online'
+          this.setEndpointAliases()
           return
         }
       } catch (err) {
@@ -107,23 +105,41 @@ class ZaboSDK {
       decentralized: o.decentralized,
       sendAppCryptoData: true
     })
-
-    if (!this.api.resources) {
-      return
-    }
-
     this.setEndpointAliases()
 
-    if (ethereum.node) {
-      this.transactions._setTransport(ethereum.node)
+    let account = null
+
+    if (o.decentralized) {
+      if (!ethereum.account || typeof window === 'undefined') {
+        throw new SDKError(
+          400,
+          `[Zabo] Unable to start decentralized SDK with 'sendAppCryptoData' set to 'true'.
+          Make sure you have registered your app at https://zabo.com and that you entered a valid 'clientId' value.
+          More details at: https://zabo.com/docs`
+        )
+      }
+
+      try {
+        const address = await ethereum.account.getAddress()
+        account = await this.api.resources.accounts.postAccount({
+          origin: window.location.host,
+          clientId: o.clientId,
+          provider: 'address-only',
+          credentials: [ address ]
+        })
+      } catch (err) {
+        console.error(err)
+      }
+    } else {
+      try {
+        account = await this.accounts.getAccount()
+      } catch (err) {
+        console.error(err)
+      }
     }
 
-    try {
-      let account = await this.accounts.getAccount()
-      this.transactions._setAccount(account)
-    } catch (e) {
-      console.error(e)
-    }
+    this.accounts._setAccount(account)
+    this.transactions._setAccount(account)
 
     if (this.autoConnect) {
       return this.applications.getInfo()
