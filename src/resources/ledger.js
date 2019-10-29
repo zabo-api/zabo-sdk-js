@@ -33,7 +33,7 @@ class Ledger {
     console.log('[Zabo] Account connected with ledger.')
   }
 
-  async signTransaction(rawTx, currency) {
+  async signTransaction(rawTx, txObj = {}, currency) {
     try {
       const transport = await TransportWebUSB.create()
 
@@ -51,7 +51,39 @@ class Ledger {
           this.btc = new Btc(transport)
         }
 
-        // TODO: this.btc.signP2SHTransaction()
+        let script = null
+
+        let inputs = []
+        txObj.tx.outputs.forEach(o => {
+          inputs.push({
+            prevout: Buffer.from(o.prev_hash),
+            sequence: Buffer.from(o.sequence),
+            script: Buffer.from(0)
+          })
+        })
+
+        let outputs = []
+        txObj.tx.outputs.forEach(o => {
+          outputs.push({
+            amount: Buffer.from(o.value),
+            script: Buffer.from(o.script)
+          })
+          script = o.script
+        })
+
+        let result = await this.btc.createPaymentTransactionNew(
+          [ [{
+            inputs: inputs,
+            outputs: outputs,
+            version: Buffer.from(txObj.tx.ver),
+            locktime: Buffer.from(0)
+          }, 1] ],
+          ["0'/0/0"],
+          undefined,
+          script
+        )
+
+        return result
       }
     } catch (err) {
       console.log(`[Zabo] Ledger.signTransaction Error: ${err}`)

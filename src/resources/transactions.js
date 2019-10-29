@@ -169,7 +169,9 @@ class Transactions {
       throw new SDKError(400, '[Zabo] Account not connected. See: https://zabo.com/docs#connecting-a-user')
     }
 
-    if (currency.toLowerCase() == 'hbar') {
+    currency = currency.toLowerCase()
+
+    if (currency == 'hbar') {
       if (this.account.wallet_provider.name == 'hedera') {
         let url = getCryptoTransferLink({ accountId, toAddress, amount })
         return this.api.request('GET', url)
@@ -195,7 +197,7 @@ class Transactions {
         throw new SDKError(500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
       }
     } else if (this.account.wallet_provider.name == 'ledger') {
-      if (currency.toLowerCase() == 'eth' || currency.toLowerCase() == 'btc') {
+      if (currency == 'eth' || currency == 'btc') {
         try {
           let response = await this.api.resources.utils.getBytecode({
             fromAddress: this.account.address,
@@ -204,7 +206,9 @@ class Transactions {
             currency
           })
 
-          let signedTx = await ledger.signTransaction(response.bytecode.pop(), currency)
+          let bytecode = response.bytecode.pop()
+          let txObj = response.tx_object || {}
+          let signedTx = await ledger.signTransaction(bytecode, txObj, currency)
 
           return this.api.request('POST', `/accounts/${this.account.id}/transactions`, {
             currency,
