@@ -15717,7 +15717,11 @@ class Transactions {
         }
       }
 
-      return
+      return this.api.request('POST', `/users/${userId}/accounts/${accountId}/transactions`, {
+        to_address: toAddress,
+        currency,
+        amount
+      })
     }
 
     if (!toAddress) {
