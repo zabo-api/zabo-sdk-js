@@ -14,7 +14,7 @@ describe('Zabo SDK Utils', () => {
 
   it('should error with a bad address', async function () {
     let requestType = 'transfer'
-    let address = '0x7580ba923c01783115d79975d6a41b3d38eff8d51'
+    let toAddress = '0x7580ba923c01783115d79975d6a41b3d38eff8d51'
     let currency = {
       "ticker": "DAI",
       "name": "Dai",
@@ -27,13 +27,13 @@ describe('Zabo SDK Utils', () => {
     }
     let amount = "24.693037"
 
-    should(() => utils.getDataObjectForEthereumRequest({ requestType, address, currency, amount, options: {} }))
+    should(() => utils.getTxObjectForEthereumRequest({ requestType, toAddress, currency, amount, options: {} }))
       .throw(utils.ErrorMessages.invalidAddress)
   })
 
   it('should reject an invalid amount', async function () {
     let requestType = 'transfer'
-    let address = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
+    let toAddress = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
     let currency = {
       "ticker": "DAI",
       "name": "Dai",
@@ -46,13 +46,13 @@ describe('Zabo SDK Utils', () => {
     }
     let amount = "24.69303.7"
 
-    should(() => utils.getDataObjectForEthereumRequest({ requestType, address, currency, amount, options: {} }))
+    should(() => utils.getTxObjectForEthereumRequest({ requestType, toAddress, currency, amount, options: {} }))
       .throw(utils.ErrorMessages.invalidAmount)
   })
 
   it('should reject an invalid amount', async function () {
     let requestType = 'transfer'
-    let address = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
+    let toAddress = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
     let currency = {
       "ticker": "NOT",
       "name": "Funny",
@@ -62,13 +62,13 @@ describe('Zabo SDK Utils', () => {
     }
     let amount = "24.693037"
 
-    should(() => utils.getDataObjectForEthereumRequest({ requestType, address, currency, amount, options: {} }))
+    should(() => utils.getTxObjectForEthereumRequest({ requestType, toAddress, currency, amount, options: {} }))
       .throw(utils.ErrorMessages.invalidAmount)
   })
 
   it('should obtain a proper data object for a proper ERC20 transfer request', async function () {
     let requestType = 'transfer'
-    let address = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
+    let toAddress = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
     let currency = {
       "ticker": "DAI",
       "name": "Dai",
@@ -82,9 +82,9 @@ describe('Zabo SDK Utils', () => {
     let amount = "24.693037"
     let amountInInt = "24693037000000000000"
 
-    let dataObject = utils.getDataObjectForEthereumRequest({ requestType, address, currency, amount, options: {} })
+    let dataObject = utils.getTxObjectForEthereumRequest({ requestType, toAddress, currency, amount, options: {} })
     let derivedData = transferFuncHash +
-      address.replace(/^0x/, '').padStart(64, 0) +
+      toAddress.replace(/^0x/, '').padStart(64, 0) +
       bigInt(amountInInt).toString(16).padStart(64, 0)
 
     dataObject.should.be.ok()
@@ -102,7 +102,7 @@ describe('Zabo SDK Utils', () => {
 
   it('should obtain a proper data object for a proper Ether transfer request', async function () {
     let requestType = 'transfer'
-    let address = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
+    let toAddress = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
     let currency = {
       "ticker": "ETH",
       "name": "Ether",
@@ -116,7 +116,7 @@ describe('Zabo SDK Utils', () => {
     let amount = "2.693037"
     let weiAmountInHex = "0x255f96e217fbd000"
 
-    let dataObject = utils.getDataObjectForEthereumRequest({ requestType, address, currency, amount, options: {} })
+    let dataObject = utils.getTxObjectForEthereumRequest({ requestType, toAddress, currency, amount, options: {} })
     let derivedData = ""
 
     dataObject.should.be.ok()
@@ -125,16 +125,16 @@ describe('Zabo SDK Utils', () => {
     dataObject.should.have.property('value')
     dataObject.should.have.property('gasLimit')
     dataObject.should.have.property('gasPrice')
+    dataObject.should.not.have.property('data')
 
     dataObject.value.should.be.equal(weiAmountInHex)
     dataObject.gasLimit.should.be.equal(defaultETHGasLimit)
     dataObject.gasPrice.should.be.equal(defaultGasPrice)
-    dataObject.data.should.be.equal(derivedData)
   })
 
   it('should obtain a proper data object for an ERC20 balance request', async function () {
     let requestType = 'balanceOf'
-    let address = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
+    let toAddress = '0x7580ba923c01783115d79975d6a41b3d38eff8d5'
     let currency = {
       "ticker": "DAI",
       "name": "Dai",
@@ -146,8 +146,8 @@ describe('Zabo SDK Utils', () => {
       "resource_type": "currency"
     }
 
-    let dataObject = utils.getDataObjectForEthereumRequest({ requestType, address, currency })
-    let derivedData = balanceFuncHash + address.replace(/^0x/, '').padStart(64, 0)
+    let dataObject = utils.getTxObjectForEthereumRequest({ requestType, toAddress, currency })
+    let derivedData = balanceFuncHash + toAddress.replace(/^0x/, '').padStart(64, 0)
 
     dataObject.should.be.ok()
     dataObject.should.be.an.Object()

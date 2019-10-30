@@ -17,6 +17,7 @@
 'use strict'
 
 const uuidValidate = require('uuid-validate')
+const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Applications {
@@ -25,7 +26,7 @@ class Applications {
     this.id = null
   }
 
-  setId (id) {
+  setId(id) {
     if (!uuidValidate(id, 4)) {
       throw new SDKError(400, '[Zabo] Application id must be a valid UUID version 4. See: https://zabo.com/docs#about-the-api')
     }
@@ -51,7 +52,7 @@ class Applications {
 
     let origin = encodeURIComponent(window ? window.location.host : '')
 
-    if (!origin) {
+    if (utils.isNode()) {
       throw new SDKError(401, '[Zabo] Method available only for client SDK. On the server-side, please use Zabo.applications.get() instead.')
     }
 
@@ -64,5 +65,8 @@ class Applications {
 }
 
 module.exports = (api, appId) => {
+  if (api.decentralized) {
+    return null
+  }
   return new Applications(api, appId)
 }

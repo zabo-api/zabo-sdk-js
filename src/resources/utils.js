@@ -49,5 +49,9 @@ class Utils {
 }
 
 module.exports = (api) => {
-  return new Utils(api)
+  let utils = new Utils(api)
+  if (api.decentralized) {
+    utils.getBytecode = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+  }
+  return utils
 }

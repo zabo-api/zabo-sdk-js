@@ -18,7 +18,7 @@
 
 const API = require('./api')
 const utils = require('./utils')
-const { ethereum } = require('./networks')
+const resources = require('./resources')
 const { SDKError } = require('./err')
 
 // SDK main class definition
@@ -48,10 +48,9 @@ class ZaboSDK {
           baseUrl: o.baseUrl,
           apiKey: o.apiKey,
           secretKey: o.secretKey,
-          env: this.env,
-          sendAppCryptoData: true
+          env: this.env
         })
-        this.setEndpointAliases()
+        await this.setEndpointAliases()
 
         if (this.autoConnect) {
           this.status = 'connecting'
@@ -62,33 +61,53 @@ class ZaboSDK {
             return this.throwConnectError(400, '[Zabo] Unable to connect with Zabo API. Please check your credentials and try again. More details at: https://zabo.com/docs')
           }
 
-          return this.applications.id
+          if (this.autoConnect) {
+            return this.applications.getInfo()
+          }
         }
       } catch (err) {
         throw err
       }
-
-      return
     }
 
     if (o.decentralized) {
       try {
-        if (o.useNode) {
-          this.status = 'connecting'
-          this.status = await ethereum.connect(o.useNode)
+        this.status = 'connecting'
+        if (o.sendAppCryptoData) {
+          this.api = new API({
+            baseUrl: o.baseUrl,
+            clientId: o.clientId,
+            env: o.env,
+            decentralized: true,
+            useNode: o.useNode,
+            useAddress: o.useAddress,
+            sendAppCryptoData: true
+          })
+          await this.setEndpointAliases()
+          let trackingAccount = await this.accounts.create({
+            clientId: o.clientId,
+            credentials: [this.accounts.data.address],
+            provider: 'address-only',
+            origin: window.location.host
+          })
+          this.accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+          return trackingAccount
         }
 
-        if (!o.sendAppCryptoData) {
-          this.api = new API({
-            decentralized: true,
-            sendAppCryptoData: false
-          })
-          this.setEndpointAliases()
-          return
-        }
+        let resourcesReturn = await resources({
+          decentralized: true,
+          clientId: o.clientId,
+          useNode: o.useNode,
+          useAddress: o.useAddress,
+          baseUrl: o.baseUrl
+        }, false)
+        Object.assign(this, resourcesReturn)
+        this.status = 'online'
+        return this.accounts.data
       } catch (err) {
-        return this.throwConnectError(401, err)
+        console.error(err)
       }
+      return
     }
 
     this.env = this.checkZaboEnv(o.env)
@@ -97,51 +116,24 @@ class ZaboSDK {
       throw new SDKError(400, '[Zabo] Please provide a valid Zabo app clientId. More details at: https://zabo.com/docs')
     }
 
-    this.api = new API({
-      baseUrl: o.baseUrl,
-      connectUrl: o.connectUrl,
-      clientId: o.clientId,
-      env: this.env,
-      decentralized: o.decentralized,
-      sendAppCryptoData: true
-    })
-    this.setEndpointAliases()
-
-    let account = null
-
-    if (o.decentralized) {
-      if (!ethereum.account || typeof window === 'undefined') {
-        throw new SDKError(
-          400,
-          `[Zabo] Unable to start decentralized SDK with 'sendAppCryptoData' set to 'true'.
-          Make sure you have registered your app at https://zabo.com and that you entered a valid 'clientId' value.
-          More details at: https://zabo.com/docs`
-        )
-      }
-
-      try {
-        const address = await ethereum.account.getAddress()
-        account = await this.api.resources.accounts.create({
-          origin: window.location.host,
-          clientId: o.clientId,
-          provider: 'address-only',
-          credentials: [ address ]
-        })
-      } catch (err) {
-        console.error(err)
-      }
-    } else {
-      try {
-        account = await this.accounts.get()
-      } catch (err) {
-        console.error(err)
-      }
+    try {
+      this.api = new API({
+        baseUrl: o.baseUrl,
+        connectUrl: o.connectUrl,
+        clientId: o.clientId,
+        env: this.env,
+      })
+      await this.setEndpointAliases()
+    } catch (err) {
+      console.error(err)
     }
 
-    this.accounts._setAccount(account)
-    this.transactions._setAccount(account)
-
-    if (this.autoConnect) {
+    try {
+      let account = await this.accounts.get()
+      this.transactions._setAccount(account)
+      return this.applications.getInfo()
+    } catch (err) {
+      console.error('[Zabo] No account connected yet.')
       return this.applications.getInfo()
     }
   }
@@ -151,7 +143,10 @@ class ZaboSDK {
     throw new SDKError(code, message)
   }
 
-  setEndpointAliases() {
+  async setEndpointAliases() {
+    while (!this.api.resources) {
+      await utils.sleep(500)
+    }
     Object.assign(this, this.api.resources)
   }
 
@@ -166,10 +161,9 @@ class ZaboSDK {
     return env
   }
 
-  connect({ interfaceType = 'popup', attachTo = 'body', width = 540, height = 960  } = {}) {
+  connect({ interfaceType = 'popup', attachTo = 'body', width = 540, height = 960 } = {}) {
     if (this.api && utils.isBrowser()) {
       this.api.connect(interfaceType, attachTo, width, height)
-      this.setEndpointAliases()
       return this
     }
 
