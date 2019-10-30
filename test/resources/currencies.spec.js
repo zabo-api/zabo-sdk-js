@@ -18,13 +18,13 @@ describe('Zabo SDK Currencies Resource', () => {
 
     sdk.api.resources.should.have.property('currencies')
 
-    sdk.api.resources.currencies.should.have.property('getCurrencies')
-    sdk.api.resources.currencies.should.have.property('getCurrency')
+    sdk.api.resources.currencies.should.have.property('getList')
+    sdk.api.resources.currencies.should.have.property('getOne')
     sdk.api.resources.currencies.should.have.property('getExchangeRates')
   })
 
-  it('currencies.getCurrencies() should fail if an invalid `limit` is provided', async function () {
-    let response = await sdk.currencies.getCurrencies({ limit: 51 }).should.be.rejected()
+  it('currencies.getList() should fail if an invalid `limit` is provided', async function () {
+    let response = await sdk.currencies.getList({ limit: 51 }).should.be.rejected()
 
     response.should.be.an.Error()
 
@@ -32,12 +32,12 @@ describe('Zabo SDK Currencies Resource', () => {
     response.message.should.containEql('limit')
   })
 
-  it('currencies.getCurrency() should fail if a ticker is not provided', async function () {
-    let response = await sdk.currencies.getCurrency().should.be.rejected()
+  it('currencies.getOne() should fail if a currency ticker is not provided', async function () {
+    let response = await sdk.currencies.getOne().should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
-    response.message.should.containEql('ticker')
+    response.message.should.containEql('currency')
   })
 
   it('currencies.getExchangeRates() should fail if an invalid `limit` is provided', async function () {

@@ -21,20 +21,13 @@ describe('Zabo SDK Accounts Resource', () => {
 
     accounts = require('../../src/resources/accounts')(sdk.api)
 
-    accounts.should.have.property('getAccount')
+    accounts.should.have.property('get')
+    accounts.should.have.property('create')
     accounts.should.have.property('getBalances')
   })
 
-  it('accounts.getBalances() should fail if a string or array of `tickers` are not provided', async function () {
-    let response = await accounts.getBalances().should.be.rejected()
-
-    response.should.be.an.Error()
-    response.error_type.should.be.equal(400)
-    response.message.should.containEql('tickers')
-  })
-
   it('accounts.getBalances() should fail if an account has not connected yet', async function () {
-    let response = await accounts.getBalances({ tickers: 'BTC' }).should.be.rejected()
+    let response = await accounts.getBalances({ currencies: 'BTC' }).should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(401)

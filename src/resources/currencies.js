@@ -24,7 +24,7 @@ class Currencies {
     this.api = api
   }
 
-  async getCurrencies({ limit = 25, cursor = '' } = {}) {
+  async getList({ limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit)
 
     try {
@@ -34,13 +34,13 @@ class Currencies {
     }
   }
 
-  async getCurrency(ticker) {
-    if (!ticker) {
-      throw new SDKError(400, '[Zabo] Missing `ticker` input. See: https://zabo.com/docs#get-specific-currency')
+  async getOne(currency) {
+    if (!currency) {
+      throw new SDKError(400, '[Zabo] Missing `currency` input. See: https://zabo.com/docs#get-specific-currency')
     }
 
     try {
-      return this.api.request('GET', `/currencies/${ticker}`)
+      return this.api.request('GET', `/currencies/${currency}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

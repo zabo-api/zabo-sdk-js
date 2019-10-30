@@ -18,6 +18,7 @@
 
 const API = require('./api')
 const utils = require('./utils')
+const { ethereum } = require('./networks')
 const { SDKError } = require('./err')
 
 // SDK main class definition
@@ -29,15 +30,6 @@ class ZaboSDK {
   }
 
   async init(o) {
-    let env = o.env ? o.env.toLowerCase() : null
-    let acceptedEnvs = ['sandbox', 'live']
-
-    if (!env || !acceptedEnvs.includes(env)) {
-      return this.throwConnectError(400, '[Zabo] Please provide a valid env, should be \'sandbox\' or \'live\'. More details at: https://zabo.com/docs')
-    }
-
-    this.env = env
-
     if (typeof o.autoConnect !== 'undefined') {
       this.autoConnect = o.autoConnect
     } else {
@@ -49,14 +41,16 @@ class ZaboSDK {
         return this.throwConnectError(401, '[Zabo] Please provide a valid Zabo app API and Secret keys. More details at: https://zabo.com/docs#app-server-authentication')
       }
 
+      this.env = this.checkZaboEnv(o.env)
+
       try {
         this.api = new API({
           baseUrl: o.baseUrl,
           apiKey: o.apiKey,
           secretKey: o.secretKey,
-          env: this.env
+          env: this.env,
+          sendAppCryptoData: true
         })
-
         this.setEndpointAliases()
 
         if (this.autoConnect) {
@@ -70,12 +64,34 @@ class ZaboSDK {
 
           return this.applications.id
         }
-
-        return
       } catch (err) {
         throw err
       }
+
+      return
     }
+
+    if (o.decentralized) {
+      try {
+        if (o.useNode) {
+          this.status = 'connecting'
+          this.status = await ethereum.connect(o.useNode)
+        }
+
+        if (!o.sendAppCryptoData) {
+          this.api = new API({
+            decentralized: true,
+            sendAppCryptoData: false
+          })
+          this.setEndpointAliases()
+          return
+        }
+      } catch (err) {
+        return this.throwConnectError(401, err)
+      }
+    }
+
+    this.env = this.checkZaboEnv(o.env)
 
     if (!o.clientId || typeof o.clientId !== 'string') {
       throw new SDKError(400, '[Zabo] Please provide a valid Zabo app clientId. More details at: https://zabo.com/docs')
@@ -85,22 +101,48 @@ class ZaboSDK {
       baseUrl: o.baseUrl,
       connectUrl: o.connectUrl,
       clientId: o.clientId,
-      env: this.env
+      env: this.env,
+      decentralized: o.decentralized,
+      sendAppCryptoData: true
     })
+    this.setEndpointAliases()
 
-    if (this.api.resources) {
-      this.setEndpointAliases()
+    let account = null
+
+    if (o.decentralized) {
+      if (!ethereum.account || typeof window === 'undefined') {
+        throw new SDKError(
+          400,
+          `[Zabo] Unable to start decentralized SDK with 'sendAppCryptoData' set to 'true'.
+          Make sure you have registered your app at https://zabo.com and that you entered a valid 'clientId' value.
+          More details at: https://zabo.com/docs`
+        )
+      }
 
       try {
-        let account = await this.accounts.getAccount()
-        this.transactions._setAccount(account)
-      } catch (e) {
-        console.error(e)
+        const address = await ethereum.account.getAddress()
+        account = await this.api.resources.accounts.create({
+          origin: window.location.host,
+          clientId: o.clientId,
+          provider: 'address-only',
+          credentials: [ address ]
+        })
+      } catch (err) {
+        console.error(err)
       }
+    } else {
+      try {
+        account = await this.accounts.get()
+      } catch (err) {
+        console.error(err)
+      }
+    }
 
-      if (this.autoConnect) {
-        return this.applications.getApplicationInfo()
-      }
+    this.accounts._setAccount(account)
+    this.transactions._setAccount(account)
+
+    if (this.autoConnect) {
+      return this.applications.getInfo()
     }
   }
 
@@ -111,6 +153,17 @@ class ZaboSDK {
 
   setEndpointAliases() {
     Object.assign(this, this.api.resources)
+  }
+
+  checkZaboEnv(env) {
+    env = env ? env.toLowerCase() : null
+
+    let acceptedEnvs = ['sandbox', 'live']
+    if (!env || !acceptedEnvs.includes(env)) {
+      return this.throwConnectError(400, '[Zabo] Please provide a valid env, should be \'sandbox\' or \'live\'. More details at: https://zabo.com/docs')
+    }
+
+    return env
   }
 
   connect({ interfaceType = 'popup', attachTo = 'body', width = 540, height = 960  } = {}) {

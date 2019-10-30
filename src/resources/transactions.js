@@ -18,19 +18,30 @@
 
 const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
+const metamask = require('./metamask')()
+const ledger = require('./ledger')()
+const { ethereum } = require('../networks')
 const { SDKError } = require('../err')
 
 class Transactions {
   constructor(api) {
     this.api = api
-    this.accountId = null
+    this.account = null
   }
 
   _setAccount(account) {
-    this.accountId = account.id
+    this.account = account
   }
 
-  async getTransaction({ userId, accountId, txId, currency } = {}) {
+  async getOne({ userId, accountId, txId, currency } = {}) {
+    if (this.api.decentralized && ethereum.node) {
+      return ethereum.getTransaction(txId)
+    }
+
+    if (!this.api.sendAppCryptoData) {
+      throw new SDKError(403, '[Zabo] Cannot perform API calls while running Zabo SDK on decentralized mode')
+    }
+
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -51,20 +62,24 @@ class Transactions {
       }
     }
 
-    if (!this.accountId) {
+    if (!this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!txId) {
       throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.accountId}/transactions/${txId}?currency=${currency}`)
+      return this.api.request('GET', `/accounts/${this.account.id}/transactions/${txId}?currency=${currency}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
   }
 
-  async getTransactionHistory({ userId, accountId, currencyTicker, limit = 25, cursor = '' } = {}) {
+  async getList({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
+    if (!this.api.sendAppCryptoData) {
+      throw new SDKError(403, '[Zabo] Cannot perform API calls while running Zabo SDK on decentralized mode')
+    }
+
     utils.validateListParameters(limit, cursor)
 
     let url = null
@@ -78,19 +93,15 @@ class Transactions {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-account-history')
       } else if (!uuidValidate(accountId, 4)) {
         throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#get-account-history')
-      } else if (!currencyTicker) {
-        throw new SDKError(400, '[Zabo] Missing `currencyTicker` parameter. See: https://zabo.com/docs#get-account-history')
       }
 
-      url = `/users/${userId}/accounts/${accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
+      url = `/users/${userId}/accounts/${accountId}/transactions?currency=${currency}&limit=${limit}&cursor=${cursor}`
     } else {
-      if (!this.accountId) {
+      if (!this.account.id) {
         throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
-      } else if (!currencyTicker) {
-        throw new SDKError(400, '[Zabo] Missing `currencyTicker` parameter. See: https://zabo.com/docs#get-account-history')
       }
 
-      url = `/accounts/${this.accountId}/transactions?currency=${currencyTicker}&limit=${limit}&cursor=${cursor}`
+      url = `/accounts/${this.account.id}/transactions?currency=${currency}&limit=${limit}&cursor=${cursor}`
     }
 
     try {
@@ -100,51 +111,142 @@ class Transactions {
     }
   }
 
-  async getCryptoTransferLink({ userId, accountId, toAddress, amount, note } = {}) {
+  async send({ userId, accountId, currency, toAddress, bytecode, amount } = {}) {
     if (utils.isNode()) {
       if (!userId) {
-        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!uuidValidate(userId, 4)) {
-        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
       } else if (!accountId) {
-        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!uuidValidate(accountId, 4)) {
-        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#request-crypto-transfer')
-      } else if (!toAddress) {
-        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#request-crypto-transfer')
+        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
       } else if (!amount) {
-        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-      } else if (!note) {
-        note = ''
-      } else {
-        note = encodeURIComponent(note)
+        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
       }
 
-      url = `/users/${userId}/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
-    } else {
-      if (!this.accountId) {
-        throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
-      } else if (!toAddress) {
-        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-      } else if (!amount) {
-        throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#request-crypto-transfer')
-      } else if (!note) {
-        note = ''
-      } else {
-        note = encodeURIComponent(note)
+      if (currency.toLowerCase() == 'hbar') {
+        let hederaAccount = await this.api.resources.users.getAccount({ userId, accountId })
+
+        if (hederaAccount.wallet_provider.name == 'hedera') {
+          let url = getCryptoTransferLink({ userId, accountId, toAddress, amount })
+          return this.api.request('GET', url)
+        } else {
+          throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
+        }
       }
 
-      url = `/accounts/${this.accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
+      return this.api.request('POST', `/users/${userId}/accounts/${accountId}/transactions`, {
+        to_address: toAddress,
+        currency,
+        amount
+      })
     }
 
-    try {
-      return this.api.request('GET', url)
-    } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+    if (!toAddress) {
+      throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#send-a-transaction')
+    } else if (!amount) {
+      throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
+    } else if (!currency) {
+      throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#send-a-transaction')
+    }
+
+    if (this.api.decentralized) {
+      const tx = { address: toAddress, amount, currency: { ticker: currency } }
+
+      // Check if user is connected to their own ethereum node
+      if (ethereum.node) {
+        return ethereum.sendTransaction(tx)
+      }
+
+      // Check if a web3 provider is available (e.g. metamask or mist)
+      if (typeof window !== 'undefined' && window.web3) {
+        try {
+          return metamask.sendTransaction(tx)
+        } catch (err) {
+          throw new SDKError(500, `[Zabo] Failed to send transaction. Error: ${err}`)
+        }
+      }
+    }
+
+    if (!this.account.id) {
+      throw new SDKError(400, '[Zabo] Account not connected. See: https://zabo.com/docs#connecting-a-user')
+    }
+
+    currency = currency.toLowerCase()
+
+    if (currency == 'hbar') {
+      if (this.account.wallet_provider.name == 'hedera') {
+        let url = getCryptoTransferLink({ accountId, toAddress, amount })
+        return this.api.request('GET', url)
+      } else {
+        throw new SDKError(403, '[Zabo] You need a `hedera` account to send `HBAR` transactions. See: https://zabo.com/docs#send-a-transaction')
+      }
+    }
+
+    if (this.account.wallet_provider.type != 'private_key') {
+      throw new SDKError(403, '[Zabo] At this moment we support transactions for self-custody wallets only. See: https://zabo.com/docs#send-a-transaction')
+    }
+
+    const currencyObj = await this.api.resources.currencies.getOne(currency)
+
+    if (this.account.wallet_provider.name == 'metamask') {
+      if (!metamask.isSupported()) {
+        throw new SDKError(403, '[Zabo] Metamask not installed.')
+      }
+
+      try {
+        return metamask.sendTransaction({ address: toAddress, currency: currencyObj, amount })
+      } catch (err) {
+        throw new SDKError(500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
+      }
+    } else if (this.account.wallet_provider.name == 'ledger') {
+      if (currency == 'eth' || currency == 'btc') {
+        try {
+          let response = await this.api.resources.utils.getBytecode({
+            fromAddress: this.account.address,
+            toAddress,
+            amount,
+            currency
+          })
+
+          let bytecode = response.bytecode.pop()
+          let txObj = response.tx_object || {}
+          let signedTx = await ledger.signTransaction(bytecode, txObj, currency)
+
+          return this.api.request('POST', `/accounts/${this.account.id}/transactions`, {
+            currency,
+            bytecode: response.bytecode,
+            signature: signedTx
+          })
+        } catch (err) {
+          throw new SDKError(500, `[Zabo] Failed to send 'Ledger' transaction. Error: ${err}`)
+        }
+      }
+
+      throw new SDKError(500, `[Zabo] Failed to send 'Ledger' transaction. Error: ${err}`)
     }
   }
 }
 
+// Private functions
+const getCryptoTransferLink = async function ({ userId, accountId, toAddress, amount, note } = {}) {
+  if (!note) {
+    note = ''
+  } else {
+    note = encodeURIComponent(note)
+  }
+
+  if (utils.isNode()) {
+    url = `/users/${userId}/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
+  } else {
+    url = `/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
+  }
+
+  return url
+}
+
+// Export class instance
 module.exports = (api) => {
   return new Transactions(api)
 }

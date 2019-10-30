@@ -64,25 +64,25 @@ describe('Zabo SDK Module', () => {
 
     // users
     sdk.users.should.have.property('create')
-    sdk.users.should.have.property('getUser')
-    sdk.users.should.have.property('getUsers')
+    sdk.users.should.have.property('getOne')
+    sdk.users.should.have.property('getList')
     sdk.users.should.have.property('getBalances')
 
     // applications
-    sdk.applications.should.have.property('getApplication')
+    sdk.applications.should.have.property('get')
 
     // wallet providers
-    sdk.walletProviders.should.have.property('getWalletProviders')
-    sdk.walletProviders.should.have.property('getWalletProvider')
+    sdk.walletProviders.should.have.property('getList')
+    sdk.walletProviders.should.have.property('getOne')
 
     // currencies
-    sdk.currencies.should.have.property('getCurrency')
-    sdk.currencies.should.have.property('getCurrencies')
+    sdk.currencies.should.have.property('getOne')
+    sdk.currencies.should.have.property('getList')
     sdk.currencies.should.have.property('getExchangeRates')
 
     // transactions
-    sdk.transactions.should.have.property('getTransaction')
-    sdk.transactions.should.have.property('getTransactionHistory')
+    sdk.transactions.should.have.property('getOne')
+    sdk.transactions.should.have.property('getList')
   })
 
 })

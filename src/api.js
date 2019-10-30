@@ -30,7 +30,12 @@ class API {
   constructor(options) {
     Object.assign(this, options)
 
-    let urls = constants(options.baseUrl, options.connectUrl)[this.env]
+    if (!this.sendAppCryptoData) {
+      this.resources = resources(this, utils.isNode())
+      return
+    }
+
+    let urls = constants(this.baseUrl, this.connectUrl)[this.env]
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios
     this.axios.defaults.baseURL = this.baseUrl
@@ -48,6 +53,10 @@ class API {
   }
 
   async connect(interfaceType, attachTo, width, height) {
+    if (!this.sendAppCryptoData) {
+      throw new SDKError(403, '[Zabo] Cannot open API connection or Connect widget while running Zabo SDK on decentralized mode')
+    }
+
     let appId = null
 
     if (utils.isNode()) {
@@ -56,7 +65,7 @@ class API {
         appId = res.id
 
         if (!appId) {
-          throw new SDKError(500, 'Something went wrong on our end. Please note the time and let us know')
+          throw new SDKError(500, '[Zabo] Something went wrong on our end. Please note the time and let us know')
         }
 
         this.resources.applications.setId(appId)
@@ -81,6 +90,10 @@ class API {
   }
 
   async request(method, path, data, isPublic = false) {
+    if (!this.sendAppCryptoData) {
+      throw new SDKError(403, '[Zabo] Cannot send API requests while running Zabo SDK on decentralized mode')
+    }
+
     let request = this._buildRequest(method, path, data, isPublic)
 
     try {
@@ -119,7 +132,7 @@ class API {
     if (event.data.zabo) {
       this.isWaitingForConnector = false
       if (event.origin !== this.connectUrl) {
-        throw new SDKError(401, 'Unauthorized attempt to call SDK from origin: ' + event.origin + '. Call can only come from: ' + this.connectUrl)
+        throw new SDKError(401, '[Zabo] Unauthorized attempt to call SDK from origin: ' + event.origin + '. Call can only come from: ' + this.connectUrl)
       }
     }
 
@@ -138,9 +151,9 @@ class API {
           this.interfaces.metamask.onConnect(event.data.account)
         } else {
           if (this._onError) {
-            this._onError({ error_type: 400, message: "Connection attempted with MetaMask, but MetaMask not found." })
+            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with MetaMask, but MetaMask not found." })
           } else {
-            throw new SDKError(400, "Connection attempted with MetaMask, but MetaMask not found.")
+            throw new SDKError(400, "[Zabo] Connection attempted with MetaMask, but MetaMask not found.")
           }
         }
       } else if (event.data.account.wallet_provider_name == 'ledger') {
@@ -160,9 +173,9 @@ class API {
 
     if (event.data.zabo && event.data.eventName == 'connectError') {
       if (this._onError) {
-        this._onError({ error_type: 400, message: "Error in the connection process: " + event.data.error.message })
+        this._onError({ error_type: 400, message: "[Zabo] Error in the connection process: " + event.data.error.message })
       } else {
-        throw new SDKError(400, "Error in the connection process: " + event.data.error.message)
+        throw new SDKError(400, "[Zabo] Error in the connection process: " + event.data.error.message)
       }
     }
 

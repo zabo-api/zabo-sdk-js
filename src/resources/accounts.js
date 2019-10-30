@@ -33,7 +33,7 @@ class Accounts {
     this.data = account
   }
 
-  async getAccount() {
+  async get() {
     try {
       let response = await this.api.request('GET', `/sessions`)
       this._setAccount(response)
@@ -44,17 +44,29 @@ class Accounts {
     }
   }
 
-  async getBalances({ tickers } = {}) {
-    if (!tickers) {
-      throw new SDKError(400, '[Zabo] Missing `tickers` parameter. See: https://zabo.com/docs#get-balances')
+  async create({ clientId, credentials, provider, origin } = {}) {
+    let data = {
+      client_id: clientId,
+      wallet_provider_name: provider,
+      credentials,
+      origin
     }
 
+    return this.api.request('POST', `/accounts`, data)
+  }
+
+  async getBalances({ currencies } = {}) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     }
 
-    if (Array.isArray(tickers)) {
-      tickers = tickers.join(',')
+    let url = `/accounts/${this.id}/balances`
+
+    if (currencies) {
+      if (Array.isArray(currencies)) {
+        currencies = currencies.join(',')
+      }
+      url = `${url}?currencies=${currencies}`
     }
 
     try {

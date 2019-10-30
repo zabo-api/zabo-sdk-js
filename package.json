@@ -41,10 +41,16 @@
     "webpack-cli": "^3.3.3"
   },
   "dependencies": {
+    "@ledgerhq/hw-app-btc": "^4.73.2",
+    "@ledgerhq/hw-app-eth": "^4.73.2",
+    "@ledgerhq/hw-transport-webusb": "^4.73.2",
     "axios": "^0.19.0",
+    "big-integer": "^1.6.47",
+    "ethers": "^4.0.38",
     "lodash": "^4.17.11",
     "mocha": "^6.1.4",
-    "uuid-validate": "0.0.3",
-    "qrcode-generator": "^1.4.3"
+    "qrcode-generator": "^1.4.3",
+    "regenerator-runtime": "^0.13.3",
+    "uuid-validate": "0.0.3"
   }
 }

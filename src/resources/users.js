@@ -54,21 +54,21 @@ class Users {
     }
   }
 
-  async removeAccount(user = {}, account = {}) {
-    if (!user.id) {
+  async removeAccount({ userId, accountId }) {
+    if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `id` property in user object. See: https://zabo.com/docs#remove-account-from-user')
-    } else if (!account.id) {
+    } else if (!accountId) {
       throw new SDKError(400, '[Zabo] Missing `id` property in account object. See: https://zabo.com/docs#remove-account-from-user')
     }
 
     try {
-      return this.api.request('DELETE', `/users/${user.id}/accounts/${account.id}`)
+      return this.api.request('DELETE', `/users/${userId}/accounts/${accountId}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
   }
 
-  async getUser(id) {
+  async getOne(id) {
     if (!id) {
       throw new SDKError(400, '[Zabo] Missing `id` input. See: https://zabo.com/docs#get-a-user')
     }
@@ -80,7 +80,7 @@ class Users {
     }
   }
 
-  async getUsers({ limit = 25, cursor = '' } = {}) {
+  async getList({ limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit, cursor)
 
     try {
@@ -104,21 +104,21 @@ class Users {
     }
   }
 
-  async getBalances({ userId, accountId, tickers } = {}) {
+  async getBalances({ userId, accountId, currencies } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-balances')
     } else if (!accountId) {
       throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-balances')
-    } else if (!tickers) {
-      throw new SDKError(400, '[Zabo] Missing `tickers` parameter. See: https://zabo.com/docs#get-balances')
+    } else if (!currencies) {
+      throw new SDKError(400, '[Zabo] Missing `currencies` parameter. See: https://zabo.com/docs#get-balances')
     }
 
-    if (Array.isArray(tickers)) {
-      tickers = tickers.join(',')
+    if (Array.isArray(currencies)) {
+      currencies = currencies.join(',')
     }
 
     try {
-      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/balances?currencies=${tickers}`)
+      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/balances?currencies=${currencies}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

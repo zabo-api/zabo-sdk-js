@@ -19,8 +19,8 @@ describe('Zabo SDK Users Resource', () => {
     sdk.api.resources.should.have.property('users')
 
     sdk.api.resources.users.should.have.property('create')
-    sdk.api.resources.users.should.have.property('getUser')
-    sdk.api.resources.users.should.have.property('getUsers')
+    sdk.api.resources.users.should.have.property('getOne')
+    sdk.api.resources.users.should.have.property('getList')
     sdk.api.resources.users.should.have.property('getBalances')
   })
 
@@ -68,7 +68,7 @@ describe('Zabo SDK Users Resource', () => {
   })
 
   it('users.removeAccount() should fail if a user `id` is missing', async function () {
-    let response = await sdk.users.removeAccount({}, { id: 'account id' }).should.be.rejected()
+    let response = await sdk.users.removeAccount({ accountId: 'account id' }).should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
@@ -77,7 +77,7 @@ describe('Zabo SDK Users Resource', () => {
   })
 
   it('users.removeAccount() should fail if an account `id` is missing', async function () {
-    let response = await sdk.users.removeAccount({ id: 'user id' }).should.be.rejected()
+    let response = await sdk.users.removeAccount({ userId: 'user id' }).should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
@@ -85,16 +85,16 @@ describe('Zabo SDK Users Resource', () => {
     response.message.should.containEql('id')
   })
 
-  it('users.getUser() should fail if an account id is missing', async function () {
-    let response = await sdk.users.getUser().should.be.rejected()
+  it('users.getOne() should fail if an account id is missing', async function () {
+    let response = await sdk.users.getOne().should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
     response.message.should.containEql('id')
   })
 
-  it('users.getUsers() should fail if an invalid `limit` is provided', async function () {
-    let response = await sdk.users.getUsers({ limit: 51 }).should.be.rejected()
+  it('users.getList() should fail if an invalid `limit` is provided', async function () {
+    let response = await sdk.users.getList({ limit: 51 }).should.be.rejected()
 
     response.should.be.an.Error()
 
@@ -102,8 +102,8 @@ describe('Zabo SDK Users Resource', () => {
     response.message.should.containEql('limit')
   })
 
-  it('users.getUsers() should fail if an invalid `cursor` is provided', async function () {
-    let response = await sdk.users.getUsers({ cursor: 'not_a_valid_id' }).should.be.rejected()
+  it('users.getList() should fail if an invalid `cursor` is provided', async function () {
+    let response = await sdk.users.getList({ cursor: 'not_a_valid_id' }).should.be.rejected()
 
     response.should.be.an.Error()
 
@@ -114,7 +114,7 @@ describe('Zabo SDK Users Resource', () => {
   it('users.getBalances() should fail if a `userId` is not provided', async function () {
     let response = await sdk.users.getBalances({
       accountId: 'not_an_account_id',
-      tickers: ['BTC', 'ETH']
+      currencies: ['BTC', 'ETH']
     }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -125,7 +125,7 @@ describe('Zabo SDK Users Resource', () => {
   it('users.getBalances() should fail if an `accountId` is not provided', async function () {
     let response = await sdk.users.getBalances({
       userId: 'not_a_user_id',
-      tickers: 'BTC'
+      currencies: 'BTC'
     }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -133,7 +133,7 @@ describe('Zabo SDK Users Resource', () => {
     response.message.should.containEql('accountId')
   })
 
-  it('users.getBalances() should fail if a string or array of `tickers` are not provided', async function () {
+  it('users.getBalances() should fail if a string or array of `currencies` are not provided', async function () {
     let response = await sdk.users.getBalances({
       accountId: 'not_an_account_id',
       userId: 'not_a_user_id'
@@ -141,7 +141,7 @@ describe('Zabo SDK Users Resource', () => {
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
-    response.message.should.containEql('tickers')
+    response.message.should.containEql('currencies')
   })
 
 })

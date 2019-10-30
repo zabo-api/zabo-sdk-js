@@ -28,6 +28,24 @@ class Utils {
   getQRCode(url) {
     return utils.createQRCode(url)
   }
+
+  getBytecode({ fromAddress, toAddress, amount, currency } = {}) {
+    if (!fromAddress) {
+      throw new SDKError(400, '[Zabo] Missing `fromAddress` parameter. See: https://zabo.com/docs#get-network-message-bytecode')
+    } else if (!toAddress) {
+      throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#get-network-message-bytecode')
+    } else if (!amount) {
+      throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#get-network-message-bytecode')
+    } else if (!currency) {
+      throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#get-network-message-bytecode')
+    }
+
+    try {
+      return this.api.request('GET', `/bytecode?currency=${currency.toLowerCase()}&from_address=${fromAddress}&to_address=${toAddress}&amount=${amount}`)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
 }
 
 module.exports = (api) => {
