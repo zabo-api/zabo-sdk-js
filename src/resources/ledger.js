@@ -37,7 +37,7 @@ class Ledger {
     try {
       const transport = await TransportWebUSB.create()
 
-      if (currency.toLowerCase() == 'eth') {
+      if (currency.toUpperCase() == 'ETH') {
         if (!this.eth) {
           this.eth = new Eth(transport)
         }
@@ -46,7 +46,7 @@ class Ledger {
         return result
       }
 
-      if (currency.toLowerCase() == 'btc') {
+      if (currency.toUpperCase() == 'BTC') {
         if (!this.btc) {
           this.btc = new Btc(transport)
         }

@@ -19,7 +19,7 @@ describe('Zabo SDK Accounts Resource', () => {
 
     sdk.api.resources.should.not.have.property('accounts')
 
-    accounts = require('../../src/resources/accounts')(sdk.api)
+    accounts = await require('../../src/resources/accounts')(sdk.api)
 
     accounts.should.have.property('get')
     accounts.should.have.property('create')
@@ -82,4 +82,18 @@ describe('Zabo SDK Accounts Resource', () => {
     response.message.should.containEql('ticker')
   })
 
+  it('accounts.getDepositAddress() should fail if a currency ticker is missing', async function () {
+    let response = await accounts.getDepositAddress({ id: 'id', token: 'token' }).should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('ticker')
+  })
+
+  it('should initialize in decentralized mode', async function () {
+    await sdk.init({
+      decentralized: true,
+      sendCryptoData: false
+    }).should.be.ok()
+  })
 })

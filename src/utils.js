@@ -21,6 +21,7 @@ const url = require('url')
 const bigInt = require('big-integer')
 const uuidValidate = require('uuid-validate')
 const qrcode = require('qrcode-generator')
+const ethers = require('ethers')
 const { SDKError } = require('./err')
 
 const ErrorMessages = {
@@ -104,12 +105,12 @@ function isValidNodeUrl(nodeUrl) {
   return nodeUrl.includes('.ipc')
 }
 
-function getDataObjectForEthereumRequest({ requestType, address, currency, amount, options = {} }) {
+function getTxObjectForEthereumRequest({ requestType, toAddress, currency, amount, options = {} }) {
   switch (requestType) {
     case "transfer":
-      return _deriveEthereumDataForTransfer({ toAddress: address, currency, amount, options })
+      return _deriveEthereumTxForTransfer({ toAddress, currency, amount, options })
     case "balanceOf":
-      return _deriveEthereumDataForBalanceRequest({ userAddress: address, currency })
+      return _deriveEthereumTxForBalanceRequest({ userAddress: toAddress, currency })
     default:
       throw new SDKError(500, ErrorMessages.internalError + ` [getDataObjectForEthereumRequest: ${ErrorMessages.internalErrorTypes.badRequestType}]`)
   }
@@ -131,21 +132,26 @@ function _changeFloatToInt(amount, decimals) {
     throw new SDKError(500, ErrorMessages.internalError + ` [_changeFloatToInt: ${ErrorMessages.internalErrorTypes.invalidDecimals}]`)
   }
   let strArray = amount.split(".")
-  if (strArray.length > 2) {
+  let strArrayLen = strArray.length
+  if (strArrayLen > 2) {
     throw new SDKError(500, ErrorMessages.internalError + ` [_changeFloatToInt: ${ErrorMessages.internalErrorTypes.invalidAmount}]`)
   }
   // If 0 decimal places specified, then there should be 0 on the right side.
-  if (strArray.length > 1 && strArray[1].length > decimals && decimals == 0) {
+  if (strArrayLen > 1 && strArray[1].length > decimals && decimals == 0) {
     throw new SDKError(500, ErrorMessages.internalError + ` [_changeFloatToInt: ${ErrorMessages.internalErrorTypes.invalidZeroDecimalAmount}]`)
   }
-  if (strArray.length > 1 && strArray[1].length > decimals + 1) {
+  if (strArrayLen > 1 && strArray[1].length > decimals + 1) {
     // If providing fractional currency, we will slice the fraction of
     strArray[1] = strArray[1].slice(0, decimals)
+  }
+
+  if (strArrayLen === 1 && decimals !== 0) {
+    return strArray[0] + "0".padEnd(decimals, 0)
   }
   return strArray[0] + strArray[1].padEnd(decimals, 0)
 }
 
-function _deriveEthereumDataForTransfer({ toAddress, amount, currency, options }) {
+function _deriveEthereumTxForTransfer({ toAddress, amount, currency, options }) {
   let gasPrice
   if (options.gasPrice) {
     gasPrice = "0x" + bigInt(options.gasPrice).toString(16)
@@ -153,15 +159,15 @@ function _deriveEthereumDataForTransfer({ toAddress, amount, currency, options }
     // 21 gwei
     gasPrice = "0x4e3b29200"
   }
-  if (currency.ticker.toLowerCase() === 'eth') {
-    let dataObject = {
-      value: "0x" + bigInt(_changeFloatToInt(amount, currency.decimals)).toString(16),
+  if (currency.ticker.toUpperCase() === 'ETH') {
+    let txObject = {
+      value: "0x" + bigInt(_changeFloatToInt(amount, 18)).toString(16),
       // 21000
       gasLimit: "0x5208",
       gasPrice: gasPrice,
-      data: ""
+      to: toAddress
     }
-    return dataObject
+    return txObject
   } else if (currency.type === 'ERC20') {
     let strippedToAddress = toAddress.replace(/^0x/, '')
     if (strippedToAddress.length !== 40) {
@@ -174,7 +180,8 @@ function _deriveEthereumDataForTransfer({ toAddress, amount, currency, options }
       // 250000
       gasLimit = "0x3d090"
     }
-    let dataObject = {
+    let txObject = {
+      to: currency.address,
       value: "0x00",
       gasLimit: gasLimit,
       gasPrice: gasPrice,
@@ -182,12 +189,12 @@ function _deriveEthereumDataForTransfer({ toAddress, amount, currency, options }
         strippedToAddress.padStart(64, 0) +
         bigInt(_changeFloatToInt(amount, currency.decimals)).toString(16).padStart(64, 0)
     }
-    return dataObject
+    return txObject
   }
   throw new SDKError(400, ErrorMessages.invalidCurrency)
 }
 
-function _deriveEthereumDataForBalanceRequest({ currency, userAddress }) {
+function _deriveEthereumTxForBalanceRequest({ currency, userAddress }) {
   if (currency.type !== 'ERC20') {
     throw new SDKError(500, ErrorMessages.internalError + ` [_deriveEthereumDataForBalanceRequest: ${ErrorMessages.internalErrorTypes.invalidERC20Currency}]`)
   }
@@ -195,24 +202,29 @@ function _deriveEthereumDataForBalanceRequest({ currency, userAddress }) {
   if (strippedToAddress.length !== 40) {
     throw new SDKError(400, ErrorMessages.invalidAddress)
   }
-  let dataObject = {
+  let txObject = {
+    to: currency.address,
     data: _getERC20FunctionBytes('balanceOf') +
       strippedToAddress.padStart(64, 0)
   }
-  return dataObject
+  return txObject
 }
 
 const isBrowser = new Function("return typeof window !== 'undefined'")
 const isNode = new Function("return typeof global !== 'undefined'")
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
 
 module.exports = {
   generateHMACSignature,
   getZaboSession,
   validateListParameters,
   createQRCode,
-  getDataObjectForEthereumRequest,
+  getTxObjectForEthereumRequest,
   isBrowser,
   isNode,
+  sleep,
   isValidNodeUrl,
   ErrorMessages
 }

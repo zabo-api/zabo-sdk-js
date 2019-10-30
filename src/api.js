@@ -29,12 +29,11 @@ const { SDKError } = require('./err')
 class API {
   constructor(options) {
     Object.assign(this, options)
-
-    if (!this.sendAppCryptoData) {
-      this.resources = resources(this, utils.isNode())
-      return
+    if (!this.env) {
+      throw new SDKError(
+        400, `[Zabo] Please provide an 'env' value when initializing Zabo. More details at: https://zabo.com/docs`
+      )
     }
-
     let urls = constants(this.baseUrl, this.connectUrl)[this.env]
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios
@@ -42,21 +41,16 @@ class API {
 
     if (utils.isNode()) {
       this.axios.defaults.headers.common['X-Zabo-Key'] = this.apiKey
-      this.resources = resources(this, true)
+      resources(this, true).then(resources => this.resources = resources)
     } else {
       this.interfaces = {}
       this.connectUrl = urls.CONNECT_BASE_URL
       this._setEventListeners()
-
-      this.resources = resources(this, false)
+      resources(this, false).then(resources => this.resources = resources)
     }
   }
 
   async connect(interfaceType, attachTo, width, height) {
-    if (!this.sendAppCryptoData) {
-      throw new SDKError(403, '[Zabo] Cannot open API connection or Connect widget while running Zabo SDK on decentralized mode')
-    }
-
     let appId = null
 
     if (utils.isNode()) {

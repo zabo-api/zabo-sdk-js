@@ -28,42 +28,64 @@ class Ethereum {
     this.account = null
   }
 
-  async connect (nodeUrl) {
+  async connect(nodeUrl, useAddress) {
     if (!utils.isValidNodeUrl(nodeUrl)) {
       throw new SDKError(400, '[Zabo] For decentralized connections, please provide a valid node url as `useNode`. More details at: https://zabo.com/docs')
     }
 
     try {
-      if (utils.isNode() && nodeUrl.includes('.ipc')) {
-        this.node = new ethers.providers.IpcProvider(nodeUrl)
+      this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
+      this.data = {
+        id: 'decentralized',
+        wallet_provider: {
+          name: 'ethereum-node',
+          type: "private_key",
+          scopes: ["read_balances", "read_transactions", "create_deposit_address"]
+        }
+      }
+      const accounts = await this.node.listAccounts()
+      if (useAddress) {
+        if (accounts.includes(useAddress)) {
+          this.data.address = useAddress
+        } else {
+          throw new SDKError(400, `[Zabo] Ethereum node address provided but not available from the node.`)
+        }
       } else {
-        this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
+        this.data.address = accounts[0]
       }
 
-      const status = await this.node.getNetwork()
-      const accounts = await this.node.listAccounts()
-
-      this.account = this.node.getSigner(accounts.pop())
+      //this.account = this.node.getSigner(accounts.pop())
 
       // TODO: Handle geth/parity account unlocks with password files
-      await this.account.unlock('')
+      //await this.account.unlock('')
     } catch (err) {
       throw new SDKError(400, `[Zabo] Failed to connect with geth or parity node. Error: ${err.message}`)
     }
 
-    return 'online'
+    return this
   }
 
-  async getBalance(address, currency = { ticker: 'ETH' }) {
-    this.validateAddress(address)
+  async getBalance(currencies) {
+    if ((currencies || []).length === 0) {
+      currencies = ['ETH']
+    } else if (currencies.length > 1) {
+      throw new SDKError(400, `[Zabo] Can only request one balance at a time in decentralized mode.`)
+    }
 
     let result = null
-
-    if (currency && currency.ticker != 'ETH') {
-      const obj =  utils.getDataObjectForEthereumRequest({ requestType: 'balanceOf', address, currency })
-      result = await this.node.call({ to: currency.address, data: obj.data })
+    let currencyObj = { ticker: currencies[0].toUpperCase() }
+    if (currencyObj.ticker != 'ETH') {
+      currencyObj = window['ERC_20_' + currencyObj.ticker]
+    }
+    if (!currencyObj) {
+      throw new SDKError(400, `[Zabo] Requested currency ${currencies[0]} is not loaded.`)
+    }
+    if (currencyObj.ticker != 'ETH') {
+      currencyObj.type = 'ERC20'
+      const txobj = utils.getTxObjectForEthereumRequest({ requestType: 'balanceOf', address: this.data.address, currency: currencyObj })
+      result = await this.node.call(txobj)
     } else {
-      result = await this.node.getBalance(address)
+      result = await this.node.getBalance(this.data.address)
     }
 
     // TODO: Format response according to token decimal places
@@ -71,46 +93,86 @@ class Ethereum {
   }
 
   async getTransaction(txHash) {
-    this.validateTxHash(txHash)
-    return this.node.getTransaction(txHash)
+    if (!txHash || txHash === '') {
+      throw new SDKError(400, `[Zabo] Did not provide a transaction hash and one is required.`)
+    }
+    let rawTx = await this.node.getTransaction(txHash)
+    let block = await this.node.getBlock(txHash.blockNumber)
+    return this._transformRawTxToZaboTx(rawTx, block)
   }
 
-  async sendTransaction({ address, amount, currency = { ticker: 'ETH', decimals: 18 }} = {}) {
+  async sendTransaction({ toAddress, amount, currency } = {}) {
     try {
-      this.validateAddress(address)
-
-      const gasPrice = await this.node.getGasPrice()
-      const txObj = { gasPrice, gasLimit: 250000 }
-
-      if (currency && currency.ticker.toLowerCase() != 'eth') {
-        const obj = utils.getDataObjectForEthereumRequest({
-          requestType: 'transfer',
-          address,
-          amount,
-          currency
-        })
-        txObj.to = currency.address
-        txObj.data = obj.data
+      let currencyObj = {}
+      if (currency != 'ETH') {
+        currencyObj = window['ERC_20_' + currency.toUpperCase()]
       } else {
-        txObj.to = address
-        txObj.value = ethers.utils.parseEther(amount) // convert eth amount to wei
+        currencyObj = { ticker: 'ETH' }
       }
+      const txobj = utils.getTxObjectForEthereumRequest({
+        requestType: 'transfer',
+        toAddress,
+        amount,
+        currency: currencyObj
+      })
+      let signer = this.node.getSigner(this.data.address)
 
-      return this.account.sendTransaction(txObj)
+      let rawTx = await signer.sendTransaction(txobj)
+      let block = await this.node.getBlock(rawTx.blockNumber)
+      return this._transformRawTxToZaboTx(rawTx, block, { currency: currency, amount: amount, to: toAddress })
     } catch (err) {
       console.error(err)
       throw new SDKError(400, '[Zabo] Unable to send transaction to ethereum node. Please review your inputs and try again.')
     }
   }
 
-  validateAddress (address) {
-    if (address && address.length === 42) { return }
-    throw new SDKError(400, '[Zabo] Please provide a valid ethereum address. More details at: https://zabo.com/docs')
-  }
-
-  validateTxHash (txHash) {
-    if (address && address.length === 42) { return }
-    throw new SDKError(400, '[Zabo] Please provide a valid ethereum transaction hash. More details at: https://zabo.com/docs')
+  _transformRawTxToZaboTx(rawTx, block, erc20Data) {
+    // Hacking here, need to clean up after Waterloo and properly parse for erc20 transfers + return
+    // ETH amount as decimal string instead of wei to conform to the API
+    let currency
+    let otherParty
+    let amount = rawTx.value.toString()
+    if (rawTx.data === "0x") {
+      currency = 'wei'
+      otherParty = rawTx.to
+    } else if (erc20Data) {
+      currency = erc20Data.currency
+      amount = erc20Data.amount
+      otherParty = erc20Data.to
+    } else {
+      currency = 'unknown'
+      otherParty = rawTx.to
+      if (amount === "0") {
+        amount = 'unknown'
+        otherParty = 'unknown'
+      }
+    }
+    let txType
+    if (rawTx.to === this.data.address) {
+      txType = 'received'
+    } else if (rawTx.from === this.data.address) {
+      txType = 'sent'
+    } else {
+      if (erc20Data) {
+        if (erc20Data.to === this.data.address) {
+          txType = 'received'
+        }
+      }
+      txType = 'unknown'
+    }
+    let zaboTx = {
+      id: rawTx.hash,
+      type: txType,
+      from: rawTx.from,
+      amount: amount,
+      currency: currency,
+      status: rawTx.confirmations > 0 ? 'completed' : 'pending',
+      other_parties: [otherParty],
+      initiated_at: block.timestamp,
+      confirmed_at: rawTx.confirmations > 0 ? block.timestamp : null,
+      rawTx: rawTx
+    }
+    return zaboTx
   }
 }
 

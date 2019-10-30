@@ -18,7 +18,6 @@
 
 'use strict'
 
-const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Accounts {
@@ -45,6 +44,13 @@ class Accounts {
   }
 
   async create({ clientId, credentials, provider, origin } = {}) {
+    if (!clientId) {
+      throw new SDKError(
+        400,
+        `[Zabo] Unable to connect with the Zabo API. Make sure you have registered your app at https://zabo.com and that you entered a valid 'clientId' value.
+        More details at: https://zabo.com/docs`
+      )
+    }
     let data = {
       client_id: clientId,
       wallet_provider_name: provider,
@@ -70,7 +76,7 @@ class Accounts {
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.id}/balances?currencies=${tickers}`)
+      return this.api.request('GET', url)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
@@ -125,6 +131,19 @@ class Accounts {
 
 }
 
-module.exports = (api) => {
-  return new Accounts(api)
+module.exports = async (api) => {
+  let accounts = new Accounts(api)
+  if (api.ethereum) {
+    let ethConnection = await api.ethereum.connect(api.useNode, api.useAddress)
+    accounts.data = ethConnection.data
+    accounts.node = ethConnection.node
+    accounts.get = () => { return accounts.data }
+    accounts.getBalances = ({ currencies } = {}) => { return ethConnection.getBalance(currencies) }
+    accounts.createDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
+    if (!api.sendAppCryptoData) {
+      accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+    }
+    accounts.getDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
+  }
+  return accounts
 }
