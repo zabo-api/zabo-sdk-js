@@ -48,7 +48,8 @@ class ZaboSDK {
           baseUrl: o.baseUrl,
           apiKey: o.apiKey,
           secretKey: o.secretKey,
-          env: this.env
+          env: this.env,
+          sendAppCryptoData: true
         })
         await this.setEndpointAliases()
 
@@ -62,7 +63,7 @@ class ZaboSDK {
           }
 
           if (this.autoConnect) {
-            return this.applications.getInfo()
+            return this.applications.get()
           }
         }
       } catch (err) {

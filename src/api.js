@@ -94,7 +94,10 @@ class API {
       let response = await this.axios(request)
       return response.data
     } catch (err) {
-      throw new SDKError(err.response.status, err.response.data.message)
+      if (err.response) {
+        throw new SDKError(err.response.status, err.response.data.message)
+      }
+      throw new SDKError(500, err.message)
     }
   }
 

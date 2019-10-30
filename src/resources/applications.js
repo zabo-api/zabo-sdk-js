@@ -24,6 +24,7 @@ class Applications {
   constructor(api) {
     this.api = api
     this.id = null
+    this.clientId = null
   }
 
   setId(id) {
@@ -36,7 +37,7 @@ class Applications {
 
   async get() {
     if (!this.id) {
-      throw new SDKError(401, '[Zabo] SDK has not initialized properly.')
+      throw new SDKError(401, '[Zabo] SDK has not initialized properly get().')
     }
     try {
       return this.api.request('GET', `/applications/${this.id}`)
@@ -47,7 +48,7 @@ class Applications {
 
   async getInfo() {
     if (!this.api.clientId) {
-      throw new SDKError(401, '[Zabo] SDK has not initialized properly.')
+      throw new SDKError(401, '[Zabo] SDK has not initialized properly getInfo().')
     }
 
     let origin = encodeURIComponent(window ? window.location.host : '')
