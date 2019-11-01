@@ -1,3 +1,4 @@
+// Note these addresses represent the tokens on Rinkeby
 var ERC_20_DAI = { ticker: "DAI", address: "0x62a6ebC0ac598819CCad368788F6d2357FaE0d9e", type: "ERC20", decimals: 18 }
 var ERC_20_BAT = { ticker: "BAT", address: "0x180716c2a99429Bc4f19a10ea28693bA44a6B26f", type: "ERC20", decimals: 18 }
 var ERC_20_LINK = { ticker: "LINK", address: "0x1dff79CfcE03751D254fd2322F52FEe0107bFC86", type: "ERC20", decimals: 18 }
