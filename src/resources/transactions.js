@@ -181,7 +181,7 @@ class Transactions {
           return transaction
         } catch (e) {
           if (e.error_type === 404) {
-            await utils.sleep(30000)
+            await utils.sleep(50000)
             try {
               transaction = await this.getOne({ txId: hash })
               return transaction
