@@ -1,6 +1,6 @@
 {
   "name": "zabo-sdk-js",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Zabo SDK for JS",
   "main": "src/index.js",
   "scripts": {
