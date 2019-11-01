@@ -84,7 +84,7 @@ class API {
   }
 
   async request(method, path, data, isPublic = false) {
-    if (!this.sendAppCryptoData) {
+    if (this.decentralized) {
       throw new SDKError(403, '[Zabo] Cannot send API requests while running Zabo SDK on decentralized mode')
     }
 
