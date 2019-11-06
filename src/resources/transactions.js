@@ -28,7 +28,7 @@ class Transactions {
     this.account = null
 
     this.txsListeners = {}
-    this.checkInterval = setInterval(this._checkTransactions.bind(this), 5000)
+    this.checkInterval = setInterval(this._checkTransactions.bind(this), 50000)
   }
 
   _setAccount(account) {
@@ -42,7 +42,7 @@ class Transactions {
       return
     }
 
-    for (hash of txIds) {
+    for (let hash of txIds) {
       try {
         transaction = await this.getOne({ txId: hash })
         this._onTransactionUpdate(hash, transaction)
@@ -180,6 +180,7 @@ class Transactions {
       throw new SDKError(400, '[Zabo] Account not connected. See: https://zabo.com/docs#connecting-a-user')
     }
 
+    amount = amount.toString()
     currency = currency.toUpperCase()
 
     if (currency == 'HBAR') {
@@ -207,10 +208,10 @@ class Transactions {
 
         return {
           id: hash,
-          type: 'send',
-          currency: currency,
-          amount: amount.toString(),
+          currency,
+          amount,
           other_parties: [ toAddress ],
+          type: 'send',
           status: 'pending'
         }
       } catch (err) {
@@ -247,7 +248,7 @@ class Transactions {
   onConfirmation (txId, callback) {
     if (!txId || typeof txId !== 'string') {
       throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#send-a-transaction')
-    } else if (!fn || typeof callback !== 'function') {
+    } else if (!callback || typeof callback !== 'function') {
       throw new SDKError(400, '[Zabo] Missing `callback` parameter. See: https://zabo.com/docs#send-a-transaction')
     }
 
