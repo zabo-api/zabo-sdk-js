@@ -155,4 +155,24 @@ describe('Zabo SDK Transactions Resource', () => {
     response.error_type.should.be.equal(400)
     response.message.should.containEql('amount')
   })
+
+  it('transactions.onConfirmation() should fail if `txId` argument is not provided', function () {
+    try {
+      sdk.transactions.onConfirmation()
+    } catch (err) {
+      err.should.be.an.Error()
+      err.error_type.should.be.equal(400)
+      err.message.should.containEql('txId')
+    }
+  })
+
+  it('transactions.onConfirmation() should fail if a callback function is not provided', function () {
+    try {
+      sdk.transactions.onConfirmation('0x00000')
+    } catch (err) {
+      err.should.be.an.Error()
+      err.error_type.should.be.equal(400)
+      err.message.should.containEql('callback')
+    }
+  })
 })
