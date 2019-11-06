@@ -124,6 +124,38 @@ class Users {
     }
   }
 
+  async createDepositAddress({ userId, accountId, currency } = {}) {
+    if (!userId) {
+      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+    } else if (!accountId) {
+      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+    } else if (!currency) {
+      throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+    }
+
+    try {
+      return this.api.request('POST', `/users/${userId}/accounts/${accountId}/deposit-addresses?currency=${currency}`)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
+  async getDepositAddresses({ userId, accountId, currency } = {}) {
+    if (!userId) {
+      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-deposit-addresses')
+    } else if (!accountId) {
+      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-deposit-addresses')
+    } else if (!currency) {
+      throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#get-deposit-addresses')
+    }
+
+    try {
+      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/deposit-addresses?currency=${currency}`)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
+  }
+
 }
 
 module.exports = (api) => {
