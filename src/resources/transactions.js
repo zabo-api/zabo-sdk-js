@@ -105,8 +105,6 @@ class Transactions {
   }
 
   async send({ userId, accountId, currency, toAddress, amount } = {}) {
-    amount = amount.toString()
-
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#send-a-transaction')
@@ -116,9 +114,13 @@ class Transactions {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!uuidValidate(accountId, 4)) {
         throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
+      } else if (!toAddress) {
+        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!amount) {
         throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
       }
+
+      amount = amount.toString()
 
       if (currency.toUpperCase() == 'HBAR') {
         let hederaAccount = await this.api.resources.users.getAccount({ userId, accountId })
