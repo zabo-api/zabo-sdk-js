@@ -26,11 +26,40 @@ class Transactions {
   constructor(api) {
     this.api = api
     this.account = null
-    this.listeners = []
+
+    this.txsListeners = {}
+    this.checkInterval = setInterval(this._checkTransactions.bind(this), 5000)
   }
 
   _setAccount(account) {
     this.account = account
+  }
+
+  async _checkTransactions() {
+    const txIds = Object.keys(this.txsListeners)
+
+    if (txIds.length == 0) {
+      return
+    }
+
+    for (hash of txIds) {
+      try {
+        transaction = await this.getOne({ txId: hash })
+        this._onTransactionUpdate(hash, transaction)
+        delete this.txsListeners[hash]
+      } catch (err) {
+        if (err.error_type !== 404) {
+          throw err
+        }
+      }
+    }
+  }
+
+  _onTransactionUpdate(hash, transaction) {
+    if (!hash || !this.txsListeners[hash] || !transaction) {
+      return
+    }
+    this.txsListeners[hash].call(this, transaction)
   }
 
   async getOne({ userId, accountId, txId } = {}) {
@@ -121,8 +150,6 @@ class Transactions {
         throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
       }
 
-      amount = amount.toString()
-
       if (currency.toUpperCase() == 'HBAR') {
         let hederaAccount = await this.api.resources.users.getAccount({ userId, accountId })
 
@@ -136,8 +163,8 @@ class Transactions {
 
       return this.api.request('POST', `/users/${userId}/accounts/${accountId}/transactions`, {
         to_address: toAddress,
+        amount: amount.toString(),
         currency,
-        amount
       })
     }
 
@@ -177,13 +204,12 @@ class Transactions {
 
       try {
         let hash = await metamask.sendTransaction({ address: toAddress, currency: currencyObj, amount })
-        this.listeners.push(hash)
 
         return {
           id: hash,
           type: 'send',
-          amount: amount,
           currency: currency,
+          amount: amount.toString(),
           other_parties: [ toAddress ],
           status: 'pending'
         }
@@ -216,6 +242,16 @@ class Transactions {
 
       throw new SDKError(500, `[Zabo] Unable to send Ledger transactions at the moment.`)
     }
+  }
+
+  onConfirmation (txId, callback) {
+    if (!txId || typeof txId !== 'string') {
+      throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#send-a-transaction')
+    } else if (!fn || typeof callback !== 'function') {
+      throw new SDKError(400, '[Zabo] Missing `callback` parameter. See: https://zabo.com/docs#send-a-transaction')
+    }
+
+    this.txsListeners[txId] = callback
   }
 }
 
