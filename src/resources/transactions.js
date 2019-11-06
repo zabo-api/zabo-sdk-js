@@ -26,6 +26,7 @@ class Transactions {
   constructor(api) {
     this.api = api
     this.account = null
+    this.listeners = []
   }
 
   _setAccount(account) {
@@ -176,27 +177,16 @@ class Transactions {
 
       try {
         let hash = await metamask.sendTransaction({ address: toAddress, currency: currencyObj, amount })
-        await utils.sleep(50000)
-        let transaction
-        try {
-          transaction = await this.getOne({ txId: hash })
-          return transaction
-        } catch (e) {
-          if (e.error_type === 404) {
-            await utils.sleep(50000)
-            try {
-              transaction = await this.getOne({ txId: hash })
-              return transaction
-            } catch (e) {
-              if (e.error_type === 404) {
-                return { id: hash }
-              }
-              throw e
-            }
-          }
-          throw e
-        }
+        this.listeners.push(hash)
 
+        return {
+          id: hash,
+          type: 'send',
+          amount: amount,
+          currency: currency,
+          other_parties: [ toAddress ],
+          status: 'pending'
+        }
       } catch (err) {
         throw new SDKError(500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
       }
