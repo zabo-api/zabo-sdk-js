@@ -26,10 +26,40 @@ class Transactions {
   constructor(api) {
     this.api = api
     this.account = null
+
+    this.txsListeners = {}
+    this.checkInterval = setInterval(this._checkTransactions.bind(this), 50000)
   }
 
   _setAccount(account) {
     this.account = account
+  }
+
+  async _checkTransactions() {
+    const txIds = Object.keys(this.txsListeners)
+
+    if (txIds.length == 0) {
+      return
+    }
+
+    for (let hash of txIds) {
+      try {
+        const transaction = await this.getOne({ txId: hash })
+        this._onTransactionUpdate(hash, transaction)
+        delete this.txsListeners[hash]
+      } catch (err) {
+        if (err.error_type !== 404) {
+          throw err
+        }
+      }
+    }
+  }
+
+  _onTransactionUpdate(hash, transaction) {
+    if (!hash || !this.txsListeners[hash] || !transaction) {
+      return
+    }
+    this.txsListeners[hash].call(this, transaction)
   }
 
   async getOne({ userId, accountId, txId } = {}) {
@@ -105,8 +135,6 @@ class Transactions {
   }
 
   async send({ userId, accountId, currency, toAddress, amount } = {}) {
-    amount = amount.toString()
-
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#send-a-transaction')
@@ -116,6 +144,8 @@ class Transactions {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!uuidValidate(accountId, 4)) {
         throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
+      } else if (!toAddress) {
+        throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!amount) {
         throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
       }
@@ -133,8 +163,8 @@ class Transactions {
 
       return this.api.request('POST', `/users/${userId}/accounts/${accountId}/transactions`, {
         to_address: toAddress,
+        amount: amount.toString(),
         currency,
-        amount
       })
     }
 
@@ -150,6 +180,7 @@ class Transactions {
       throw new SDKError(400, '[Zabo] Account not connected. See: https://zabo.com/docs#connecting-a-user')
     }
 
+    amount = amount.toString()
     currency = currency.toUpperCase()
 
     if (currency == 'HBAR') {
@@ -173,30 +204,24 @@ class Transactions {
       }
 
       try {
-        let hash = await metamask.sendTransaction({ address: toAddress, currency: currencyObj, amount })
-        await utils.sleep(50000)
-        let transaction
-        try {
-          transaction = await this.getOne({ txId: hash })
-          return transaction
-        } catch (e) {
-          if (e.error_type === 404) {
-            await utils.sleep(50000)
-            try {
-              transaction = await this.getOne({ txId: hash })
-              return transaction
-            } catch (e) {
-              if (e.error_type === 404) {
-                return { id: hash }
-              }
-              throw e
-            }
-          }
-          throw e
+        let metamaskAddress = await metamask.connect()
+
+        if (metamaskAddress !== this.account.address) {
+          throw new SDKError(403, 'Make sure you have the right account selected on your Metamask plugin.')
         }
 
+        let hash = await metamask.sendTransaction({ address: toAddress, currency: currencyObj, amount })
+
+        return {
+          id: hash,
+          currency,
+          amount,
+          other_parties: [ toAddress ],
+          type: 'send',
+          status: 'pending'
+        }
       } catch (err) {
-        throw new SDKError(500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
+        throw new SDKError(err.error_type || 500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
       }
     } else if (this.account.wallet_provider.name == 'ledger') {
       if (currency == 'ETH' || currency == 'BTC') {
@@ -224,6 +249,16 @@ class Transactions {
 
       throw new SDKError(500, `[Zabo] Unable to send Ledger transactions at the moment.`)
     }
+  }
+
+  onConfirmation (txId, callback) {
+    if (!txId || typeof txId !== 'string') {
+      throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#send-a-transaction')
+    } else if (!callback || typeof callback !== 'function') {
+      throw new SDKError(400, '[Zabo] Missing `callback` parameter. See: https://zabo.com/docs#send-a-transaction')
+    }
+
+    this.txsListeners[txId] = callback
   }
 }
 

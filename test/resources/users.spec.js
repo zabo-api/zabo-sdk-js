@@ -11,7 +11,7 @@ describe('Zabo SDK Users Resource', () => {
       secretKey: 'some-secret-key',
       env: 'sandbox',
       autoConnect: false
-    }).should.be.ok()
+    }).catch(err => err).should.be.ok()
 
     sdk.api.should.be.ok()
     sdk.api.connect.should.be.a.Function()

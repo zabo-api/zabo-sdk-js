@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "getv": "echo $npm_package_version",
-    "test": "./node_modules/mocha/bin/mocha --recursive test/",
+    "test": "./node_modules/mocha/bin/mocha --recursive test/ --exit",
     "test:ethereum": "TEST_TYPE=ethereum npm run test",
     "build": "npx webpack --config webpack.config.js --progress --colors",
     "build:local": "NODE_ENV=local npm run build",

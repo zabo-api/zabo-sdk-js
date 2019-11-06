@@ -33,7 +33,7 @@ describe('Zabo SDK Module', () => {
       secretKey: 'some-secret-key',
       env: 'sandbox',
       autoConnect: false
-    }).should.be.ok()
+    }).catch(err => err).should.be.ok()
 
     sdk.status.should.be.ok()
     sdk.status.should.equal('offline')
@@ -45,7 +45,7 @@ describe('Zabo SDK Module', () => {
       secretKey: 'some-secret-key',
       env: 'sandbox',
       autoConnect: false
-    }).should.be.ok()
+    }).catch(err => err).should.be.ok()
 
     sdk.connect.should.be.a.Function()
   })
@@ -58,7 +58,7 @@ describe('Zabo SDK Module', () => {
       secretKey: 'some-secret-key',
       env: 'sandbox',
       autoConnect: false
-    })
+    }).catch(err => err)
 
     sdk.status.should.be.ok()
 

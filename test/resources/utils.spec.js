@@ -12,7 +12,7 @@ describe('Zabo SDK Utils', () => {
       secretKey: 'some-secret-key',
       env: 'sandbox',
       autoConnect: false
-    }).should.be.ok()
+    }).catch(err => err).should.be.ok()
 
     utils = require('../../src/resources/utils')(sdk.api)
 
