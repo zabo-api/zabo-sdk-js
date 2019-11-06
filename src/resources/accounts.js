@@ -86,7 +86,7 @@ class Accounts {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!currency || typeof currency !== 'string') {
-      throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs#get-deposit-addresses')
+      throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs##create-a-deposit-address')
     }
 
     const providersWithStaticDepositAddresses = [
@@ -111,11 +111,11 @@ class Accounts {
     }
   }
 
-  async getDepositAddress(currency) {
+  async getDepositAddresses(currency) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!currency || typeof currency !== 'string') {
-      throw new SDKError(400, '[Zabo] Invalid `currency` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+      throw new SDKError(400, '[Zabo] Invalid `currency` parameter. See: https://zabo.com/docs#get-deposit-addresses')
     }
 
     try {
