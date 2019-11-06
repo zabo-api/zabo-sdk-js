@@ -100,4 +100,59 @@ describe('Zabo SDK Transactions Resource', () => {
     response.message.should.containEql('cursor')
   })
 
+  it('transactions.send() should fail if `userId` is not provided', async function () {
+    let response = await sdk.transactions.send({
+      accountId: '7a1e6a76-f7d0-4b8c-8c16-8972041c970a',
+      currency: 'ETH',
+      toAddress: '0x0DCFA5fBBCe44FfebcBd7D306fEa4F946eBaE535',
+      amount: 0.1
+    }).should.be.rejected()
+
+    response.should.be.an.Error()
+
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('userId')
+  })
+
+  it('transactions.send() should fail if `accountId` is not provided', async function () {
+    let response = await sdk.transactions.send({
+      userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
+      currency: 'ETH',
+      toAddress: '0x0DCFA5fBBCe44FfebcBd7D306fEa4F946eBaE535',
+      amount: 0.1
+    }).should.be.rejected()
+
+    response.should.be.an.Error()
+
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('accountId')
+  })
+
+  it('transactions.send() should fail if `toAddress` is not provided', async function () {
+    let response = await sdk.transactions.send({
+      accountId: '7a1e6a76-f7d0-4b8c-8c16-8972041c970a',
+      userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
+      currency: 'ETH',
+      amount: 0.1
+    }).should.be.rejected()
+
+    response.should.be.an.Error()
+
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('toAddress')
+  })
+
+  it('transactions.send() should fail if `amount` is not provided', async function () {
+    let response = await sdk.transactions.send({
+      accountId: '7a1e6a76-f7d0-4b8c-8c16-8972041c970a',
+      userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
+      currency: 'ETH',
+      toAddress: '0x0DCFA5fBBCe44FfebcBd7D306fEa4F946eBaE535',
+    }).should.be.rejected()
+
+    response.should.be.an.Error()
+
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('amount')
+  })
 })
