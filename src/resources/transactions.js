@@ -44,7 +44,7 @@ class Transactions {
 
     for (let hash of txIds) {
       try {
-        transaction = await this.getOne({ txId: hash })
+        const transaction = await this.getOne({ txId: hash })
         this._onTransactionUpdate(hash, transaction)
         delete this.txsListeners[hash]
       } catch (err) {
@@ -204,6 +204,12 @@ class Transactions {
       }
 
       try {
+        let metamaskAddress = await metamask.connect()
+
+        if (metamaskAddress !== this.account.address) {
+          throw new SDKError(403, 'Make sure you have the right account selected on your Metamask plugin.')
+        }
+
         let hash = await metamask.sendTransaction({ address: toAddress, currency: currencyObj, amount })
 
         return {
@@ -215,7 +221,7 @@ class Transactions {
           status: 'pending'
         }
       } catch (err) {
-        throw new SDKError(500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
+        throw new SDKError(err.error_type || 500, `[Zabo] Failed to send 'Metamask' transaction. Error: ${err}`)
       }
     } else if (this.account.wallet_provider.name == 'ledger') {
       if (currency == 'ETH' || currency == 'BTC') {
