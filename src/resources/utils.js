@@ -19,6 +19,7 @@
 'use strict'
 
 const utils = require('../utils')
+const { SDKError } = require('../err')
 
 class Utils {
   constructor(api) {
