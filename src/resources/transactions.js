@@ -97,7 +97,14 @@ class Transactions {
   }
 
   async getList({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
-    utils.validateListParameters(limit, cursor)
+    utils.validateListParameters(limit)
+
+    if (cursor) {
+      const timestamp = (new Date(cursor)).getTime()
+      if (timestamp === 0 || isNaN(timestamp)) {
+        throw new SDKError(400, '[Zabo] Values for `cursor` must be a valid `initiated_at` timestamp. See: https://zabo.com/docs#get-account-history')
+      }
+    }
 
     let url = null
 

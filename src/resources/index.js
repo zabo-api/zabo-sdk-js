@@ -18,6 +18,7 @@ const { ethereum } = require('../networks')
 module.exports = async (api, isNode) => {
   if (isNode) {
     return {
+      utils: require('./utils')(api),
       users: require('./users')(api),
       applications: require('./applications')(api),
       currencies: require('./currencies')(api),

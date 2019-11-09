@@ -19,6 +19,7 @@
 'use strict'
 
 const utils = require('../utils')
+const { SDKError } = require('../err')
 
 class Utils {
   constructor(api) {
@@ -29,7 +30,7 @@ class Utils {
     return utils.createQRCode(url)
   }
 
-  getBytecode({ fromAddress, toAddress, amount, currency } = {}) {
+  async getBytecode({ fromAddress, toAddress, amount, currency } = {}) {
     if (!fromAddress) {
       throw new SDKError(400, '[Zabo] Missing `fromAddress` parameter. See: https://zabo.com/docs#get-network-message-bytecode')
     } else if (!toAddress) {
