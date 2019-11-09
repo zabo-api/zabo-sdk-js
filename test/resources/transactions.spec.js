@@ -92,7 +92,7 @@ describe('Zabo SDK Transactions Resource', () => {
   })
 
   it('transactions.getList() should fail if an invalid `cursor` is provided', async function () {
-    let response = await sdk.transactions.getList({ cursor: 'not_a_valid_id' }).should.be.rejected()
+    let response = await sdk.transactions.getList({ cursor: 'not_a_valid_timestamp' }).should.be.rejected()
 
     response.should.be.an.Error()
 
