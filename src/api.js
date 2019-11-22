@@ -36,7 +36,7 @@ class API {
     }
     let urls = constants(this.baseUrl, this.connectUrl)[this.env]
     this.baseUrl = urls.API_BASE_URL
-    this.axios = axios
+    this.axios = axios.create()
     this.axios.defaults.baseURL = this.baseUrl
 
     if (utils.isNode()) {
