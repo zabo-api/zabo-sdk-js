@@ -79,6 +79,7 @@ class API {
         document.querySelector(attachTo).appendChild(this.connector)
       } else {
         this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
+        this._watchConnector()
       }
     }
   }
@@ -123,6 +124,22 @@ class API {
 
   _setEventListeners() {
     window.addEventListener('message', this._onPostMessage.bind(this), false)
+  }
+
+  _watchConnector() {
+    const interval = setInterval(() => {
+      if (this.isWaitingForConnector) {
+        if (this.connector.closed) {
+          this.isWaitingForConnector = false
+
+          if (this._onError) {
+            this._onError({ error_type: 400, message: "[Zabo] Error in the connection process: Connection closed" })
+          }
+        }
+      } else {
+        clearInterval(interval)
+      }
+    }, 1000)
   }
 
   _onPostMessage(event) {
