@@ -25,6 +25,7 @@ class Applications {
     this.api = api
     this.id = null
     this.clientId = null
+    this.data = null
   }
 
   setId(id) {
@@ -40,7 +41,7 @@ class Applications {
       throw new SDKError(401, '[Zabo] SDK has not initialized properly get().')
     }
     try {
-      return this.api.request('GET', `/applications/${this.id}`)
+      return this.data = await this.api.request('GET', `/applications/${this.id}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
@@ -58,7 +59,7 @@ class Applications {
     }
 
     try {
-      return this.api.request('GET', `/applications/info?client_id=${this.api.clientId}&origin=${origin}`, {}, true)
+      return this.data = await this.api.request('GET', `/applications/info?client_id=${this.api.clientId}&origin=${origin}`, {}, true)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
