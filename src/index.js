@@ -133,11 +133,11 @@ class ZaboSDK {
     try {
       let account = await this.accounts.get()
       this.transactions._setAccount(account)
-      return this.applications.getInfo()
     } catch (err) {
-      console.error('[Zabo] No account connected yet.')
-      return this.applications.getInfo()
+      console.info('[Zabo] No account connected yet.')
     }
+
+    return this.applications.getInfo()
   }
 
   throwConnectError(code, message) {
