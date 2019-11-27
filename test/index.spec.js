@@ -1,7 +1,7 @@
 'use strict'
 
 const should = require('should')
-const sdk = require('../src/index.js')
+const sdk = require('../src/sdk.js')
 
 describe('Zabo SDK Module', () => {
 

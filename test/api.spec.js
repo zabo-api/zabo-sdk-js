@@ -2,7 +2,7 @@
 
 const should = require('should')
 const crypto = require('crypto')
-const sdk = require('../src/index.js')
+const sdk = require('../src/sdk.js')
 
 describe('Zabo SDK API', () => {
 
