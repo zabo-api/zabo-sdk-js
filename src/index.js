@@ -16,20 +16,17 @@
 
 'use strict'
 
-const SDK = require('./sdk')
+const sdk = require('./sdk')
 
 // Zabo main class definition
 class Zabo {
-  #sdkInstance
-
   async init (config = {}) {
-    const sdkInstance = new SDK()
-    await sdkInstance.init(config)
-    return this.#sdkInstance = sdkInstance
+    await sdk.init(config)
+    return sdk
   }
 
   get instance () {
-    return this.#sdkInstance
+    return sdk
   }
 
   get version () {

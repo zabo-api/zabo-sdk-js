@@ -192,4 +192,4 @@ class ZaboSDK {
 }
 
 // Export ZaboSDK class
-module.exports = ZaboSDK
+module.exports = new ZaboSDK()
