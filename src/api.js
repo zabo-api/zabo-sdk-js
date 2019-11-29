@@ -25,6 +25,35 @@ const resources = require('./resources')
 
 const { SDKError } = require('./err')
 
+// ListCursor class definition
+class ListCursor extends Array {
+  #api
+  #list
+  #cursor
+
+  constructor({ data, list_cursor } = {}, api) {
+    super(...data)
+    this.#api = api
+    this.#list = data
+    this.#cursor = list_cursor
+  }
+
+  get hasMore () {
+    return this.#cursor.has_more
+  }
+
+  get limit () {
+    return this.#cursor.limit
+  }
+
+  next () {
+    if (this.hasMore && this.#cursor.next_uri) {
+      return this.#api.request('GET', this.#cursor.next_uri)
+    }
+    return new ListCursor({ data: [], list_cursor: this.#cursor })
+  }
+}
+
 // Main API class definition
 class API {
   constructor(options) {
@@ -93,6 +122,10 @@ class API {
 
     try {
       let response = await this.axios(request)
+
+      if (response.data && response.data.list_cursor) {
+        return new ListCursor(response.data, this)
+      }
       return response.data
     } catch (err) {
       if (err.response) {
