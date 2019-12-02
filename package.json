@@ -55,5 +55,8 @@
     "qrcode-generator": "^1.4.3",
     "regenerator-runtime": "^0.13.3",
     "uuid-validate": "0.0.3"
+  },
+  "engines": {
+    "node": ">=12"
   }
 }
