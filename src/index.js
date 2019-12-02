@@ -27,6 +27,7 @@ class ZaboSDK {
     this.status = 'offline'
     this.api = null
     this.autoConnect = true
+    this.version = process.env.PACKAGE_VERSION
   }
 
   async init(o) {
@@ -192,9 +193,4 @@ class ZaboSDK {
 }
 
 // Export SDK instance
-let _z = new ZaboSDK()
-if (utils.isBrowser()) {
-  window.Zabo = _z
-}
-
-module.exports = _z
+module.exports = new ZaboSDK()
