@@ -163,9 +163,14 @@ class ZaboSDK {
     return env
   }
 
-  connect({ interfaceType = 'popup', attachTo = 'body', width = 540, height = 960 } = {}) {
+  connect(config = {}) {
+    // TODO: Remove warnings
+    if (config.interfaceType) {
+      console.warn('[ZABO] "interfaceType" has been deprecated. More details at: https://zabo.com/docs/#connecting-a-user')
+    }
+
     if (this.api && utils.isBrowser()) {
-      this.api.connect(interfaceType, attachTo, width, height)
+      this.api.connect(config)
       return this
     }
 
