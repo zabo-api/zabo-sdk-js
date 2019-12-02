@@ -79,7 +79,7 @@ class API {
     }
   }
 
-  async connect(interfaceType, attachTo, width, height) {
+  async connect({ width = 540, height = 960 } = {}) {
     let appId = null
 
     if (utils.isNode()) {
@@ -97,19 +97,10 @@ class API {
         throw err
       }
     } else {
-      const url = `${this.connectUrl}/connect?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
       this.isWaitingForConnector = true
-
-      if (interfaceType == 'iframe') {
-        this.connector = document.createElement('iframe')
-        this.connector.width = width
-        this.connector.height = height
-        this.connector.src = url
-        document.querySelector(attachTo).appendChild(this.connector)
-      } else {
-        this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
-        this._watchConnector()
-      }
+      const url = `${this.connectUrl}/connect?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
+      this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
+      this._watchConnector()
     }
   }
 
@@ -225,24 +216,12 @@ class API {
         throw new SDKError(400, "[Zabo] Error in the connection process: " + event.data.error.message)
       }
     }
-
-    if (event.data.zabo && event.data.eventName == 'closeIFrame') {
-      this._closeIframe()
-    }
   }
 
   _setSession(cookie) {
     let sExpires = "; expires=" + cookie.exp_time
     document.cookie = encodeURIComponent(cookie.key) + "=" + encodeURIComponent(cookie.value) + sExpires
     return true;
-  }
-
-  _closeIframe() {
-    if (this.connector) {
-      this.connector.parentNode.removeChild(this.connector)
-    }
-
-    return this
   }
 }
 
