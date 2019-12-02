@@ -132,11 +132,11 @@ class ZaboSDK {
     try {
       let account = await this.accounts.get()
       this.transactions._setAccount(account)
+      return this.applications.getInfo()
     } catch (err) {
-      console.info('[Zabo] No account connected yet.')
+      console.error('[Zabo] No account connected yet.')
+      return this.applications.getInfo()
     }
-
-    return this.applications.getInfo()
   }
 
   throwConnectError(code, message) {
@@ -162,9 +162,14 @@ class ZaboSDK {
     return env
   }
 
-  connect({ interfaceType = 'popup', attachTo = 'body', width = 540, height = 960 } = {}) {
+  connect(config = {}) {
+    // TODO: Remove warnings
+    if (config.interfaceType) {
+      console.warn('[ZABO] "interfaceType" has been deprecated. More details at: https://zabo.com/docs/#connecting-a-user')
+    }
+
     if (this.api && utils.isBrowser()) {
-      this.api.connect(interfaceType, attachTo, width, height)
+      this.api.connect(config)
       return this
     }
 
