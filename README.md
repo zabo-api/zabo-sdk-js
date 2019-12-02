@@ -55,62 +55,62 @@ The first step is always to allow a user to connect from your front-end:
   </section>
 
   <!--Add this script to your html file-->
-  <script src="https://cdn.zabo.com/develop/latest/zabo.js">
+  <script src="https://cdn.zabo.com/latest/zabo.js"></script>
 
   <script type="text/javascript">
     // Wait for document to fully load
-    document.onreadystatechange = () => {
+    document.onreadystatechange = async () => {
       if (document.readyState !== 'complete') { return }
 
       const output = document.querySelector('#output')
 
       // Initiate Zabo SDK, replace the `clientId` field with your app key generated at {LINK}.
-      Zabo.init({
+      const zabo = await Zabo.init({
         clientId: 'YourClientIDFromTheZaboDotComDashboard',
         env: 'sandbox'
       })
       // Bind "connect" button
       document.querySelector('#connect').addEventListener('click', ev => {
         // Call connect when pressed and provide default .connect() window.
-        Zabo.connect().onConnection(account => {
+        zabo.connect().onConnection(account => {
           console.log('account connected:', account)
           bindOtherMethods()
         }).onError(error => {
           console.error('account connection error:', error.message)
         })
       })
-    }
 
-    // Bind buttons for the other SDK example methods [Requires a successful Zabo.connect() first]
-    const bindOtherMethods = () => {
-      document.querySelector('#getBalance').addEventListener('click', ev => {
-        // Get ETH balance
-        Zabo.accounts.getBalances({tickers: ["ETH"]}).then(balances => {
-          console.log(balances)
-        }).catch(error => {
-          /* User has not yet connected or doesn't have an ether wallet */
-          console.error(error)
+      // Bind buttons for the other SDK example methods [Requires a successful zabo.connect() first]
+      function bindOtherMethods () {
+        document.querySelector('#getBalance').addEventListener('click', ev => {
+          // Get ETH balance
+          zabo.accounts.getBalances({ currencies: ["ETH"] }).then(balances => {
+            console.log(balances)
+          }).catch(error => {
+            /* User has not yet connected or doesn't have an ether wallet */
+            console.error(error)
+          })
         })
-      })
 
-      document.querySelector('#getHistory').addEventListener('click', ev => {
-        // Get account transactions history
-        Zabo.transactions.getTransactionHistory({ currencyTicker: 'ETH' }).then(history => {
-          console.log(history)
-        }).catch(error => {
-          /* User has not yet connected */
-          console.error(error)
+        document.querySelector('#getHistory').addEventListener('click', ev => {
+          // Get account transactions history
+          zabo.transactions.getList({ currency: 'ETH' }).then(history => {
+            console.log(history)
+          }).catch(error => {
+            /* User has not yet connected */
+            console.error(error)
+          })
         })
-      })
 
-      document.querySelector('#getExchangeRates').addEventListener('click', ev => {
-        // Get crypto USD exchange rates
-        Zabo.currencies.getExchangeRates().then(rates => {
-          console.log(rates)
-        }).catch(error => {
-          console.error(error)
+        document.querySelector('#getExchangeRates').addEventListener('click', ev => {
+          // Get crypto USD exchange rates
+          zabo.currencies.getExchangeRates().then(rates => {
+            console.log(rates)
+          }).catch(error => {
+            console.error(error)
+          })
         })
-      })
+      }
     }
   </script>
 </body>
@@ -120,9 +120,9 @@ The first step is always to allow a user to connect from your front-end:
 
 Or importing as a package:
 ```js
-const zabo = require('zabo-sdk-js')
+const Zabo = require('zabo-sdk-js')
 
-await zabo.init({
+const zabo = await Zabo.init({
   clientId: 'YourClientIDFromTheZaboDotComDashboard',
   env: 'sandbox'
 })
@@ -135,13 +135,13 @@ zabo.connect().onConnection(account => {
 ```
 Or using ES6 modules:
 ```js
-import zabo from 'zabo-sdk-js'
+import Zabo from 'zabo-sdk-js'
 ```
 
 ### After connecting
 After a user connects, the client SDK can continued to be used for the connected wallet:
 ```js
-Zabo.transactions.getTransactionHistory({ currencyTicker: 'ETH' }).then(history => {
+zabo.transactions.getList({ currency: 'ETH' }).then(history => {
   console.log(history)
 }).catch(error => {
   /* User has not yet connected */
@@ -157,14 +157,14 @@ zabo.connect().onConnection(account => {
 })
 
 // Then in your server
-const zabo = require('zabo-sdk-js')
+const Zabo = require('zabo-sdk-js')
 let account = accountReceivedFromTheClient
 
-zabo.init({
+Zabo.init({
   apiKey: 'YourPublicAPIKeyGeneratedInYourZaboDotComDashboard',
   secretKey: 'YourSecretAPIKey',
   env: 'sandbox'
-}).then(() => {
+}).then(zabo => {
   zabo.users.create(account)
 }).catch(e => {
   console.log(e.message)
@@ -189,7 +189,7 @@ The SDK can be used in either the client or server environment after a user conn
 ### Using Promises
 Every method returns a chainable promise which can be used:
 ```js
-Zabo.applications.getApplication().then(a => {
+zabo.applications.get().then(a => {
   console.log(a)
 }).catch(e => {
   console.log(e.message)
@@ -197,7 +197,7 @@ Zabo.applications.getApplication().then(a => {
 ```
 Or with async/await:
 ```js
-let exchangeRates = await Zabo.currencies.exchangeRates()
+let exchangeRates = await zabo.currencies.exchangeRates()
 console.log(exchangeRates)
 ```
 
