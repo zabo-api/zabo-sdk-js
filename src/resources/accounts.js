@@ -97,10 +97,10 @@ class Accounts {
       'binance',
     ]
 
-    for (provider of providersWithStaticDepositAddresses) {
-      if (provider === this.data.wallet_provider_name) {
+    for (let provider of providersWithStaticDepositAddresses) {
+      if (provider === this.data.wallet_provider.name) {
         console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddress()... More details: https://zabo.com/docs#get-deposit-address`)
-        return this.getDepositAddress(currency)
+        return this.getDepositAddresses(currency)
       }
     }
 
