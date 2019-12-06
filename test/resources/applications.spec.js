@@ -2,8 +2,10 @@
 
 const should = require('should')
 const sdk = require('../../src/sdk.js')
+const mockApi = require('../mock/api.js')
 
 describe('Zabo SDK Applications Resource', () => {
+  let applications
 
   it('should be instantiated during zabo.init()', async function () {
     await sdk.init({
@@ -18,12 +20,14 @@ describe('Zabo SDK Applications Resource', () => {
 
     sdk.api.resources.should.have.property('applications')
 
-    sdk.api.resources.applications.should.have.property('get')
-    sdk.api.resources.applications.should.have.property('getInfo')
+    applications = await require('../../src/resources/applications')(mockApi)
+
+    applications.should.have.property('get')
+    applications.should.have.property('getInfo')
   })
 
   it('applications.get() should fail if an application id has not been set', async function () {
-    let response = await sdk.applications.get().should.be.rejected()
+    let response = await applications.get().should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(401)
@@ -31,18 +35,45 @@ describe('Zabo SDK Applications Resource', () => {
 
   it('applications.setId() should fail if an invalid application id is provided', function () {
     should(() => {
-      sdk.applications.setId('not a valid id')
+      applications.setId('not a valid id')
     }).throw(Error)
   })
 
   it('applications.setId() should set id if a valid application id is provided', function () {
-    let uuid = '0b1fa5c7-db98-47ff-9a16-09e6493b3ba8'
+    let uuid = 'b5cfb0d8-58de-4786-9545-3d38521d7d2b'
 
     should(() => {
-      sdk.applications.setId(uuid)
+      applications.setId(uuid)
     }).not.throw(Error)
 
-    sdk.applications.id.should.equal(uuid)
+    applications.id.should.equal(uuid)
   })
 
+  it('accounts.get() should return an application and cache application data', async function () {
+    const application = await applications.get()
+
+    application.should.be.ok()
+    application.should.have.properties([ 'id', 'name', 'status', 'currencies', 'wallet_providers', 'authorized_origins' ])
+    
+    applications.data.should.be.eql(application)
+    applications.id.should.be.equal(application.id)
+  })
+  
+  it('accounts.getInfo() should return application info and cache application data', async function () {
+    // Mock DOM
+    require('jsdom-global')()
+    const originalGlobal = global
+    global = undefined
+    
+    const application = await applications.getInfo()
+    
+    application.should.be.ok()
+    application.should.have.properties([ 'id', 'name', 'status', 'currencies', 'wallet_providers', 'authorized_origins' ])
+    
+    applications.data.should.be.eql(application)
+    applications.id.should.be.equal(application.id)
+
+    // Undo mock DOM
+    global = originalGlobal
+  })
 })

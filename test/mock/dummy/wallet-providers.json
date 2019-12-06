@@ -1,0 +1,52 @@
+{
+  "list_cursor": {
+    "limit": 25,
+    "has_more": false,
+    "self_uri": "/wallet-providers?limit=25",
+    "next_uri": ""
+  },
+  "data": [
+    {
+      "name": "coinbase",
+      "display_name": "Coinbase",
+      "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/coinbase.png",
+      "auth_type": "oauth",
+      "resource_type": "wallet_provider",
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions.",
+          "resource_type": "scope"
+        }
+      ],
+      "available_currencies": [{ "type": "account", "list": [ "ETH" ] },{ "type": "UTXO", "list": [ "BTC" ] }],
+      "resource_type": "wallet_provider"
+    },
+    {
+      "name": "metamask",
+      "display_name": "MetaMask",
+      "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/metamask.png",
+      "auth_type": "private_key",
+      "resource_type": "wallet_provider",
+      "available_scopes": ["read_balances","read_transaction_history"],
+      "available_currencies": [{ "type": "account", "list": [ "ETH" ] }, { "type": "ERC20", "list": [ "ALL" ] }],
+      "resource_type": "wallet_provider"
+    },
+    {
+      "name": "ledger",
+      "display_name": "Ledger Hardware Wallet",
+      "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/ledger.png",
+      "auth_type": "private_key",
+      "resource_type": "wallet_provider",
+      "available_scopes": ["read_balances","read_transaction_history"],
+      "available_currencies": [{ "type": "account", "list": [ "all" ] }, { "type": "ERC20", "list": [ "ALL" ] }],
+      "resource_type": "wallet_provider"
+    }
+  ]
+}

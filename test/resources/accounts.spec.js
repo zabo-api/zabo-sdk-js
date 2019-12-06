@@ -2,9 +2,11 @@
 
 const should = require('should')
 const sdk = require('../../src/sdk.js')
+const mockApi = require('../mock/api.js')
+
 
 describe('Zabo SDK Accounts Resource', () => {
-  let accounts = null
+  let accounts
 
   it('should not be instantiated during zabo.init() running outside a browser', async function () {
     await sdk.init({
@@ -19,7 +21,7 @@ describe('Zabo SDK Accounts Resource', () => {
 
     sdk.api.resources.should.not.have.property('accounts')
 
-    accounts = await require('../../src/resources/accounts')(sdk.api)
+    accounts = await require('../../src/resources/accounts')(mockApi)
 
     accounts.should.have.property('get')
     accounts.should.have.property('create')
@@ -34,10 +36,54 @@ describe('Zabo SDK Accounts Resource', () => {
     response.message.should.containEql('connected')
   })
 
-  it('should initialize in decentralized mode', async function () {
-    await sdk.init({
-      decentralized: true,
-      sendCryptoData: false
-    }).should.be.ok()
+  it('accounts.get() should return an account and cache account data', async function () {
+    const account = await accounts.get()
+
+    account.should.be.ok()
+    account.should.have.properties([ "id", "address", "wallet_provider", "currencies" ])
+    
+    accounts.data.should.be.eql(account)
+    accounts.id.should.be.equal(account.id)
+  })
+  
+  it('accounts.create() should create and return a new account', async function () {
+    const data = {
+      clientId: 'some-client-id',
+      credentials: [ 'some-credentials' ],
+      provider: 'some-provider',
+      origin: 'some-origin'
+    }
+    
+    const account = await accounts.create(data)
+    
+    account.should.be.ok()
+    account.should.have.properties([ "id", "address", "wallet_provider", "currencies" ])
+    account.wallet_provider.name.should.have.equal(data.provider)
+  })
+
+  it('accounts.getBalances() should return balances for the required currencies', async function () {
+    const currencies = [ 'BTC', 'ETH' ]
+    const balances = await accounts.getBalances({ currencies })
+
+    balances.data.should.be.ok()
+    balances.data.should.be.an.Array()
+
+    const tickers = balances.data.map(b => b.currency)
+    tickers.should.containDeep(currencies)
+  })
+
+  it('accounts.createDepositAddress() should create and return an address', async function () {
+    const resp = await accounts.createDepositAddress('BTC')
+
+    resp.should.be.ok()
+    resp.should.have.properties([ 'currency', 'address' ])
+  })
+  
+  it('accounts.getDepositAddresses() should return a list of addresses', async function () {
+    const resp = await accounts.getDepositAddresses('BTC')
+    
+    resp.should.be.ok()
+    resp.should.be.an.Array()
+    resp[0].should.have.properties([ 'currency', 'address' ])
   })
 })
