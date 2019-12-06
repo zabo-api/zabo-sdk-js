@@ -151,19 +151,31 @@ class API {
       }
 
       if (event.data.account.wallet_provider_name == 'metamask') {
-        this.interfaces.metamask = require('./resources/metamask')()
-        if (this.interfaces.metamask.isSupported()) {
+        const Metamask = require('./interfaces/Metamask')
+
+        if (Metamask.isSupported()) {
+          this.interfaces.metamask = new Metamask(this)
           this.interfaces.metamask.onConnect(event.data.account)
         } else {
           if (this._onError) {
-            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with MetaMask, but MetaMask not found." })
+            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with MetaMask, but MetaMask not available." })
           } else {
-            throw new SDKError(400, "[Zabo] Connection attempted with MetaMask, but MetaMask not found.")
+            throw new SDKError(400, "[Zabo] Connection attempted with MetaMask, but MetaMask not available.")
           }
         }
       } else if (event.data.account.wallet_provider_name == 'ledger') {
-        this.interfaces.ledger = require('./resources/ledger')()
-        this.interfaces.ledger.onConnect(event.data.account)
+        const Ledger = require('./interfaces/Ledger')
+
+        if (Ledger.isSupported()) {
+          this.interfaces.ledger = new Ledger(this)
+          this.interfaces.ledger.onConnect(event.data.account)
+        } else {
+          if (this._onError) {
+            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with Ledger, but Ledger not available." })
+          } else {
+            throw new SDKError(400, "[Zabo] Connection attempted with Ledger, but Ledger not available.")
+          }
+        }
       }
 
       if (this.resources.accounts && this.resources.transactions) {
