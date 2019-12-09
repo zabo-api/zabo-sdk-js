@@ -154,6 +154,7 @@ class Transactions {
       throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
     }
 
+    amount = amount.toString()
     currency = currency.toUpperCase()
 
     if (utils.isNode()) {
@@ -177,8 +178,8 @@ class Transactions {
 
       return this.api.request('POST', `/users/${userId}/accounts/${accountId}/transactions`, {
         to_address: toAddress,
-        amount: amount.toString(),
         currency,
+        amount
       })
     }
 
@@ -187,9 +188,6 @@ class Transactions {
     } else if (this.account.wallet_provider.type !== 'private_key') {
       throw new SDKError(403, '[Zabo] At this moment we support transactions for self-custody wallets only. See: https://zabo.com/docs#send-a-transaction')
     }
-
-    amount = amount.toString()
-    currency = currency.toUpperCase()
 
     if (this.interfaces[this.account.wallet_provider.name]) {
       return this.interfaces[this.account.wallet_provider.name].sendTransaction({
