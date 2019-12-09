@@ -1,0 +1,22 @@
+{
+  "list_cursor": {
+    "limit": 25,
+    "has_more": false,
+    "self_uri": "/exchange-rates?limit=25&fiat_currency=USD",
+    "next_uri": ""
+  },
+  "data": [
+    {
+      "from": "BTC",
+      "to": "USD",
+      "rate": "8000.00",
+      "timestamp": 145824503000
+    },
+    {
+      "from": "ETH",
+      "to": "USD",
+      "rate": "300.00",
+      "timestamp": 145824503000
+    }
+  ]
+}

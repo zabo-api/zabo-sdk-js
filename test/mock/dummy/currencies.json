@@ -1,0 +1,40 @@
+{
+  "list_cursor": {
+    "limit": 25,
+    "has_more": false,
+    "self_uri": "/currencies?limit=25",
+    "next_uri": ""
+  },
+  "data": [
+    {
+      "ticker": "BTC",
+      "name": "Bitcoin",
+      "type": "UTXO",
+      "logo": "https://zabo-static.s3.amazonaws.com/currencies/BTC.png",
+      "priority": 1,
+      "decimals": 9,
+      "address": null,
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "ETH",
+      "name": "Ether",
+      "type": "account",
+      "logo": "https://zabo-static.s3.amazonaws.com/currencies/ETH.png",
+      "priority": 2,
+      "decimals": 18,
+      "address": null,
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "DAI",
+      "name": "Dai",
+      "type": "ERC20",
+      "logo": "https://zabo-static.s3.amazonaws.com/currencies/DAI.png",
+      "priority": 5,
+      "decimals": 18,
+      "address": "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359",
+      "resource_type": "currency"
+    }
+  ]
+}

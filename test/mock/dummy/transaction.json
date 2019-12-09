@@ -1,0 +1,10 @@
+{
+  "id": "0x158be2ad4ba161c1a67e9b5646d2ed35bd4940b708103635dfd84f5ef252c18a",
+  "type": "send",
+  "amount": "1",
+  "currency": "ETH",
+  "status": "pending",
+  "other_parties": ["0x839395e20bbb182fa440d08f850e6c7a8f6f0780"],
+  "initiated_at": 123456789000,
+  "confirmed_at": 123456789000
+}

@@ -1,0 +1,57 @@
+{
+  "id": "b5cfb0d8-58de-4786-9545-3d38521d7d2b",
+  "client_id": "aPublicKeyIdentifyingYourApp",
+  "name": "Your App Name",
+  "status": "Sandbox",
+  "currencies": [
+    { "type": "UTXO", "list": [ "BTC" ] },
+    { "type": "account", "list": [ "ETH" ] }
+  ],
+  "wallet_providers": [
+    {
+      "name": "coinbase",
+      "display_name": "Coinbase",
+      "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/coinbase.png",
+      "scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+        }
+      ],
+      "currencies": [
+        { "type": "UTXO", "list": [ "BTC" ] },
+        { "type": "account", "list": [ "ETH" ] }
+      ]
+    },
+    {
+      "name": "metamask",
+      "display_name": "MetaMask",
+      "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/metamask.png",
+      "scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "currencies": [
+        { "type": "account", "list": [ "ETH" ] },
+        { "type": "ERC20", "list": [ "all" ] }
+      ]
+    }
+  ],
+  "authorized_origins": [
+    "zabo.com", "www.zabo.com"
+  ],
+  "created_at": 1420069800000,
+  "updated_at": 1420069800000,
+  "resource_type": "application"
+}

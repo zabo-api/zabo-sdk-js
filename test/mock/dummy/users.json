@@ -1,0 +1,26 @@
+{
+  "list_cursor": {
+    "limit": 25,
+    "has_more": false,
+    "self_uri": "/users?limit=25",
+    "next_uri": ""
+  },
+  "data": [
+    {
+      "id": "17c0f27e-9916-4ace-b8ca-18d1be2cff43",
+      "accounts": [
+        {
+          "id": "8b0a037f-67cb-44b7-ac2a-18e7a54561a8",
+          "address": "0x667dd163f1a0e6ef3e7bbe8e0676f62146d5662d",
+          "wallet_provider": {
+            "name": "metamask",
+            "display_name": "MetaMask",
+            "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/metamask.png",
+            "type": "private_key",
+            "scopes": ["read_balances", "read_transactions", "send_crypto", "receive_crypto"]
+          }
+        }
+      ]
+    }
+  ]
+}
