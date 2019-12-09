@@ -3,7 +3,7 @@ jobs:
   checkout:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10.15
+      - image: circleci/node:12
       
     steps:
       - restore_cache:
@@ -21,7 +21,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10.15
+      - image: circleci/node:12
 
     steps:
       - restore_cache:
@@ -48,7 +48,7 @@ jobs:
   test:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10.15
+      - image: circleci/node:12
 
     steps:
       - restore_cache:
@@ -68,7 +68,7 @@ jobs:
   compile:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10.15
+      - image: circleci/node:12
 
     steps:
       - restore_cache:
@@ -95,7 +95,7 @@ jobs:
   
   deploy:
     docker:
-      - image: circleci/node:10.15
+      - image: circleci/node:12
 
     working_directory: ~/repo
 
