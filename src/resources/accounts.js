@@ -18,6 +18,7 @@
 
 'use strict'
 
+const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Accounts {
@@ -33,6 +34,10 @@ class Accounts {
   }
 
   async get() {
+    if (utils.isNode()) {
+      throw new SDKError(400, '[Zabo] Not available in the server SDK. See: https://zabo.com/docs/#get-an-account')
+    }
+
     try {
       let response = await this.api.request('GET', `/sessions`)
       this._setAccount(response)
@@ -44,6 +49,10 @@ class Accounts {
   }
 
   async create({ clientId, credentials, provider, origin } = {}) {
+    if (utils.isNode()) {
+      throw new SDKError(400, '[Zabo] Not available in the server SDK. See: https://zabo.com/docs')
+    }
+
     if (!clientId) {
       throw new SDKError(
         400,
@@ -61,12 +70,16 @@ class Accounts {
     return this.api.request('POST', `/accounts`, data)
   }
 
-  async getBalances({ currencies } = {}) {
-    if (!this.id) {
-      throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
+  async getBalances({ accountId = this.id, currencies } = {}) {
+    if (!accountId) {
+      if (utils.isNode()) {
+        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs/#get-a-specific-balance')
+      } else {
+        throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
+      }
     }
 
-    let url = `/accounts/${this.id}/balances`
+    let url = `/accounts/${accountId}/balances`
 
     if (currencies) {
       if (Array.isArray(currencies)) {
@@ -82,10 +95,16 @@ class Accounts {
     }
   }
 
-  async createDepositAddress(currency) {
-    if (!this.id) {
-      throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
-    } else if (!currency || typeof currency !== 'string') {
+  async createDepositAddress({ accountId = this.id, currency }) {
+    if (!accountId) {
+      if (utils.isNode()) {
+        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+      } else {
+        throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
+      }
+    }
+
+    if (!currency || typeof currency !== 'string') {
       throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs##create-a-deposit-address')
     }
 
@@ -105,21 +124,27 @@ class Accounts {
     }
 
     try {
-      return this.api.request('POST', `/accounts/${this.id}/deposit-addresses?currency=${currency}`)
+      return this.api.request('POST', `/accounts/${accountId}/deposit-addresses?currency=${currency}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
   }
 
-  async getDepositAddresses(currency) {
-    if (!this.id) {
-      throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
-    } else if (!currency || typeof currency !== 'string') {
+  async getDepositAddresses({ accountId = this.id, currency }) {
+    if (!accountId) {
+      if (utils.isNode()) {
+        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-deposit-addresses')
+      } else {
+        throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
+      }
+    }
+
+    if (!currency || typeof currency !== 'string') {
       throw new SDKError(400, '[Zabo] Invalid `currency` parameter. See: https://zabo.com/docs#get-deposit-addresses')
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.id}/deposit-addresses?currency=${currency}`)
+      return this.api.request('GET', `/accounts/${accountId}/deposit-addresses?currency=${currency}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

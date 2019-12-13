@@ -20,6 +20,7 @@ module.exports = async (api, isNode) => {
     return {
       utils: require('./utils')(api),
       users: require('./users')(api),
+      accounts: require('./accounts')(api),
       applications: require('./applications')(api),
       currencies: require('./currencies')(api),
       transactions: require('./transactions')(api),
@@ -31,11 +32,10 @@ module.exports = async (api, isNode) => {
     api.ethereum = ethereum
   }
 
-  let accounts = await require('./accounts')(api)
   let resources = {
     utils: require('./utils')(api),
     applications: require('./applications')(api),
-    accounts: accounts,
+    accounts: require('./accounts')(api),
     currencies: require('./currencies')(api),
     transactions: require('./transactions')(api)
   }
