@@ -20,7 +20,7 @@ module.exports = async (api, isNode) => {
     return {
       utils: require('./utils')(api),
       users: require('./users')(api),
-      accounts: require('./accounts')(api),
+      accounts: await require('./accounts')(api),
       applications: require('./applications')(api),
       currencies: require('./currencies')(api),
       transactions: require('./transactions')(api),
@@ -35,7 +35,7 @@ module.exports = async (api, isNode) => {
   let resources = {
     utils: require('./utils')(api),
     applications: require('./applications')(api),
-    accounts: require('./accounts')(api),
+    accounts: await require('./accounts')(api),
     currencies: require('./currencies')(api),
     transactions: require('./transactions')(api)
   }
