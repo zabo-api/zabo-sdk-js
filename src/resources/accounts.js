@@ -153,19 +153,21 @@ class Accounts {
   }
 }
 
-module.exports = async (api) => {
+module.exports = (api) => {
   let accounts = new Accounts(api)
   if (api.ethereum) {
-    let ethConnection = await api.ethereum.connect(api.useNode, api.useAddress)
-    accounts.data = ethConnection.data
-    accounts.node = ethConnection.node
-    accounts.get = () => { return accounts.data }
-    accounts.getBalances = ({ currencies } = {}) => { return ethConnection.getBalance(currencies) }
-    accounts.createDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
-    if (!api.sendAppCryptoData) {
-      accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
-    }
-    accounts.getDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
+    api.ethereum.connect(api.useNode, api.useAddress)
+      .then(ethConnection => {
+        accounts.data = ethConnection.data
+        accounts.node = ethConnection.node
+        accounts.get = () => { return accounts.data }
+        accounts.getBalances = ({ currencies } = {}) => { return ethConnection.getBalance(currencies) }
+        accounts.createDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
+        if (!api.sendAppCryptoData) {
+          accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+        }
+        accounts.getDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
+      })
   }
   return accounts
 }

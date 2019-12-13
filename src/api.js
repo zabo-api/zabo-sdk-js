@@ -70,12 +70,12 @@ class API {
 
     if (utils.isNode()) {
       this.axios.defaults.headers.common['X-Zabo-Key'] = this.apiKey
-      resources(this, true).then(resources => this.resources = resources)
+      this.resources = resources(this, true)
     } else {
       this.interfaces = {}
       this.connectUrl = urls.CONNECT_BASE_URL
       this._setEventListeners()
-      resources(this, false).then(resources => this.resources = resources)
+      this.resources = resources(this, false)
     }
   }
 
