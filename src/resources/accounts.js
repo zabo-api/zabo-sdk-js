@@ -108,18 +108,20 @@ class Accounts {
       throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs##create-a-deposit-address')
     }
 
-    const providersWithStaticDepositAddresses = [
-      'metamask',
-      'ledger',
-      'hedera',
-      'address-only',
-      'binance',
-    ]
+    if (utils.isBrowser()) {
+      const providersWithStaticDepositAddresses = [
+        'metamask',
+        'ledger',
+        'hedera',
+        'address-only',
+        'binance',
+      ]
 
-    for (let provider of providersWithStaticDepositAddresses) {
-      if (provider === this.data.wallet_provider.name) {
-        console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddress()... More details: https://zabo.com/docs#get-deposit-address`)
-        return this.getDepositAddresses(currency)
+      for (let provider of providersWithStaticDepositAddresses) {
+        if (provider === this.data.wallet_provider.name) {
+          console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddress()... More details: https://zabo.com/docs#get-deposit-address`)
+          return this.getDepositAddresses(currency)
+        }
       }
     }
 
