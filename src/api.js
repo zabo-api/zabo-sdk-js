@@ -27,30 +27,26 @@ const { SDKError } = require('./err')
 
 // ListCursor class definition
 class ListCursor extends Array {
-  #api
-  #list
-  #cursor
-
   constructor({ data, list_cursor } = {}, api) {
     super(...data)
-    this.#api = api
-    this.#list = data
-    this.#cursor = list_cursor
+    this.api = api
+    this.list = data
+    this.cursor = list_cursor
   }
 
   get hasMore () {
-    return this.#cursor.has_more
+    return this.cursor.has_more
   }
 
   get limit () {
-    return this.#cursor.limit
+    return this.cursor.limit
   }
 
   next () {
-    if (this.hasMore && this.#cursor.next_uri) {
-      return this.#api.request('GET', this.#cursor.next_uri)
+    if (this.hasMore && this.cursor.next_uri) {
+      return this.api.request('GET', this.cursor.next_uri)
     }
-    return new ListCursor({ data: [], list_cursor: this.#cursor })
+    return new ListCursor({ data: [], list_cursor: this.cursor })
   }
 }
 
