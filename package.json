@@ -60,5 +60,10 @@
   },
   "engines": {
     "node": ">=12"
+  },
+  "browser": {
+    "net": false,
+    "fs": false,
+    "child_process": false
   }
 }
