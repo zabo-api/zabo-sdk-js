@@ -58,7 +58,12 @@ class Accounts {
       origin
     }
 
-    return this.api.request('POST', `/accounts`, data)
+    try {
+      let account = await this.api.request('POST', `/accounts`, data)
+      this._setAccount(account)
+    } catch (err) {
+      throw new SDKError(err.error_type, err.message)
+    }
   }
 
   async getBalances({ currencies } = {}) {
