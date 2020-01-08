@@ -148,10 +148,6 @@ class Transactions {
       throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#send-a-transaction')
     } else if (!amount) {
       throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
-    } else if (!accountId) {
-      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#send-a-transaction')
-    } else if (!uuidValidate(accountId, 4)) {
-      throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
     }
 
     amount = amount.toString()
@@ -162,6 +158,10 @@ class Transactions {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#send-a-transaction')
       } else if (!uuidValidate(userId, 4)) {
         throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
+      } else if (!accountId) {
+        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#send-a-transaction')
+      } else if (!uuidValidate(accountId, 4)) {
+        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
       }
 
       if (currency === 'HBAR') {
@@ -199,7 +199,7 @@ class Transactions {
     }
   }
 
-  onConfirmation (txId, callback) {
+  onConfirmation(txId, callback) {
     if (!txId || typeof txId !== 'string') {
       throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#send-a-transaction')
     } else if (!callback || typeof callback !== 'function') {
