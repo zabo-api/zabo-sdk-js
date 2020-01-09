@@ -1,0 +1,49 @@
+{
+  "id": "17c0f27e-9916-4ace-b8ca-18d1be2cff43",
+  "application": {
+    "id": "b5cfb0d8-58de-4786-9545-3d38521d7d2b",
+    "name": "Your App Name"
+  },
+  "accounts": [
+    {
+      "id": "8b0a037f-67cb-44b7-ac2a-18e7a54561a8",
+      "address": "0x667dd163f1a0e6ef3e7bbe8e0676f62146d5662d",
+      "wallet_provider": {
+        "name": "metamask",
+        "display_name": "MetaMask",
+        "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/metamask.png",
+        "type": "private_key",
+        "scopes": ["read_balances", "read_transactions", "send_crypto", "receive_crypto"]
+      }
+    },
+    {
+      "id": "5ab071ba-1171-43e1-a3a5-3cf43d2d4dc8",
+      "address": "b134235a-088a-489c-aa36-dc0841094db8",
+      "wallet_provider":{
+        "name":"hedera",
+        "display_name":"Hedera Wallet",
+        "logo":"https://zabo-static.s3.amazonaws.com/wallet-providers/hedera.png",
+        "type":"private_key",
+        "scopes":[
+          "read_balances",
+          "read_transaction_history",
+          "send_crypto"
+        ]
+      },
+      "currencies": [
+        {
+          "balance": "10",
+          "currency": "HBAR",
+          "type": "account",
+          "updated_at": 1560134750000
+        }
+      ],
+      "created_at": 1560134750000,
+      "updated_at": 1560134750000,
+      "resource_type": "account"
+    }
+  ],
+  "created_at": 1420069800000,
+  "updated_at": 1420069800000,
+  "resource_type": "user"
+}

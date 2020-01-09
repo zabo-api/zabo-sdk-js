@@ -1,5 +1,5 @@
 /**
- * @Copyright (c) 2019-present, Zabo, All rights reserved.
+ * @Copyright (c) 2019-present, Zabo & Modular, Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 
-'use strict'
+const Hedera = require('./Hedera')
+const Ledger = require('./Ledger')
+const Metamask = require('./Metamask')
 
-const sdk = require('./sdk')
-
-// Zabo main class definition
-class Zabo {
-  async init (config = {}) {
-    await sdk.init(config)
-    return sdk
-  }
-
-  get instance () {
-    return sdk
-  }
-
-  get version () {
-    return process.env.PACKAGE_VERSION
-  }
-}
-
-// Export Zabo instance
-module.exports = new Zabo()
+module.exports = api => ({
+  hedera: Hedera.isSupported() && new Hedera(api),
+  ledger: Ledger.isSupported() && new Ledger(api),
+  metamask: Metamask.isSupported() && new Metamask(api)
+})

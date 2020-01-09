@@ -25,6 +25,31 @@ const resources = require('./resources')
 
 const { SDKError } = require('./err')
 
+// ListCursor class definition
+class ListCursor extends Array {
+  constructor({ data, list_cursor } = {}, api) {
+    super(...data)
+    this.api = api
+    this.list = data
+    this.cursor = list_cursor
+  }
+
+  get hasMore () {
+    return this.cursor.has_more
+  }
+
+  get limit () {
+    return this.cursor.limit
+  }
+
+  next () {
+    if (this.hasMore && this.cursor.next_uri) {
+      return this.api.request('GET', this.cursor.next_uri)
+    }
+    return new ListCursor({ data: [], list_cursor: this.cursor })
+  }
+}
+
 // Main API class definition
 class API {
   constructor(options) {
@@ -36,7 +61,7 @@ class API {
     }
     let urls = constants(this.baseUrl, this.connectUrl)[this.env]
     this.baseUrl = urls.API_BASE_URL
-    this.axios = axios
+    this.axios = axios.create()
     this.axios.defaults.baseURL = this.baseUrl
 
     if (utils.isNode()) {
@@ -50,7 +75,7 @@ class API {
     }
   }
 
-  async connect(interfaceType, attachTo, width, height) {
+  async connect({ width = 540, height = 960 } = {}) {
     let appId = null
 
     if (utils.isNode()) {
@@ -68,18 +93,10 @@ class API {
         throw err
       }
     } else {
-      const url = `${this.connectUrl}/connect?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
       this.isWaitingForConnector = true
-
-      if (interfaceType == 'iframe') {
-        this.connector = document.createElement('iframe')
-        this.connector.width = width
-        this.connector.height = height
-        this.connector.src = url
-        document.querySelector(attachTo).appendChild(this.connector)
-      } else {
-        this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
-      }
+      const url = `${this.connectUrl}/connect?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
+      this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
+      this._watchConnector()
     }
   }
 
@@ -92,6 +109,10 @@ class API {
 
     try {
       let response = await this.axios(request)
+
+      if (response.data && response.data.list_cursor) {
+        return new ListCursor(response.data, this)
+      }
       return response.data
     } catch (err) {
       if (err.response) {
@@ -125,6 +146,22 @@ class API {
     window.addEventListener('message', this._onPostMessage.bind(this), false)
   }
 
+  _watchConnector() {
+    const interval = setInterval(() => {
+      if (this.isWaitingForConnector) {
+        if (this.connector.closed) {
+          this.isWaitingForConnector = false
+
+          if (this._onError) {
+            this._onError({ error_type: 400, message: "[Zabo] Error in the connection process: Connection closed" })
+          }
+        }
+      } else {
+        clearInterval(interval)
+      }
+    }, 1000)
+  }
+
   _onPostMessage(event) {
     if (event.data.zabo) {
       this.isWaitingForConnector = false
@@ -143,19 +180,31 @@ class API {
       }
 
       if (event.data.account.wallet_provider_name == 'metamask') {
-        this.interfaces.metamask = require('./resources/metamask')()
-        if (this.interfaces.metamask.isSupported()) {
+        const Metamask = require('./interfaces/Metamask')
+
+        if (Metamask.isSupported()) {
+          this.interfaces.metamask = new Metamask(this)
           this.interfaces.metamask.onConnect(event.data.account)
         } else {
           if (this._onError) {
-            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with MetaMask, but MetaMask not found." })
+            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with MetaMask, but MetaMask not available." })
           } else {
-            throw new SDKError(400, "[Zabo] Connection attempted with MetaMask, but MetaMask not found.")
+            throw new SDKError(400, "[Zabo] Connection attempted with MetaMask, but MetaMask not available.")
           }
         }
       } else if (event.data.account.wallet_provider_name == 'ledger') {
-        this.interfaces.ledger = require('./resources/ledger')()
-        this.interfaces.ledger.onConnect(event.data.account)
+        const Ledger = require('./interfaces/Ledger')
+
+        if (Ledger.isSupported()) {
+          this.interfaces.ledger = new Ledger(this)
+          this.interfaces.ledger.onConnect(event.data.account)
+        } else {
+          if (this._onError) {
+            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with Ledger, but Ledger not available." })
+          } else {
+            throw new SDKError(400, "[Zabo] Connection attempted with Ledger, but Ledger not available.")
+          }
+        }
       }
 
       if (this.resources.accounts && this.resources.transactions) {
@@ -175,24 +224,12 @@ class API {
         throw new SDKError(400, "[Zabo] Error in the connection process: " + event.data.error.message)
       }
     }
-
-    if (event.data.zabo && event.data.eventName == 'closeIFrame') {
-      this._closeIframe()
-    }
   }
 
   _setSession(cookie) {
     let sExpires = "; expires=" + cookie.exp_time
     document.cookie = encodeURIComponent(cookie.key) + "=" + encodeURIComponent(cookie.value) + sExpires
     return true;
-  }
-
-  _closeIframe() {
-    if (this.connector) {
-      this.connector.parentNode.removeChild(this.connector)
-    }
-
-    return this
   }
 }
 

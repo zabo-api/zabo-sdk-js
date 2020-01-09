@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "balance": "5.068",
+      "currency": "ETH",
+      "type": "account",
+      "updated_at": 1560134750000
+    },
+    {
+      "balance": "0.932",
+      "currency": "BTC",
+      "type": "UTXO",
+      "updated_at": 1560134750000
+    }
+  ]
+}

@@ -1,13 +1,13 @@
 {
   "name": "zabo-sdk-js",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Zabo SDK for JS",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "getv": "echo $npm_package_version",
-    "test": "./node_modules/mocha/bin/mocha --recursive test/ --exit",
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha -r jsdom-global/register --recursive test/ --exit",
     "test:ethereum": "TEST_TYPE=ethereum npm run test",
-    "build": "npx webpack --config webpack.config.js --progress --colors",
+    "build": "PACKAGE_VERSION=$npm_package_version npx webpack --config webpack.config.js --progress --colors",
     "build:local": "NODE_ENV=local npm run build",
     "examples": "npm run build && ln -sf ../dist/zabo.js examples/zabo.js && live-server --host=localhost --port=8080 examples/"
   },
@@ -36,9 +36,14 @@
   },
   "homepage": "https://github.com/zabo-api/zabo-sdk-js#readme",
   "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "jsdom": "15.2.1",
+    "jsdom-global": "3.0.2",
     "mocha": "^6.2.0",
     "should": "^13.2.3",
-    "webpack": "^4.33.0",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.3.3"
   },
   "dependencies": {
@@ -49,9 +54,16 @@
     "big-integer": "^1.6.47",
     "ethers": "^4.0.38",
     "lodash": "^4.17.11",
-    "mocha": "^6.1.4",
     "qrcode-generator": "^1.4.3",
     "regenerator-runtime": "^0.13.3",
     "uuid-validate": "0.0.3"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "browser": {
+    "net": false,
+    "fs": false,
+    "child_process": false
   }
 }

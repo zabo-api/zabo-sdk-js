@@ -1,5 +1,5 @@
 /**
- * @Copyright (c) 2019-present, Zabo, All rights reserved.
+ * @Copyright (c) 2019-present, Zabo & Modular, Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 'use strict'
 
-const sdk = require('./sdk')
-
-// Zabo main class definition
-class Zabo {
-  async init (config = {}) {
-    await sdk.init(config)
-    return sdk
+class Interface {
+  constructor (name, api) {
+    this.api = api
+    this.name = name
   }
 
-  get instance () {
-    return sdk
+  onConnect() {
+    console.log(`[Zabo] Account connected with ${this.name}.`)
   }
 
-  get version () {
-    return process.env.PACKAGE_VERSION
+  static isSupported () {
+    // override
+  }
+
+  sendTransaction (data) {
+    // override
   }
 }
 
-// Export Zabo instance
-module.exports = new Zabo()
+module.exports = Interface

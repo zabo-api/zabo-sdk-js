@@ -1,9 +1,12 @@
 'use strict'
 
 const should = require('should')
-const sdk = require('../../src/index.js')
+const sdk = require('../../src/sdk.js')
+const mockApi = require('../mock/api.js')
 
 describe('Zabo SDK Utils', () => {
+  let utils
+
   it('should be instantiated during zabo.init()', async function () {
     await sdk.init({
       apiKey: 'some-api-key',
@@ -12,18 +15,20 @@ describe('Zabo SDK Utils', () => {
       autoConnect: false
     }).catch(err => err).should.be.ok()
 
-    sdk.utils.should.have.property('getQRCode')
-    sdk.utils.should.have.property('getBytecode')
+    utils = await require('../../src/resources/utils')(mockApi)
+
+    utils.should.have.property('getQRCode')
+    utils.should.have.property('getBytecode')
   })
 
   it('utils.getQRCode() should return a QRCode image', function () {
-    let qrCodeImage = sdk.utils.getQRCode('test')
+    let qrCodeImage = utils.getQRCode('test')
 
     qrCodeImage.should.containEql('<img src=')
   })
 
   it('utils.getBytecode() should fail if `fromAddress` is missing', async function () {
-    let response = await sdk.utils.getBytecode({
+    let response = await utils.getBytecode({
       toAddress: '0x0',
       amount: '0.0001',
       currency: 'ETH'
@@ -35,7 +40,7 @@ describe('Zabo SDK Utils', () => {
   })
 
   it('utils.getBytecode() should fail if `toAddress` is missing', async function () {
-    let response = await sdk.utils.getBytecode({
+    let response = await utils.getBytecode({
       fromAddress: '0x0',
       amount: '0.0001',
       currency: 'ETH'
@@ -47,7 +52,7 @@ describe('Zabo SDK Utils', () => {
   })
 
   it('utils.getBytecode() should fail if `amount` is missing', async function () {
-    let response = await sdk.utils.getBytecode({
+    let response = await utils.getBytecode({
       fromAddress: '0x0',
       toAddress: '0x0',
       currency: 'ETH'
@@ -59,7 +64,7 @@ describe('Zabo SDK Utils', () => {
   })
 
   it('utils.getBytecode() should fail if `currency` is missing', async function () {
-    let response = await sdk.utils.getBytecode({
+    let response = await utils.getBytecode({
       fromAddress: '0x0',
       toAddress: '0x0',
       amount: '0.0001'
@@ -70,4 +75,17 @@ describe('Zabo SDK Utils', () => {
     response.message.should.containEql('currency')
   })
 
+  it('utils.getBytecode() should return the bytecode', async function () {
+    let response = await utils.getBytecode({
+      fromAddress: '0x0',
+      toAddress: '0x0',
+      amount: '0.0001',
+      currency: 'ETH'
+    })
+
+    response.should.be.ok()
+    response.should.have.property('bytecode')
+    response.bytecode.should.be.an.Array()
+    response.bytecode[0].should.be.a.String()
+  })
 })

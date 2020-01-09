@@ -1,7 +1,7 @@
 'use strict'
 
 const should = require('should')
-const sdk = require('../src/index.js')
+const sdk = require('../src/sdk.js')
 
 describe('Zabo SDK Module', () => {
 
@@ -83,6 +83,13 @@ describe('Zabo SDK Module', () => {
     // transactions
     sdk.transactions.should.have.property('getOne')
     sdk.transactions.should.have.property('getList')
+  })
+
+  it('should initialize in decentralized mode', async function () {
+    await sdk.init({
+      decentralized: true,
+      sendCryptoData: false
+    }).should.be.ok()
   })
 
 })

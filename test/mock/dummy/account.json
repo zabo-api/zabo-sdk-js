@@ -1,0 +1,28 @@
+{
+  "id": "663925bd-205d-479e-895f-27ec3891e8b3",
+  "address": "b134235a-088a-489c-aa36-dc0841094db8",
+  "wallet_provider": {
+    "name": "coinbase",
+    "display_name": "Coinbase",
+    "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/coinbase.png",
+    "type": "oauth",
+    "scopes": ["read_balances", "read_transactions", "send_crypto", "receive_crypto"]
+  },
+  "currencies": [
+    {
+      "balance": "5.068",
+      "currency": "ETH",
+      "type": "account",
+      "updated_at": 1560134750000
+    },
+    {
+      "balance": "0.932",
+      "currency": "BTC",
+      "type": "UTXO",
+      "updated_at": 1560134750000
+    }
+  ],
+  "created_at": 1560134750000,
+  "updated_at": 1560134750000,
+  "resource_type": "account"
+}
