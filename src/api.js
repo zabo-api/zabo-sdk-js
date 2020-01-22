@@ -75,7 +75,7 @@ class API {
     }
   }
 
-  async connect({ width = 540, height = 960 } = {}) {
+  async connect({ walletProvider, width = 540, height = 960 } = {}) {
     let appId = null
 
     if (utils.isNode()) {
@@ -94,7 +94,8 @@ class API {
       }
     } else {
       this.isWaitingForConnector = true
-      const url = `${this.connectUrl}/connect?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
+      const provider = walletProvider && typeof walletProvider === 'string' ? `/${walletProvider}` : ''
+      const url = `${this.connectUrl}/connect${provider}?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
       this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
       this._watchConnector()
     }
