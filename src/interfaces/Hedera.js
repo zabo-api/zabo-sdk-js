@@ -23,18 +23,18 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Hedera extends Interface {
-  constructor(api) {
+  constructor (api) {
     super('Hedera', api)
     this._accounts = []
   }
 
-  static isSupported() {
+  static isSupported () {
     return true
   }
-  
-  async sendTransaction({ userId, account, currency, toAddress, amount } = {}) {
+
+  async sendTransaction ({ userId, account, currency, toAddress, amount } = {}) {
     if (currency === 'HBAR') {
-      if (account.wallet_provider.name == 'hedera') {
+      if (account.wallet_provider.name === 'hedera') {
         const url = this._getCryptoTransferLink({ accountId: account.id, userId, toAddress, amount })
         return this.api.request('GET', url)
       } else {
@@ -42,19 +42,19 @@ class Hedera extends Interface {
       }
     }
 
-    throw new SDKError(500, `[Zabo] Unable to send Hedera transactions at the moment.`)
+    throw new SDKError(500, '[Zabo] Unable to send Hedera transactions at the moment.')
   }
 
   _getCryptoTransferLink ({ userId, accountId, toAddress, amount, note } = {}) {
     note = note ? encodeURIComponent(note) : ''
-  
+
     let url
     if (utils.isNode()) {
       url = `/users/${userId}/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
     } else {
       url = `/accounts/${accountId}/transfer-request?to_address=${toAddress}&amount=${amount}&note=${note}`
     }
-  
+
     return url
   }
 }

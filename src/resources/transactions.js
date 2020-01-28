@@ -22,7 +22,7 @@ const interfaces = require('../interfaces')
 const { SDKError } = require('../err')
 
 class Transactions {
-  constructor(api) {
+  constructor (api) {
     this.api = api
     this.account = null
     this.interfaces = interfaces(api)
@@ -31,18 +31,18 @@ class Transactions {
     this.checkInterval = setInterval(this._checkTransactions.bind(this), 50000)
   }
 
-  _setAccount(account) {
+  _setAccount (account) {
     this.account = account
   }
 
-  async _checkTransactions() {
+  async _checkTransactions () {
     const txIds = Object.keys(this.txsListeners)
 
-    if (txIds.length == 0) {
+    if (!txIds.length) {
       return
     }
 
-    for (let hash of txIds) {
+    for (const hash of txIds) {
       try {
         const transaction = await this.getOne({ txId: hash })
         this._onTransactionUpdate(hash, transaction)
@@ -55,14 +55,14 @@ class Transactions {
     }
   }
 
-  _onTransactionUpdate(hash, transaction) {
+  _onTransactionUpdate (hash, transaction) {
     if (!hash || !this.txsListeners[hash] || !transaction) {
       return
     }
     this.txsListeners[hash].call(this, transaction)
   }
 
-  async getOne({ userId, accountId, txId } = {}) {
+  async getOne ({ userId, accountId, txId } = {}) {
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -96,7 +96,7 @@ class Transactions {
     }
   }
 
-  async getList({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
+  async getList ({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit)
 
     if (cursor) {
@@ -141,7 +141,7 @@ class Transactions {
     }
   }
 
-  async send({ userId, accountId, currency, toAddress, amount } = {}) {
+  async send ({ userId, accountId, currency, toAddress, amount } = {}) {
     if (!toAddress) {
       throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#send-a-transaction')
     } else if (!currency) {
@@ -167,7 +167,7 @@ class Transactions {
       if (currency === 'HBAR') {
         const hederaAccount = await this.api.resources.users.getAccount({ userId, accountId })
 
-        return this.interfaces['hedera'].sendTransaction({
+        return this.interfaces.hedera.sendTransaction({
           account: hederaAccount,
           currency,
           toAddress,
@@ -199,7 +199,7 @@ class Transactions {
     }
   }
 
-  onConfirmation(txId, callback) {
+  onConfirmation (txId, callback) {
     if (!txId || typeof txId !== 'string') {
       throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#send-a-transaction')
     } else if (!callback || typeof callback !== 'function') {
@@ -212,10 +212,10 @@ class Transactions {
 
 // Export class instance
 module.exports = (api) => {
-  let transactions = new Transactions(api)
+  const transactions = new Transactions(api)
   if (api.ethereum) {
     transactions.getOne = ({ txId } = {}) => { return api.ethereum.getTransaction(txId) }
-    transactions.send = ({ toAddress, currency, amount } = {}) => { let tx = { toAddress, currency: (currency || 'ETH'), amount }; return api.ethereum.sendTransaction(tx) }
+    transactions.send = ({ toAddress, currency, amount } = {}) => { const tx = { toAddress, currency: (currency || 'ETH'), amount }; return api.ethereum.sendTransaction(tx) }
     transactions.getList = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
   }
   return transactions

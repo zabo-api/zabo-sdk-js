@@ -27,18 +27,18 @@ const Eth = require('@ledgerhq/hw-app-eth').default
 const TransportWebUSB = require('@ledgerhq/hw-transport-webusb').default
 
 class Ledger extends Interface {
-  constructor(api) {
+  constructor (api) {
     super('Ledger', api)
     this._btcApp = null
     this._ethApp = null
   }
 
-  static isSupported() {
+  static isSupported () {
     return utils.isBrowser() && TransportWebUSB.isSupported()
   }
 
-  async sendTransaction({ account, currency, toAddress, amount } = {}) {
-    if (currency == 'ETH' || currency === 'BTC') {
+  async sendTransaction ({ account, currency, toAddress, amount } = {}) {
+    if (currency === 'ETH' || currency === 'BTC') {
       try {
         const response = await this.api.resources.utils.getBytecode({
           fromAddress: account.address,
@@ -61,10 +61,10 @@ class Ledger extends Interface {
       }
     }
 
-    throw new SDKError(500, `[Zabo] Unable to send Ledger transactions at the moment.`)
+    throw new SDKError(500, '[Zabo] Unable to send Ledger transactions at the moment.')
   }
 
-  async _signTransaction(rawTx, txObj = {}, currency) {
+  async _signTransaction (rawTx, txObj = {}, currency) {
     // Skip device connection
     if (process.env.NODE_ENV === 'test') {
       return {}
@@ -81,7 +81,7 @@ class Ledger extends Interface {
         return this._ethApp.signTransaction("44'/60'/0'/0/0", rawTx.replace(/^0x/, ''))
       }
 
-      if (currency == 'BTC') {
+      if (currency === 'BTC') {
         if (!this._btcApp) {
           this._btcApp = new Btc(transport)
         }
@@ -107,12 +107,12 @@ class Ledger extends Interface {
         })
 
         return this._btcApp.createPaymentTransactionNew(
-          [ [{
+          [[{
             inputs: inputs,
             outputs: outputs,
             version: Buffer.from(txObj.tx.ver),
             locktime: Buffer.from(0)
-          }, 1] ],
+          }, 1]],
           ["0'/0/0"],
           undefined,
           script

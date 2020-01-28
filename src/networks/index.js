@@ -15,5 +15,5 @@
  */
 
 module.exports = {
-  ethereum: require('./ethereum')(),
+  ethereum: require('./ethereum')()
 }

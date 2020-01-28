@@ -23,16 +23,16 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Metamask extends Interface {
-  constructor(api) {
+  constructor (api) {
     super('Metamask', api)
     this._accounts = []
   }
 
-  static isSupported() {
+  static isSupported () {
     return utils.isBrowser() && typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask
   }
-  
-  async sendTransaction({ account, currency, toAddress, amount } = {}) {
+
+  async sendTransaction ({ account, currency, toAddress, amount } = {}) {
     currency = await this.api.resources.currencies.getOne(currency)
 
     if (!window || !window.web3) {
@@ -40,8 +40,8 @@ class Metamask extends Interface {
     }
 
     try {
-      let metamaskAddress = await this._connect()
-      
+      const metamaskAddress = await this._connect()
+
       if (!metamaskAddress) {
         throw new SDKError(400, '[Zabo] Unable to sign transaction with metamask. Account connection refused.')
       }
@@ -70,7 +70,7 @@ class Metamask extends Interface {
         id: hash,
         currency: currency.ticker,
         amount,
-        other_parties: [ toAddress ],
+        other_parties: [toAddress],
         type: 'send',
         status: 'pending'
       }
@@ -79,7 +79,7 @@ class Metamask extends Interface {
     }
   }
 
-  async _connect() {
+  async _connect () {
     const accounts = await window.ethereum.enable()
 
     if (accounts.length === 0) {
@@ -101,7 +101,7 @@ class Metamask extends Interface {
     return this._accounts[0]
   }
 
-  _onAccountSwitch(account) {
+  _onAccountSwitch (account) {
     // TODO: Bubble event up to Zabo SDK and store new address in user's settings
   }
 }

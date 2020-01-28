@@ -17,7 +17,7 @@
 'use strict'
 
 class SDKError extends Error {
-  constructor(type, msg) {
+  constructor (type, msg) {
     super(...arguments)
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
@@ -32,16 +32,7 @@ class SDKError extends Error {
   }
 }
 
-class SDKPromiseError extends SDKError {
-  constructor(type, msg) {
-    super(...arguments)
-
-    return Promise.reject(this)
-  }
-}
-
 // Export Zabo Error class
 module.exports = {
-  SDKError,
-  SDKPromiseError
+  SDKError
 }

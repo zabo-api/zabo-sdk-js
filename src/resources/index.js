@@ -31,8 +31,8 @@ module.exports = async (api, isNode) => {
     api.ethereum = ethereum
   }
 
-  let accounts = await require('./accounts')(api)
-  let resources = {
+  const accounts = await require('./accounts')(api)
+  const resources = {
     utils: require('./utils')(api),
     applications: require('./applications')(api),
     accounts: accounts,
