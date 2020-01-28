@@ -101,31 +101,6 @@ class Ethereum {
     return this._transformRawTxToZaboTx(rawTx, block)
   }
 
-  async sendTransaction ({ toAddress, amount, currency } = {}) {
-    try {
-      let currencyObj = {}
-      if (currency !== 'ETH') {
-        currencyObj = window['ERC_20_' + currency.toUpperCase()]
-      } else {
-        currencyObj = { ticker: 'ETH' }
-      }
-      const txobj = utils.getTxObjectForEthereumRequest({
-        requestType: 'transfer',
-        toAddress,
-        amount,
-        currency: currencyObj
-      })
-      const signer = this.node.getSigner(this.data.address)
-
-      const rawTx = await signer.sendTransaction(txobj)
-      const block = await this.node.getBlock(rawTx.blockNumber)
-      return this._transformRawTxToZaboTx(rawTx, block, { currency: currency, amount: amount, to: toAddress })
-    } catch (err) {
-      console.error(err)
-      throw new SDKError(400, '[Zabo] Unable to send transaction to ethereum node. Please review your inputs and try again.')
-    }
-  }
-
   _transformRawTxToZaboTx (rawTx, block, erc20Data) {
     // Hacking here, need to clean up after Waterloo and properly parse for erc20 transfers + return
     // ETH amount as decimal string instead of wei to conform to the API

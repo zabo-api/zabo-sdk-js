@@ -18,7 +18,6 @@ const { ethereum } = require('../networks')
 module.exports = async (api, isNode) => {
   if (isNode) {
     return {
-      utils: require('./utils')(api),
       users: require('./users')(api),
       applications: require('./applications')(api),
       currencies: require('./currencies')(api),
@@ -33,7 +32,6 @@ module.exports = async (api, isNode) => {
 
   const accounts = await require('./accounts')(api)
   const resources = {
-    utils: require('./utils')(api),
     applications: require('./applications')(api),
     accounts: accounts,
     currencies: require('./currencies')(api),

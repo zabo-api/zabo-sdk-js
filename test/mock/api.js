@@ -1,15 +1,13 @@
 const dummy = require('./dummy')
 const Currencies = require('../../src/resources/currencies')
 const Users = require('../../src/resources/users')
-const Utils = require('../../src/resources/utils')
 
 class MockApi {
   constructor () {
     this.clientId = 'some-client-id'
     this.resources = {
       currencies: Currencies(this),
-      users: Users(this),
-      utils: Utils(this)
+      users: Users(this)
     }
   }
 
