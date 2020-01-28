@@ -20,11 +20,11 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class WalletProviders {
-  constructor(api) {
+  constructor (api) {
     this.api = api
   }
 
-  async getList({ limit = 25, cursor = '' } = {}) {
+  async getList ({ limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit, cursor)
 
     try {
@@ -34,7 +34,7 @@ class WalletProviders {
     }
   }
 
-  async getOne(name) {
+  async getOne (name) {
     if (!name) {
       throw new SDKError(400, '[Zabo] Missing `name` input. See: https://zabo.com/docs#get-a-wallet-provider')
     }
@@ -45,7 +45,6 @@ class WalletProviders {
       throw new SDKError(err.error_type, err.message)
     }
   }
-
 }
 
 module.exports = (api) => {

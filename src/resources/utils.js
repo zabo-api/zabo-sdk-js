@@ -22,15 +22,15 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Utils {
-  constructor(api) {
+  constructor (api) {
     this.api = api
   }
 
-  getQRCode(url) {
+  getQRCode (url) {
     return utils.createQRCode(url)
   }
 
-  async getBytecode({ fromAddress, toAddress, amount, currency } = {}) {
+  async getBytecode ({ fromAddress, toAddress, amount, currency } = {}) {
     if (!fromAddress) {
       throw new SDKError(400, '[Zabo] Missing `fromAddress` parameter. See: https://zabo.com/docs#get-network-message-bytecode')
     } else if (!toAddress) {
@@ -50,7 +50,7 @@ class Utils {
 }
 
 module.exports = (api) => {
-  let utils = new Utils(api)
+  const utils = new Utils(api)
   if (api.decentralized) {
     utils.getBytecode = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
   }

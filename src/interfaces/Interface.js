@@ -21,7 +21,7 @@ class Interface {
     this.name = name
   }
 
-  onConnect() {
+  onConnect () {
     console.log(`[Zabo] Account connected with ${this.name}.`)
   }
 
