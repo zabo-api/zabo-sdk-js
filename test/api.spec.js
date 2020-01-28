@@ -1,11 +1,10 @@
 'use strict'
 
-const should = require('should')
 const crypto = require('crypto')
 const sdk = require('../src/sdk.js')
+require('should')
 
 describe('Zabo SDK API', () => {
-
   it('should be instantiated during zabo.init()', async function () {
     await sdk.init({
       apiKey: 'some-api-key',
@@ -25,7 +24,7 @@ describe('Zabo SDK API', () => {
   })
 
   it('should build a proper request object', function () {
-    let request = sdk.api._buildRequest('GET', '/sessions')
+    const request = sdk.api._buildRequest('GET', '/sessions')
 
     request.should.be.instanceof(Object)
 
@@ -37,29 +36,28 @@ describe('Zabo SDK API', () => {
   })
 
   it('should embed a valid timestamp in the request headers', function () {
-    let request = sdk.api._buildRequest('GET', '/sessions')
+    const request = sdk.api._buildRequest('GET', '/sessions')
 
     request.headers.should.have.property('X-Zabo-Timestamp')
-    let date = new Date(request.headers['X-Zabo-Timestamp'])
+    const date = new Date(request.headers['X-Zabo-Timestamp'])
 
     date.should.be.instanceof(Date)
     date.getTime().should.be.above(0)
   })
 
   it('should embed a valid HMAC signature in the request headers', function () {
-    let request = sdk.api._buildRequest('GET', '/users?limit=25')
+    const request = sdk.api._buildRequest('GET', '/users?limit=25')
 
     request.should.be.instanceof(Object)
 
     request.method.should.equal('get')
     request.url.should.equal('https://api.zabo.com/sandbox-v0/users?limit=25')
 
-    let timestamp = request.headers['X-Zabo-Timestamp']
-    let text = timestamp + request.url
-    let sig = crypto.createHmac('sha256', sdk.api.secretKey).update(text).digest('hex')
+    const timestamp = request.headers['X-Zabo-Timestamp']
+    const text = timestamp + request.url
+    const sig = crypto.createHmac('sha256', sdk.api.secretKey).update(text).digest('hex')
 
     request.headers.should.have.property('X-Zabo-Sig')
     request.headers['X-Zabo-Sig'].should.equal(sig)
   })
-
 })

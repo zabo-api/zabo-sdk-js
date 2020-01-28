@@ -66,5 +66,14 @@
     "net": false,
     "fs": false,
     "child_process": false
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ],
+    "ignore": [
+      "/assets",
+      "/examples"
+    ]
   }
 }

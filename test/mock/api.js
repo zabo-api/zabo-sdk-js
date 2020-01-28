@@ -4,7 +4,7 @@ const Users = require('../../src/resources/users')
 const Utils = require('../../src/resources/utils')
 
 class MockApi {
-  constructor() {
+  constructor () {
     this.clientId = 'some-client-id'
     this.resources = {
       currencies: Currencies(this),
@@ -13,9 +13,9 @@ class MockApi {
     }
   }
 
-  request(method, path, data = {}) {
+  request (method, path, data = {}) {
     const map = {
-      "GET": [{
+      GET: [{
         regexp: /\/applications\/.+/,
         data: dummy.application
       }, {
@@ -29,7 +29,7 @@ class MockApi {
         data: dummy.balances
       }, {
         regexp: /\/accounts\/.+\/deposit-addresses/,
-        data: [ dummy.address ]
+        data: [dummy.address]
       }, {
         regexp: /\/currencies\/.+/,
         data: dummy.currencies.data.find(c => path.includes(c.ticker))
@@ -64,7 +64,7 @@ class MockApi {
         regexp: /\/bytecode/,
         data: dummy.bytecode
       }],
-      "POST": [{
+      POST: [{
         regexp: /\/accounts\/.+\/deposit-addresses/,
         data: dummy.address
       }, {
@@ -73,7 +73,7 @@ class MockApi {
           ...dummy.transaction,
           amount: data.amount,
           currency: data.currency,
-          other_parties: [ data.to_address ]
+          other_parties: [data.to_address]
         }
       }, {
         regexp: /\/accounts\/.+\/transactions/,
@@ -100,7 +100,7 @@ class MockApi {
         regexp: /\/users/,
         data: dummy.user
       }],
-      "DELETE": [{
+      DELETE: [{
         regexp: /\/users\/.+\/accounts\/.+/,
         data: {
           ...dummy.user,
@@ -108,11 +108,11 @@ class MockApi {
         }
       }]
     }
-  
+
     const responses = map[method] || []
     const response = responses.find(r => r.regexp.test(path))
-  
-    return new Promise (resolve =>
+
+    return new Promise(resolve =>
       setTimeout(() => resolve(response && response.data), 100)
     )
   }

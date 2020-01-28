@@ -1,8 +1,8 @@
 'use strict'
 
-const should = require('should')
 const sdk = require('../../src/sdk.js')
 const mockApi = require('../mock/api.js')
+require('should')
 
 describe('Zabo SDK Utils', () => {
   let utils
@@ -22,13 +22,13 @@ describe('Zabo SDK Utils', () => {
   })
 
   it('utils.getQRCode() should return a QRCode image', function () {
-    let qrCodeImage = utils.getQRCode('test')
+    const qrCodeImage = utils.getQRCode('test')
 
     qrCodeImage.should.containEql('<img src=')
   })
 
   it('utils.getBytecode() should fail if `fromAddress` is missing', async function () {
-    let response = await utils.getBytecode({
+    const response = await utils.getBytecode({
       toAddress: '0x0',
       amount: '0.0001',
       currency: 'ETH'
@@ -40,7 +40,7 @@ describe('Zabo SDK Utils', () => {
   })
 
   it('utils.getBytecode() should fail if `toAddress` is missing', async function () {
-    let response = await utils.getBytecode({
+    const response = await utils.getBytecode({
       fromAddress: '0x0',
       amount: '0.0001',
       currency: 'ETH'
@@ -52,7 +52,7 @@ describe('Zabo SDK Utils', () => {
   })
 
   it('utils.getBytecode() should fail if `amount` is missing', async function () {
-    let response = await utils.getBytecode({
+    const response = await utils.getBytecode({
       fromAddress: '0x0',
       toAddress: '0x0',
       currency: 'ETH'
@@ -64,7 +64,7 @@ describe('Zabo SDK Utils', () => {
   })
 
   it('utils.getBytecode() should fail if `currency` is missing', async function () {
-    let response = await utils.getBytecode({
+    const response = await utils.getBytecode({
       fromAddress: '0x0',
       toAddress: '0x0',
       amount: '0.0001'
@@ -76,7 +76,7 @@ describe('Zabo SDK Utils', () => {
   })
 
   it('utils.getBytecode() should return the bytecode', async function () {
-    let response = await utils.getBytecode({
+    const response = await utils.getBytecode({
       fromAddress: '0x0',
       toAddress: '0x0',
       amount: '0.0001',
