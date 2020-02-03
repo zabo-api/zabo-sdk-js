@@ -27,11 +27,11 @@ const { SDKError } = require('./err')
 
 // ListCursor class definition
 class ListCursor extends Array {
-  constructor({ data, list_cursor } = {}, api) {
-    super(...data)
+  constructor (cursor = {}, api) {
+    super(...cursor.data)
     this.api = api
-    this.list = data
-    this.cursor = list_cursor
+    this.list = cursor.data
+    this.cursor = cursor.list_cursor
   }
 
   get hasMore () {
@@ -52,46 +52,41 @@ class ListCursor extends Array {
 
 // Main API class definition
 class API {
-  constructor(options) {
+  constructor (options) {
     Object.assign(this, options)
     if (!this.env) {
       throw new SDKError(
-        400, `[Zabo] Please provide an 'env' value when initializing Zabo. More details at: https://zabo.com/docs`
+        400, '[Zabo] Please provide an \'env\' value when initializing Zabo. More details at: https://zabo.com/docs'
       )
     }
-    let urls = constants(this.baseUrl, this.connectUrl)[this.env]
+    const urls = constants(this.baseUrl, this.connectUrl)[this.env]
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios.create()
     this.axios.defaults.baseURL = this.baseUrl
 
     if (utils.isNode()) {
       this.axios.defaults.headers.common['X-Zabo-Key'] = this.apiKey
-      resources(this, true).then(resources => this.resources = resources)
+      resources(this, true).then(resources => { this.resources = resources })
     } else {
-      this.interfaces = {}
       this.connectUrl = urls.CONNECT_BASE_URL
       this._setEventListeners()
-      resources(this, false).then(resources => this.resources = resources)
+      resources(this, false).then(resources => { this.resources = resources })
     }
   }
 
-  async connect({ walletProvider, width = 540, height = 960 } = {}) {
+  async connect ({ walletProvider, width = 540, height = 960 } = {}) {
     let appId = null
 
     if (utils.isNode()) {
-      try {
-        let res = await this.request('GET', '/applications/id')
-        appId = res.id
+      const res = await this.request('GET', '/applications/id')
+      appId = res.id
 
-        if (!appId) {
-          throw new SDKError(500, '[Zabo] Something went wrong on our end. Please note the time and let us know')
-        }
-
-        this.resources.applications.setId(appId)
-        return appId
-      } catch (err) {
-        throw err
+      if (!appId) {
+        throw new SDKError(500, '[Zabo] Something went wrong on our end. Please note the time and let us know')
       }
+
+      this.resources.applications.setId(appId)
+      return appId
     } else {
       this.isWaitingForConnector = true
       const provider = walletProvider && typeof walletProvider === 'string' ? `/${walletProvider}` : ''
@@ -101,15 +96,15 @@ class API {
     }
   }
 
-  async request(method, path, data, isPublic = false) {
+  async request (method, path, data, isPublic = false) {
     if (this.decentralized && !this.sendAppCryptoData) {
       throw new SDKError(403, '[Zabo] Cannot send API requests while running Zabo SDK on decentralized mode')
     }
 
-    let request = this._buildRequest(method, path, data, isPublic)
+    const request = this._buildRequest(method, path, data, isPublic)
 
     try {
-      let response = await this.axios(request)
+      const response = await this.axios(request)
 
       if (response.data && response.data.list_cursor) {
         return new ListCursor(response.data, this)
@@ -123,38 +118,38 @@ class API {
     }
   }
 
-  _buildRequest(method, path, data, isPublic) {
-    let timestamp = Date.now()
-    let url = this.baseUrl + path
-    let body = data ? JSON.stringify(data) : ''
+  _buildRequest (method, path, data, isPublic) {
+    const timestamp = Date.now()
+    const url = this.baseUrl + path
+    const body = data ? JSON.stringify(data) : ''
     let headers = {}
 
     if (utils.isNode()) {
-      let signature = utils.generateHMACSignature(this.secretKey, url, body, timestamp)
+      const signature = utils.generateHMACSignature(this.secretKey, url, body, timestamp)
       headers = {
         'X-Zabo-Sig': signature,
         'X-Zabo-Timestamp': timestamp
       }
     } else if (!isPublic) {
-      headers = { 'Authorization': 'Bearer ' + utils.getZaboSession() }
+      headers = { Authorization: 'Bearer ' + utils.getZaboSession() }
     }
     method = method.toLowerCase()
 
     return { method, url, data, headers }
   }
 
-  _setEventListeners() {
+  _setEventListeners () {
     window.addEventListener('message', this._onPostMessage.bind(this), false)
   }
 
-  _watchConnector() {
+  _watchConnector () {
     const interval = setInterval(() => {
       if (this.isWaitingForConnector) {
         if (this.connector.closed) {
           this.isWaitingForConnector = false
 
           if (this._onError) {
-            this._onError({ error_type: 400, message: "[Zabo] Error in the connection process: Connection closed" })
+            this._onError({ error_type: 400, message: '[Zabo] Error in the connection process: Connection closed' })
           }
         }
       } else {
@@ -163,7 +158,7 @@ class API {
     }, 1000)
   }
 
-  _onPostMessage(event) {
+  _onPostMessage (event) {
     if (event.data.zabo) {
       this.isWaitingForConnector = false
       if (event.origin !== this.connectUrl) {
@@ -171,41 +166,13 @@ class API {
       }
     }
 
-    if (event.data.zabo && event.data.eventName == 'connectSuccess') {
+    if (event.data.zabo && event.data.eventName === 'connectSuccess') {
       if (event.data.account && event.data.account.token) {
         this._setSession({
           key: 'zabosession',
           value: event.data.account.token,
           exp_time: event.data.account.exp_time
         })
-      }
-
-      if (event.data.account.wallet_provider_name == 'metamask') {
-        const Metamask = require('./interfaces/Metamask')
-
-        if (Metamask.isSupported()) {
-          this.interfaces.metamask = new Metamask(this)
-          this.interfaces.metamask.onConnect(event.data.account)
-        } else {
-          if (this._onError) {
-            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with MetaMask, but MetaMask not available." })
-          } else {
-            throw new SDKError(400, "[Zabo] Connection attempted with MetaMask, but MetaMask not available.")
-          }
-        }
-      } else if (event.data.account.wallet_provider_name == 'ledger') {
-        const Ledger = require('./interfaces/Ledger')
-
-        if (Ledger.isSupported()) {
-          this.interfaces.ledger = new Ledger(this)
-          this.interfaces.ledger.onConnect(event.data.account)
-        } else {
-          if (this._onError) {
-            this._onError({ error_type: 400, message: "[Zabo] Connection attempted with Ledger, but Ledger not available." })
-          } else {
-            throw new SDKError(400, "[Zabo] Connection attempted with Ledger, but Ledger not available.")
-          }
-        }
       }
 
       if (this.resources.accounts && this.resources.transactions) {
@@ -218,19 +185,19 @@ class API {
       }
     }
 
-    if (event.data.zabo && event.data.eventName == 'connectError') {
+    if (event.data.zabo && event.data.eventName === 'connectError') {
       if (this._onError) {
-        this._onError({ error_type: 400, message: "[Zabo] Error in the connection process: " + event.data.error.message })
+        this._onError({ error_type: 400, message: '[Zabo] Error in the connection process: ' + event.data.error.message })
       } else {
-        throw new SDKError(400, "[Zabo] Error in the connection process: " + event.data.error.message)
+        throw new SDKError(400, '[Zabo] Error in the connection process: ' + event.data.error.message)
       }
     }
   }
 
-  _setSession(cookie) {
-    let sExpires = "; expires=" + cookie.exp_time
-    document.cookie = encodeURIComponent(cookie.key) + "=" + encodeURIComponent(cookie.value) + sExpires
-    return true;
+  _setSession (cookie) {
+    const sExpires = '; expires=' + cookie.exp_time
+    document.cookie = encodeURIComponent(cookie.key) + '=' + encodeURIComponent(cookie.value) + sExpires
+    return true
   }
 }
 

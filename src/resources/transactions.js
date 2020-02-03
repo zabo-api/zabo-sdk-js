@@ -18,51 +18,19 @@
 
 const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
-const interfaces = require('../interfaces')
 const { SDKError } = require('../err')
 
 class Transactions {
-  constructor(api) {
+  constructor (api) {
     this.api = api
     this.account = null
-    this.interfaces = interfaces(api)
-
-    this.txsListeners = {}
-    this.checkInterval = setInterval(this._checkTransactions.bind(this), 50000)
   }
 
-  _setAccount(account) {
+  _setAccount (account) {
     this.account = account
   }
 
-  async _checkTransactions() {
-    const txIds = Object.keys(this.txsListeners)
-
-    if (txIds.length == 0) {
-      return
-    }
-
-    for (let hash of txIds) {
-      try {
-        const transaction = await this.getOne({ txId: hash })
-        this._onTransactionUpdate(hash, transaction)
-        delete this.txsListeners[hash]
-      } catch (err) {
-        if (err.error_type !== 404) {
-          throw err
-        }
-      }
-    }
-  }
-
-  _onTransactionUpdate(hash, transaction) {
-    if (!hash || !this.txsListeners[hash] || !transaction) {
-      return
-    }
-    this.txsListeners[hash].call(this, transaction)
-  }
-
-  async getOne({ userId, accountId, txId } = {}) {
+  async getOne ({ userId, accountId, txId } = {}) {
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -96,7 +64,7 @@ class Transactions {
     }
   }
 
-  async getList({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
+  async getList ({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit)
 
     if (cursor) {
@@ -141,81 +109,22 @@ class Transactions {
     }
   }
 
-  async send({ userId, accountId, currency, toAddress, amount } = {}) {
-    if (!toAddress) {
-      throw new SDKError(400, '[Zabo] Missing `toAddress` parameter. See: https://zabo.com/docs#send-a-transaction')
-    } else if (!currency) {
-      throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#send-a-transaction')
-    } else if (!amount) {
-      throw new SDKError(400, '[Zabo] Missing `amount` parameter. See: https://zabo.com/docs#send-a-transaction')
-    }
-
-    amount = amount.toString()
-    currency = currency.toUpperCase()
-
-    if (utils.isNode()) {
-      if (!userId) {
-        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#send-a-transaction')
-      } else if (!uuidValidate(userId, 4)) {
-        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
-      } else if (!accountId) {
-        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#send-a-transaction')
-      } else if (!uuidValidate(accountId, 4)) {
-        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#send-a-transaction')
-      }
-
-      if (currency === 'HBAR') {
-        const hederaAccount = await this.api.resources.users.getAccount({ userId, accountId })
-
-        return this.interfaces['hedera'].sendTransaction({
-          account: hederaAccount,
-          currency,
-          toAddress,
-          amount,
-          userId
-        })
-      }
-
-      return this.api.request('POST', `/users/${userId}/accounts/${accountId}/transactions`, {
-        to_address: toAddress,
-        currency,
-        amount
-      })
-    }
-
-    if (!this.account.id) {
-      throw new SDKError(400, '[Zabo] Account not connected. See: https://zabo.com/docs#connecting-a-user')
-    } else if (this.account.wallet_provider.type !== 'private_key') {
-      throw new SDKError(403, '[Zabo] At this moment we support transactions for self-custody wallets only. See: https://zabo.com/docs#send-a-transaction')
-    }
-
-    if (this.interfaces[this.account.wallet_provider.name]) {
-      return this.interfaces[this.account.wallet_provider.name].sendTransaction({
-        account: this.account,
-        currency,
-        toAddress,
-        amount
-      })
-    }
+  async send () {
+    console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs#send-a-transaction')
+    throw new SDKError(400, '[Zabo] Not supported for this wallet provider. See: https://zabo.com/docs/#unsupported-functions')
   }
 
-  onConfirmation(txId, callback) {
-    if (!txId || typeof txId !== 'string') {
-      throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#send-a-transaction')
-    } else if (!callback || typeof callback !== 'function') {
-      throw new SDKError(400, '[Zabo] Missing `callback` parameter. See: https://zabo.com/docs#send-a-transaction')
-    }
-
-    this.txsListeners[txId] = callback
+  onConfirmation () {
+    console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs#send-a-transaction')
+    throw new SDKError(400, '[Zabo] Not supported for this wallet provider. See: https://zabo.com/docs/#unsupported-functions')
   }
 }
 
 // Export class instance
 module.exports = (api) => {
-  let transactions = new Transactions(api)
+  const transactions = new Transactions(api)
   if (api.ethereum) {
     transactions.getOne = ({ txId } = {}) => { return api.ethereum.getTransaction(txId) }
-    transactions.send = ({ toAddress, currency, amount } = {}) => { let tx = { toAddress, currency: (currency || 'ETH'), amount }; return api.ethereum.sendTransaction(tx) }
     transactions.getList = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
   }
   return transactions

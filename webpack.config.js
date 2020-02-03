@@ -6,7 +6,7 @@ module.exports = () => {
     // Create global constants.
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'process.env.PACKAGE_VERSION':  JSON.stringify(process.env.PACKAGE_VERSION)
+      'process.env.PACKAGE_VERSION': JSON.stringify(process.env.PACKAGE_VERSION)
     }),
     // Add banner to the top of each generated chunk.
     new webpack.BannerPlugin({
@@ -34,8 +34,8 @@ module.exports = () => {
   // Output: "./dist/zabo.js"
   const browserConfig = {
     mode: 'production',
-    target: "web",
-    devtool: "source-map",
+    target: 'web',
+    devtool: 'source-map',
     entry: './src/index.js',
     output: {
       library: 'Zabo',
@@ -50,7 +50,7 @@ module.exports = () => {
           exclude: /(node_modules)/,
           use: 'babel-loader'
         }
-      ],
+      ]
     },
     plugins
   }
@@ -59,7 +59,7 @@ module.exports = () => {
   // Output: "./dist/index.js"
   const modulesConfig = {
     mode: 'production',
-    target: "node",
+    target: 'node',
     node: { process: false },
     entry: './src/index.js',
     output: {
@@ -69,7 +69,7 @@ module.exports = () => {
       libraryTarget: 'umd',
       umdNamedDefine: true,
       // TODO: Hack (for Webpack 4+) to enable create UMD build which can be required by Node without throwing error for window being undefined (https://github.com/webpack/webpack/issues/6522)
-      globalObject: `(typeof self !== 'undefined' ? self : this)`
+      globalObject: "(typeof self !== 'undefined' ? self : this)"
     },
     module: {
       rules: [
@@ -78,10 +78,10 @@ module.exports = () => {
           exclude: /(node_modules)/,
           use: 'babel-loader'
         }
-      ],
+      ]
     },
     plugins
   }
 
-  return [ browserConfig, modulesConfig ]
+  return [browserConfig, modulesConfig]
 }
