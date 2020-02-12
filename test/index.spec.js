@@ -70,9 +70,9 @@ describe('Zabo SDK Module', () => {
     // applications
     sdk.applications.should.have.property('get')
 
-    // wallet providers
-    sdk.walletProviders.should.have.property('getList')
-    sdk.walletProviders.should.have.property('getOne')
+    // providers
+    sdk.providers.should.have.property('getList')
+    sdk.providers.should.have.property('getOne')
 
     // currencies
     sdk.currencies.should.have.property('getOne')

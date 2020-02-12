@@ -111,12 +111,12 @@ class Transactions {
 
   async send () {
     console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs#send-a-transaction')
-    throw new SDKError(400, '[Zabo] Not supported for this wallet provider. See: https://zabo.com/docs/#unsupported-functions')
+    throw new SDKError(400, '[Zabo] Not supported for this provider. See: https://zabo.com/docs/#unsupported-functions')
   }
 
   onConfirmation () {
     console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs#send-a-transaction')
-    throw new SDKError(400, '[Zabo] Not supported for this wallet provider. See: https://zabo.com/docs/#unsupported-functions')
+    throw new SDKError(400, '[Zabo] Not supported for this provider. See: https://zabo.com/docs/#unsupported-functions')
   }
 }
 

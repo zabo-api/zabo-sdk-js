@@ -53,7 +53,7 @@ class Accounts {
     }
     const data = {
       client_id: clientId,
-      wallet_provider_name: provider,
+      provider_name: provider,
       credentials,
       origin
     }
@@ -104,7 +104,7 @@ class Accounts {
     ]
 
     for (const provider of providersWithStaticDepositAddresses) {
-      if (provider === this.data.wallet_provider.name) {
+      if (provider === this.data.provider.name) {
         console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddress()... More details: https://zabo.com/docs#get-deposit-address`)
         return this.getDepositAddresses(currency)
       }

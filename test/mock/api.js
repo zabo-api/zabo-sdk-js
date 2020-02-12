@@ -35,11 +35,11 @@ class MockApi {
         regexp: /\/currencies/,
         data: dummy.currencies
       }, {
-        regexp: /\/wallet-providers\/.+/,
-        data: dummy.walletProviders.data.find(p => path.includes(p.name))
+        regexp: /\/providers\/.+/,
+        data: dummy.providers.data.find(p => path.includes(p.name))
       }, {
-        regexp: /\/wallet-providers/,
-        data: dummy.walletProviders
+        regexp: /\/providers/,
+        data: dummy.providers
       }, {
         regexp: /\/transactions\/.+/,
         data: dummy.transactions.data.find(tx => path.includes(tx.id))
@@ -89,9 +89,9 @@ class MockApi {
         regexp: /\/accounts/,
         data: {
           ...dummy.account,
-          wallet_provider: {
-            ...dummy.account.wallet_provider,
-            name: data.wallet_provider_name
+          provider: {
+            ...dummy.account.provider,
+            name: data.provider_name
           }
         }
       }, {

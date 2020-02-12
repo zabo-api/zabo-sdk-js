@@ -22,7 +22,7 @@ module.exports = async (api, isNode) => {
       applications: require('./applications')(api),
       currencies: require('./currencies')(api),
       transactions: require('./transactions')(api),
-      walletProviders: require('./wallet_providers')(api)
+      providers: require('./providers')(api)
     }
   }
 
