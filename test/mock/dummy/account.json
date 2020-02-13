@@ -1,14 +1,14 @@
 {
   "id": "663925bd-205d-479e-895f-27ec3891e8b3",
   "address": "b134235a-088a-489c-aa36-dc0841094db8",
-  "wallet_provider": {
+  "provider": {
     "name": "coinbase",
     "display_name": "Coinbase",
-    "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/coinbase.png",
+    "logo": "https://cdn.zabo.com/assets/providers/coinbase.png",
     "type": "oauth",
     "scopes": ["read_balances", "read_transactions", "send_crypto", "receive_crypto"]
   },
-  "currencies": [
+  "balances": [
     {
       "balance": "5.068",
       "currency": "ETH",

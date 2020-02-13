@@ -37,7 +37,7 @@ class Ethereum {
       this.node = new ethers.providers.JsonRpcProvider(nodeUrl)
       this.data = {
         id: 'decentralized',
-        wallet_provider: {
+        provider: {
           name: 'ethereum-node',
           type: 'private_key',
           scopes: ['read_balances', 'read_transactions', 'create_deposit_address']

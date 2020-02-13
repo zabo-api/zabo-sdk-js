@@ -53,7 +53,7 @@ class Accounts {
     }
     const data = {
       client_id: clientId,
-      wallet_provider_name: provider,
+      provider_name: provider,
       credentials,
       origin
     }
@@ -92,7 +92,7 @@ class Accounts {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!currency || typeof currency !== 'string') {
-      throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs##create-a-deposit-address')
+      throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs#create-a-deposit-address')
     }
 
     const providersWithStaticDepositAddresses = [
@@ -104,8 +104,8 @@ class Accounts {
     ]
 
     for (const provider of providersWithStaticDepositAddresses) {
-      if (provider === this.data.wallet_provider.name) {
-        console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddress()... More details: https://zabo.com/docs#get-deposit-address`)
+      if (provider === this.data.provider.name) {
+        console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddresses()... More details: https://zabo.com/docs#get-deposit-addresses`)
         return this.getDepositAddresses(currency)
       }
     }
@@ -142,7 +142,7 @@ module.exports = async (api) => {
     accounts.getBalances = ({ currencies } = {}) => { return ethConnection.getBalance(currencies) }
     accounts.createDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
     if (!api.sendAppCryptoData) {
-      accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+      accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs') }
     }
     accounts.getDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
   }

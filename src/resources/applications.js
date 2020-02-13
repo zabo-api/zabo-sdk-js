@@ -30,7 +30,7 @@ class Applications {
 
   setId (id) {
     if (!uuidValidate(id, 4)) {
-      throw new SDKError(400, '[Zabo] Application id must be a valid UUID version 4. See: https://zabo.com/docs#about-the-api')
+      throw new SDKError(400, '[Zabo] Application id must be a valid UUID version 4. See: https://zabo.com/docs')
     }
 
     this.id = id

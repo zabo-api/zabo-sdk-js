@@ -7,11 +7,11 @@
     { "type": "UTXO", "list": [ "BTC" ] },
     { "type": "account", "list": [ "ETH" ] }
   ],
-  "wallet_providers": [
+  "providers": [
     {
       "name": "coinbase",
       "display_name": "Coinbase",
-      "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/coinbase.png",
+      "logo": "https://cdn.zabo.com/assets/providers/coinbase.png",
       "scopes": [
         {
           "name": "read_balances",
@@ -29,7 +29,7 @@
     {
       "name": "metamask",
       "display_name": "MetaMask",
-      "logo": "https://zabo-static.s3.amazonaws.com/wallet-providers/metamask.png",
+      "logo": "https://cdn.zabo.com/assets/providers/metamask.png",
       "scopes": [
         {
           "name": "read_balances",

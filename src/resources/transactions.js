@@ -70,7 +70,7 @@ class Transactions {
     if (cursor) {
       const timestamp = (new Date(cursor)).getTime()
       if (timestamp === 0 || isNaN(timestamp)) {
-        throw new SDKError(400, '[Zabo] Values for `cursor` must be a valid `initiated_at` timestamp. See: https://zabo.com/docs#get-account-history')
+        throw new SDKError(400, '[Zabo] Values for `cursor` must be a valid `initiated_at` timestamp. See: https://zabo.com/docs#get-transaction-history')
       }
     }
 
@@ -78,13 +78,13 @@ class Transactions {
 
     if (utils.isNode()) {
       if (!userId) {
-        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-account-history')
+        throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-transaction-history')
       } else if (!uuidValidate(userId, 4)) {
-        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#get-account-history')
+        throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#get-transaction-history')
       } else if (!accountId) {
-        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-account-history')
+        throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-transaction-history')
       } else if (!uuidValidate(accountId, 4)) {
-        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#get-account-history')
+        throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#get-transaction-history')
       }
 
       url = `/users/${userId}/accounts/${accountId}/transactions?limit=${limit}&cursor=${cursor}`
@@ -110,13 +110,13 @@ class Transactions {
   }
 
   async send () {
-    console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs#send-a-transaction')
-    throw new SDKError(400, '[Zabo] Not supported for this wallet provider. See: https://zabo.com/docs/#unsupported-functions')
+    console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs')
+    throw new SDKError(400, '[Zabo] Not supported for this provider. See: https://zabo.com/docs/#unsupported-functions')
   }
 
   onConfirmation () {
-    console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs#send-a-transaction')
-    throw new SDKError(400, '[Zabo] Not supported for this wallet provider. See: https://zabo.com/docs/#unsupported-functions')
+    console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs')
+    throw new SDKError(400, '[Zabo] Not supported for this provider. See: https://zabo.com/docs/#unsupported-functions')
   }
 }
 
@@ -125,7 +125,7 @@ module.exports = (api) => {
   const transactions = new Transactions(api)
   if (api.ethereum) {
     transactions.getOne = ({ txId } = {}) => { return api.ethereum.getTransaction(txId) }
-    transactions.getList = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+    transactions.getList = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs') }
   }
   return transactions
 }

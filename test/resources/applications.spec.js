@@ -53,7 +53,7 @@ describe('Zabo SDK Applications Resource', () => {
     const application = await applications.get()
 
     application.should.be.ok()
-    application.should.have.properties(['id', 'name', 'status', 'currencies', 'wallet_providers', 'authorized_origins'])
+    application.should.have.properties(['id', 'name', 'status', 'currencies', 'providers', 'authorized_origins'])
 
     applications.data.should.be.eql(application)
     applications.id.should.be.equal(application.id)
@@ -68,7 +68,7 @@ describe('Zabo SDK Applications Resource', () => {
     const application = await applications.getInfo()
 
     application.should.be.ok()
-    application.should.have.properties(['id', 'name', 'status', 'currencies', 'wallet_providers', 'authorized_origins'])
+    application.should.have.properties(['id', 'name', 'status', 'currencies', 'providers', 'authorized_origins'])
 
     applications.data.should.be.eql(application)
     applications.id.should.be.equal(application.id)

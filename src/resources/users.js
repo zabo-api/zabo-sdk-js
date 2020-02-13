@@ -44,7 +44,7 @@ class Users {
     } else if (!account.id) {
       throw new SDKError(400, '[Zabo] Missing `id` property in account object. See: https://zabo.com/docs#add-account-to-existing-user')
     } else if (!account.token) {
-      throw new SDKError(400, '[Zabo] Missing `token` property in account object. See: https://zabo.com/docs#add-account-to-existing-use')
+      throw new SDKError(400, '[Zabo] Missing `token` property in account object. See: https://zabo.com/docs#add-account-to-existing-user')
     }
 
     try {
@@ -92,9 +92,9 @@ class Users {
 
   async getAccount ({ userId, accountId } = {}) {
     if (!userId) {
-      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-user-account')
     } else if (!accountId) {
-      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-a-user-account')
     }
 
     try {
@@ -106,11 +106,11 @@ class Users {
 
   async getBalances ({ userId, accountId, currencies } = {}) {
     if (!userId) {
-      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     } else if (!accountId) {
-      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     } else if (!currencies) {
-      throw new SDKError(400, '[Zabo] Missing `currencies` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `currencies` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     }
 
     if (Array.isArray(currencies)) {

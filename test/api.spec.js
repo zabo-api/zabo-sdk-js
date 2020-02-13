@@ -19,7 +19,7 @@ describe('Zabo SDK API', () => {
 
     sdk.api.resources.should.have.property('applications')
     sdk.api.resources.should.have.property('transactions')
-    sdk.api.resources.should.have.property('walletProviders')
+    sdk.api.resources.should.have.property('providers')
     sdk.api.resources.should.have.property('currencies')
   })
 

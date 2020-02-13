@@ -39,7 +39,7 @@ describe('Zabo SDK Accounts Resource', () => {
     const account = await accounts.get()
 
     account.should.be.ok()
-    account.should.have.properties(['id', 'address', 'wallet_provider', 'currencies'])
+    account.should.have.properties(['id', 'address', 'provider', 'balances'])
 
     accounts.data.should.be.eql(account)
     accounts.id.should.be.equal(account.id)
@@ -56,8 +56,8 @@ describe('Zabo SDK Accounts Resource', () => {
     const account = await accounts.create(data)
 
     account.should.be.ok()
-    account.should.have.properties(['id', 'address', 'wallet_provider', 'currencies'])
-    account.wallet_provider.name.should.have.equal(data.provider)
+    account.should.have.properties(['id', 'address', 'provider', 'balances'])
+    account.provider.name.should.have.equal(data.provider)
   })
 
   it('accounts.getBalances() should return balances for the required currencies', async function () {
