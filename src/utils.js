@@ -22,8 +22,8 @@ const uuidValidate = require('uuid-validate')
 const { SDKError } = require('./err')
 
 const ErrorMessages = {
-  invalidLimit: '[Zabo] Values for `limit` must be 50 or below. See: https://zabo.com/docs#about-the-api',
-  invalidUUID: '[Zabo] `cursor` must be a valid UUID version 4. See: https://zabo.com/docs#about-the-api',
+  invalidLimit: '[Zabo] Values for `limit` must be 50 or below. See: https://zabo.com/docs#pagination',
+  invalidUUID: '[Zabo] `cursor` must be a valid UUID version 4. See: https://zabo.com/docs#pagination',
   invalidAddress: '[Zabo] Invalid Ethereum address provided.',
   internalError: '[Zabo] Internal SDK Error. Please note the time and let us know!',
   invalidCurrency: '[Zabo] Invalid currency provided for Ethereum function. Must be ETH or an ERC20 token.',

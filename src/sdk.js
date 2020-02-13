@@ -87,7 +87,7 @@ class ZaboSDK {
             provider: 'address-only',
             origin: window.location.host
           })
-          this.accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+          this.accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs') }
 
           return trackingAccount
         }
