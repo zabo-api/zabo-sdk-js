@@ -1,8 +1,8 @@
 'use strict'
 
-const should = require('should')
 const sdk = require('../../src/sdk.js')
 const mockApi = require('../mock/api.js')
+require('should')
 
 describe('Zabo SDK Currencies Resource', () => {
   let currencies
@@ -28,7 +28,7 @@ describe('Zabo SDK Currencies Resource', () => {
   })
 
   it('currencies.getList() should fail if an invalid `limit` is provided', async function () {
-    let response = await currencies.getList({ limit: 51 }).should.be.rejected()
+    const response = await currencies.getList({ limit: 51 }).should.be.rejected()
 
     response.should.be.an.Error()
 
@@ -37,7 +37,7 @@ describe('Zabo SDK Currencies Resource', () => {
   })
 
   it('currencies.getOne() should fail if a currency ticker is not provided', async function () {
-    let response = await currencies.getOne().should.be.rejected()
+    const response = await currencies.getOne().should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
@@ -45,7 +45,7 @@ describe('Zabo SDK Currencies Resource', () => {
   })
 
   it('currencies.getExchangeRates() should fail if an invalid `limit` is provided', async function () {
-    let response = await currencies.getExchangeRates({
+    const response = await currencies.getExchangeRates({
       cryptoCurrency: 'BTC',
       limit: 51
     }).should.be.rejected()
@@ -57,26 +57,26 @@ describe('Zabo SDK Currencies Resource', () => {
   })
 
   it('currencies.getList() should return the list of currencies', async function () {
-    let list = await currencies.getList()
+    const list = await currencies.getList()
 
     list.should.be.ok()
     list.data.should.be.an.Array()
-    list.data[0].should.have.properties([ 'ticker', 'name', 'type', 'logo' ])
+    list.data[0].should.have.properties(['ticker', 'name', 'type', 'logo'])
   })
 
   it('currencies.getOne() should return one currency', async function () {
-    let currency = await currencies.getOne('BTC')
+    const currency = await currencies.getOne('BTC')
 
     currency.should.be.ok()
-    currency.should.have.properties([ 'ticker', 'name', 'type', 'logo' ])
+    currency.should.have.properties(['ticker', 'name', 'type', 'logo'])
     currency.ticker.should.be.eql('BTC')
   })
 
   it('currencies.getExchangeRates() should return a list of exchange rates', async function () {
-    let list = await currencies.getExchangeRates()
+    const list = await currencies.getExchangeRates()
 
     list.should.be.ok()
     list.data.should.be.an.Array()
-    list.data[0].should.have.properties([ 'from', 'to', 'rate' ])
+    list.data[0].should.have.properties(['from', 'to', 'rate'])
   })
 })

@@ -21,45 +21,47 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Applications {
-  constructor(api) {
+  constructor (api) {
     this.api = api
     this.id = null
     this.clientId = null
     this.data = null
   }
 
-  setId(id) {
+  setId (id) {
     if (!uuidValidate(id, 4)) {
-      throw new SDKError(400, '[Zabo] Application id must be a valid UUID version 4. See: https://zabo.com/docs#about-the-api')
+      throw new SDKError(400, '[Zabo] Application id must be a valid UUID version 4. See: https://zabo.com/docs')
     }
 
     this.id = id
   }
 
-  async get() {
+  async get () {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] SDK has not initialized properly get().')
     }
     try {
-      return this.data = await this.api.request('GET', `/applications/${this.id}`)
+      this.data = await this.api.request('GET', `/applications/${this.id}`)
+      return this.data
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
   }
 
-  async getInfo() {
+  async getInfo () {
     if (!this.api.clientId) {
       throw new SDKError(401, '[Zabo] SDK has not initialized properly getInfo().')
     }
 
-    let origin = encodeURIComponent(window ? window.location.host : '')
+    const origin = encodeURIComponent(window ? window.location.host : '')
 
     if (utils.isNode()) {
       throw new SDKError(401, '[Zabo] Method available only for client SDK. On the server-side, please use Zabo.applications.get() instead.')
     }
 
     try {
-      return this.data = await this.api.request('GET', `/applications/info?client_id=${this.api.clientId}&origin=${origin}`, {}, true)
+      this.data = await this.api.request('GET', `/applications/info?client_id=${this.api.clientId}&origin=${origin}`, {}, true)
+      return this.data
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }

@@ -20,11 +20,11 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 class Users {
-  constructor(api) {
+  constructor (api) {
     this.api = api
   }
 
-  async create(account = {}) {
+  async create (account = {}) {
     if (!account.id) {
       throw new SDKError(400, '[Zabo] Missing `id` property in account object. See: https://zabo.com/docs#create-a-user')
     } else if (!account.token) {
@@ -38,13 +38,13 @@ class Users {
     }
   }
 
-  async addAccount(user = {}, account = {}) {
+  async addAccount (user = {}, account = {}) {
     if (!user.id) {
       throw new SDKError(400, '[Zabo] Missing `id` property in user object. See: https://zabo.com/docs#add-account-to-existing-user')
     } else if (!account.id) {
       throw new SDKError(400, '[Zabo] Missing `id` property in account object. See: https://zabo.com/docs#add-account-to-existing-user')
     } else if (!account.token) {
-      throw new SDKError(400, '[Zabo] Missing `token` property in account object. See: https://zabo.com/docs#add-account-to-existing-use')
+      throw new SDKError(400, '[Zabo] Missing `token` property in account object. See: https://zabo.com/docs#add-account-to-existing-user')
     }
 
     try {
@@ -54,7 +54,7 @@ class Users {
     }
   }
 
-  async removeAccount({ userId, accountId }) {
+  async removeAccount ({ userId, accountId }) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `id` property in user object. See: https://zabo.com/docs#remove-account-from-user')
     } else if (!accountId) {
@@ -68,7 +68,7 @@ class Users {
     }
   }
 
-  async getOne(id) {
+  async getOne (id) {
     if (!id) {
       throw new SDKError(400, '[Zabo] Missing `id` input. See: https://zabo.com/docs#get-a-user')
     }
@@ -80,7 +80,7 @@ class Users {
     }
   }
 
-  async getList({ limit = 25, cursor = '' } = {}) {
+  async getList ({ limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit, cursor)
 
     try {
@@ -90,11 +90,11 @@ class Users {
     }
   }
 
-  async getAccount({ userId, accountId } = {}) {
+  async getAccount ({ userId, accountId } = {}) {
     if (!userId) {
-      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-user-account')
     } else if (!accountId) {
-      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-a-user-account')
     }
 
     try {
@@ -104,13 +104,13 @@ class Users {
     }
   }
 
-  async getBalances({ userId, accountId, currencies } = {}) {
+  async getBalances ({ userId, accountId, currencies } = {}) {
     if (!userId) {
-      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     } else if (!accountId) {
-      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     } else if (!currencies) {
-      throw new SDKError(400, '[Zabo] Missing `currencies` parameter. See: https://zabo.com/docs#get-balances')
+      throw new SDKError(400, '[Zabo] Missing `currencies` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     }
 
     if (Array.isArray(currencies)) {
@@ -124,7 +124,7 @@ class Users {
     }
   }
 
-  async createDepositAddress({ userId, accountId, currency } = {}) {
+  async createDepositAddress ({ userId, accountId, currency } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#create-a-deposit-address')
     } else if (!accountId) {
@@ -140,7 +140,7 @@ class Users {
     }
   }
 
-  async getDepositAddresses({ userId, accountId, currency } = {}) {
+  async getDepositAddresses ({ userId, accountId, currency } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-deposit-addresses')
     } else if (!accountId) {
@@ -155,7 +155,6 @@ class Users {
       throw new SDKError(err.error_type, err.message)
     }
   }
-
 }
 
 module.exports = (api) => {

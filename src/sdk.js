@@ -23,13 +23,13 @@ const { SDKError } = require('./err')
 
 // SDK main class definition
 class ZaboSDK {
-  constructor() {
+  constructor () {
     this.status = 'offline'
     this.api = null
     this.autoConnect = true
   }
 
-  async init(o) {
+  async init (o) {
     if (typeof o.autoConnect !== 'undefined') {
       this.autoConnect = o.autoConnect
     } else {
@@ -43,31 +43,27 @@ class ZaboSDK {
 
       this.env = this.checkZaboEnv(o.env)
 
-      try {
-        this.api = new API({
-          baseUrl: o.baseUrl,
-          apiKey: o.apiKey,
-          secretKey: o.secretKey,
-          env: this.env,
-          sendAppCryptoData: true
-        })
-        await this.setEndpointAliases()
+      this.api = new API({
+        baseUrl: o.baseUrl,
+        apiKey: o.apiKey,
+        secretKey: o.secretKey,
+        env: this.env,
+        sendAppCryptoData: true
+      })
+      await this.setEndpointAliases()
+
+      if (this.autoConnect) {
+        this.status = 'connecting'
+        await this.api.connect()
+        this.status = 'online'
+
+        if (!this.applications.id) {
+          return this.throwConnectError(400, '[Zabo] Unable to connect with Zabo API. Please check your credentials and try again. More details at: https://zabo.com/docs')
+        }
 
         if (this.autoConnect) {
-          this.status = 'connecting'
-          await this.api.connect()
-          this.status = 'online'
-
-          if (!this.applications.id) {
-            return this.throwConnectError(400, '[Zabo] Unable to connect with Zabo API. Please check your credentials and try again. More details at: https://zabo.com/docs')
-          }
-
-          if (this.autoConnect) {
-            return this.applications.get()
-          }
+          return this.applications.get()
         }
-      } catch (err) {
-        throw err
       }
     }
 
@@ -85,18 +81,18 @@ class ZaboSDK {
             sendAppCryptoData: true
           })
           await this.setEndpointAliases()
-          let trackingAccount = await this.accounts.create({
+          const trackingAccount = await this.accounts.create({
             clientId: o.clientId,
             credentials: [this.accounts.data.address],
             provider: 'address-only',
             origin: window.location.host
           })
-          this.accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+          this.accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs') }
 
           return trackingAccount
         }
 
-        let resourcesReturn = await resources({
+        const resourcesReturn = await resources({
           decentralized: true,
           clientId: o.clientId,
           useNode: o.useNode,
@@ -123,7 +119,7 @@ class ZaboSDK {
         baseUrl: o.baseUrl,
         connectUrl: o.connectUrl,
         clientId: o.clientId,
-        env: this.env,
+        env: this.env
       })
       await this.setEndpointAliases()
     } catch (err) {
@@ -131,7 +127,7 @@ class ZaboSDK {
     }
 
     try {
-      let account = await this.accounts.get()
+      const account = await this.accounts.get()
       this.transactions._setAccount(account)
       return this.applications.getInfo()
     } catch (err) {
@@ -140,22 +136,22 @@ class ZaboSDK {
     }
   }
 
-  throwConnectError(code, message) {
+  throwConnectError (code, message) {
     this.status = 'offline'
     throw new SDKError(code, message)
   }
 
-  async setEndpointAliases() {
+  async setEndpointAliases () {
     while (!this.api.resources) {
       await utils.sleep(500)
     }
     Object.assign(this, this.api.resources)
   }
 
-  checkZaboEnv(env) {
+  checkZaboEnv (env) {
     env = env ? env.toLowerCase() : null
 
-    let acceptedEnvs = ['sandbox', 'live']
+    const acceptedEnvs = ['sandbox', 'live']
     if (!env || !acceptedEnvs.includes(env)) {
       return this.throwConnectError(400, '[Zabo] Please provide a valid env, should be \'sandbox\' or \'live\'. More details at: https://zabo.com/docs')
     }
@@ -163,7 +159,7 @@ class ZaboSDK {
     return env
   }
 
-  connect(config = {}) {
+  connect (config = {}) {
     // TODO: Remove warnings
     if (config.interfaceType) {
       console.warn('[ZABO] "interfaceType" has been deprecated. More details at: https://zabo.com/docs/#connecting-a-user')
@@ -184,13 +180,13 @@ class ZaboSDK {
     })
   }
 
-  onConnection(fn) {
+  onConnection (fn) {
     if (typeof fn !== 'function') { return }
     this.api._onConnection = fn.bind(this)
     return this
   }
 
-  onError(fn) {
+  onError (fn) {
     if (typeof fn !== 'function') { return }
     this.api._onError = fn.bind(this)
     return this

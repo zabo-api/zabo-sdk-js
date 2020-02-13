@@ -27,7 +27,7 @@ describe('Zabo SDK Applications Resource', () => {
   })
 
   it('applications.get() should fail if an application id has not been set', async function () {
-    let response = await applications.get().should.be.rejected()
+    const response = await applications.get().should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(401)
@@ -40,7 +40,7 @@ describe('Zabo SDK Applications Resource', () => {
   })
 
   it('applications.setId() should set id if a valid application id is provided', function () {
-    let uuid = 'b5cfb0d8-58de-4786-9545-3d38521d7d2b'
+    const uuid = 'b5cfb0d8-58de-4786-9545-3d38521d7d2b'
 
     should(() => {
       applications.setId(uuid)
@@ -53,27 +53,27 @@ describe('Zabo SDK Applications Resource', () => {
     const application = await applications.get()
 
     application.should.be.ok()
-    application.should.have.properties([ 'id', 'name', 'status', 'currencies', 'wallet_providers', 'authorized_origins' ])
-    
+    application.should.have.properties(['id', 'name', 'status', 'currencies', 'providers', 'authorized_origins'])
+
     applications.data.should.be.eql(application)
     applications.id.should.be.equal(application.id)
   })
-  
+
   it('accounts.getInfo() should return application info and cache application data', async function () {
     // Mock DOM
     require('jsdom-global')()
     const originalGlobal = global
-    global = undefined
-    
+    global = undefined // eslint-disable-line
+
     const application = await applications.getInfo()
-    
+
     application.should.be.ok()
-    application.should.have.properties([ 'id', 'name', 'status', 'currencies', 'wallet_providers', 'authorized_origins' ])
-    
+    application.should.have.properties(['id', 'name', 'status', 'currencies', 'providers', 'authorized_origins'])
+
     applications.data.should.be.eql(application)
     applications.id.should.be.equal(application.id)
 
     // Undo mock DOM
-    global = originalGlobal
+    global = originalGlobal // eslint-disable-line
   })
 })

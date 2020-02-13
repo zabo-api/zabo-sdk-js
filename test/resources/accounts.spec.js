@@ -1,9 +1,8 @@
 'use strict'
 
-const should = require('should')
 const sdk = require('../../src/sdk.js')
 const mockApi = require('../mock/api.js')
-
+require('should')
 
 describe('Zabo SDK Accounts Resource', () => {
   let accounts
@@ -29,7 +28,7 @@ describe('Zabo SDK Accounts Resource', () => {
   })
 
   it('accounts.getBalances() should fail if an account has not connected yet', async function () {
-    let response = await accounts.getBalances({ currencies: 'BTC' }).should.be.rejected()
+    const response = await accounts.getBalances({ currencies: 'BTC' }).should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(401)
@@ -40,29 +39,29 @@ describe('Zabo SDK Accounts Resource', () => {
     const account = await accounts.get()
 
     account.should.be.ok()
-    account.should.have.properties([ "id", "address", "wallet_provider", "currencies" ])
-    
+    account.should.have.properties(['id', 'address', 'provider', 'balances'])
+
     accounts.data.should.be.eql(account)
     accounts.id.should.be.equal(account.id)
   })
-  
+
   it('accounts.create() should create and return a new account', async function () {
     const data = {
       clientId: 'some-client-id',
-      credentials: [ 'some-credentials' ],
+      credentials: ['some-credentials'],
       provider: 'some-provider',
       origin: 'some-origin'
     }
-    
+
     const account = await accounts.create(data)
-    
+
     account.should.be.ok()
-    account.should.have.properties([ "id", "address", "wallet_provider", "currencies" ])
-    account.wallet_provider.name.should.have.equal(data.provider)
+    account.should.have.properties(['id', 'address', 'provider', 'balances'])
+    account.provider.name.should.have.equal(data.provider)
   })
 
   it('accounts.getBalances() should return balances for the required currencies', async function () {
-    const currencies = [ 'BTC', 'ETH' ]
+    const currencies = ['BTC', 'ETH']
     const balances = await accounts.getBalances({ currencies })
 
     balances.data.should.be.ok()
@@ -76,14 +75,14 @@ describe('Zabo SDK Accounts Resource', () => {
     const resp = await accounts.createDepositAddress('BTC')
 
     resp.should.be.ok()
-    resp.should.have.properties([ 'currency', 'address' ])
+    resp.should.have.properties(['currency', 'address'])
   })
-  
+
   it('accounts.getDepositAddresses() should return a list of addresses', async function () {
     const resp = await accounts.getDepositAddresses('BTC')
-    
+
     resp.should.be.ok()
     resp.should.be.an.Array()
-    resp[0].should.have.properties([ 'currency', 'address' ])
+    resp[0].should.have.properties(['currency', 'address'])
   })
 })

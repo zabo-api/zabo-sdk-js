@@ -1,10 +1,9 @@
 'use strict'
 
-const should = require('should')
 const sdk = require('../src/sdk.js')
+require('should')
 
 describe('Zabo SDK Module', () => {
-
   it('should init properly', async function () {
     await sdk.init({
       apiKey: 'some-api-key',
@@ -21,7 +20,7 @@ describe('Zabo SDK Module', () => {
 
     await sdk.init({
       apiKey: 'some-api-key',
-      env: 'sandbox',
+      env: 'sandbox'
     }).should.be.rejected()
 
     sdk.status.should.equal('offline')
@@ -71,9 +70,9 @@ describe('Zabo SDK Module', () => {
     // applications
     sdk.applications.should.have.property('get')
 
-    // wallet providers
-    sdk.walletProviders.should.have.property('getList')
-    sdk.walletProviders.should.have.property('getOne')
+    // providers
+    sdk.providers.should.have.property('getList')
+    sdk.providers.should.have.property('getOne')
 
     // currencies
     sdk.currencies.should.have.property('getOne')
@@ -91,5 +90,4 @@ describe('Zabo SDK Module', () => {
       sendCryptoData: false
     }).should.be.ok()
   })
-
 })

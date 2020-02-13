@@ -19,35 +19,34 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
-class WalletProviders {
-  constructor(api) {
+class Providers {
+  constructor (api) {
     this.api = api
   }
 
-  async getList({ limit = 25, cursor = '' } = {}) {
+  async getList ({ limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit, cursor)
 
     try {
-      return this.api.request('GET', `/wallet-providers?limit=${limit}&cursor=${cursor}`)
+      return this.api.request('GET', `/providers?limit=${limit}&cursor=${cursor}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
   }
 
-  async getOne(name) {
+  async getOne (name) {
     if (!name) {
-      throw new SDKError(400, '[Zabo] Missing `name` input. See: https://zabo.com/docs#get-a-wallet-provider')
+      throw new SDKError(400, '[Zabo] Missing `name` input. See: https://zabo.com/docs#get-a-provider')
     }
 
     try {
-      return this.api.request('GET', `/wallet-providers/${name}`)
+      return this.api.request('GET', `/providers/${name}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message)
     }
   }
-
 }
 
 module.exports = (api) => {
-  return new WalletProviders(api)
+  return new Providers(api)
 }

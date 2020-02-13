@@ -21,20 +21,20 @@
 const { SDKError } = require('../err')
 
 class Accounts {
-  constructor(api) {
+  constructor (api) {
     this.api = api
     this.id = null
     this.data = null
   }
 
-  _setAccount(account) {
+  _setAccount (account) {
     this.id = account.id
     this.data = account
   }
 
-  async get() {
+  async get () {
     try {
-      let response = await this.api.request('GET', `/sessions`)
+      const response = await this.api.request('GET', '/sessions')
       this._setAccount(response)
 
       return this.data
@@ -43,7 +43,7 @@ class Accounts {
     }
   }
 
-  async create({ clientId, credentials, provider, origin } = {}) {
+  async create ({ clientId, credentials, provider, origin } = {}) {
     if (!clientId) {
       throw new SDKError(
         400,
@@ -51,15 +51,15 @@ class Accounts {
         More details at: https://zabo.com/docs`
       )
     }
-    let data = {
+    const data = {
       client_id: clientId,
-      wallet_provider_name: provider,
+      provider_name: provider,
       credentials,
       origin
     }
 
     try {
-      let account = await this.api.request('POST', `/accounts`, data)
+      const account = await this.api.request('POST', '/accounts', data)
       this._setAccount(account)
       return account
     } catch (err) {
@@ -67,7 +67,7 @@ class Accounts {
     }
   }
 
-  async getBalances({ currencies } = {}) {
+  async getBalances ({ currencies } = {}) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     }
@@ -88,11 +88,11 @@ class Accounts {
     }
   }
 
-  async createDepositAddress(currency) {
+  async createDepositAddress (currency) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!currency || typeof currency !== 'string') {
-      throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs##create-a-deposit-address')
+      throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs#create-a-deposit-address')
     }
 
     const providersWithStaticDepositAddresses = [
@@ -100,12 +100,12 @@ class Accounts {
       'ledger',
       'hedera',
       'address-only',
-      'binance',
+      'binance'
     ]
 
-    for (let provider of providersWithStaticDepositAddresses) {
-      if (provider === this.data.wallet_provider.name) {
-        console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddress()... More details: https://zabo.com/docs#get-deposit-address`)
+    for (const provider of providersWithStaticDepositAddresses) {
+      if (provider === this.data.provider.name) {
+        console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddresses()... More details: https://zabo.com/docs#get-deposit-addresses`)
         return this.getDepositAddresses(currency)
       }
     }
@@ -117,7 +117,7 @@ class Accounts {
     }
   }
 
-  async getDepositAddresses(currency) {
+  async getDepositAddresses (currency) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!currency || typeof currency !== 'string') {
@@ -133,16 +133,16 @@ class Accounts {
 }
 
 module.exports = async (api) => {
-  let accounts = new Accounts(api)
+  const accounts = new Accounts(api)
   if (api.ethereum) {
-    let ethConnection = await api.ethereum.connect(api.useNode, api.useAddress)
+    const ethConnection = await api.ethereum.connect(api.useNode, api.useAddress)
     accounts.data = ethConnection.data
     accounts.node = ethConnection.node
     accounts.get = () => { return accounts.data }
     accounts.getBalances = ({ currencies } = {}) => { return ethConnection.getBalance(currencies) }
     accounts.createDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
     if (!api.sendAppCryptoData) {
-      accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs#decentralized-mode') }
+      accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs') }
     }
     accounts.getDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
   }

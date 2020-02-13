@@ -11,5 +11,5 @@ module.exports = {
   transferRequest: require('./transfer-request.json'),
   user: require('./user.json'),
   users: require('./users.json'),
-  walletProviders: require('./wallet-providers.json')
+  providers: require('./providers.json')
 }

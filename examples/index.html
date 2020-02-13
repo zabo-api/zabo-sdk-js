@@ -107,13 +107,7 @@
 
       // Bind "connect" button
       document.querySelector('#connect').addEventListener('click', ev => {
-        // Call default .connect() window. For an embedded iframe, please see https://zabo.com/docs#connect-an-account
-        zabo.connect({
-          // interfaceType: 'iframe',
-          // attachTo: '#connect-widget',
-          width: 540,
-          height: 960
-        }).onConnection(account => {
+        zabo.connect().onConnection(account => {
           console.log('account connected:', account)
           printOutput(account)
 
