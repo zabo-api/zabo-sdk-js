@@ -7,6 +7,7 @@
     "getv": "echo $npm_package_version",
     "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha -r jsdom-global/register --recursive test/ --exit",
     "test:ethereum": "TEST_TYPE=ethereum npm run test",
+    "prepublishOnly": "npm run build",
     "build": "PACKAGE_VERSION=$npm_package_version npx webpack --config webpack.config.js --progress --colors",
     "build:local": "NODE_ENV=local npm run build",
     "examples": "npm run build && ln -sf ../dist/zabo.js examples/zabo.js && live-server --host=localhost --port=8080 examples/"
