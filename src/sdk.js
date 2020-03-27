@@ -32,6 +32,8 @@ class ZaboSDK {
   async init (o) {
     if (typeof o.autoConnect !== 'undefined') {
       this.autoConnect = o.autoConnect
+    } else {
+      this.autoConnect = true
     }
 
     if (utils.isNode()) {

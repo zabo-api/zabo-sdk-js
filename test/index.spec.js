@@ -67,9 +67,6 @@ describe('Zabo SDK Module', () => {
     sdk.users.should.have.property('getList')
     sdk.users.should.have.property('getBalances')
 
-    // applications
-    sdk.applications.should.have.property('get')
-
     // providers
     sdk.providers.should.have.property('getList')
     sdk.providers.should.have.property('getOne')

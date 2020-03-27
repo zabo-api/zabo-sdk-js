@@ -1,7 +1,7 @@
 module.exports = {
   account: require('./account.json'),
   address: require('./address.json'),
-  application: require('./application.json'),
+  team: require('./team.json'),
   balances: require('./balances.json'),
   bytecode: require('./bytecode.json'),
   currencies: require('./currencies.json'),
