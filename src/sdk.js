@@ -32,8 +32,6 @@ class ZaboSDK {
   async init (o) {
     if (typeof o.autoConnect !== 'undefined') {
       this.autoConnect = o.autoConnect
-    } else {
-      this.autoConnect = true
     }
 
     if (utils.isNode()) {
@@ -57,13 +55,11 @@ class ZaboSDK {
         await this.api.connect()
         this.status = 'online'
 
-        if (!this.applications.id) {
+        if (!this.api.resources.teams.id) {
           return this.throwConnectError(400, '[Zabo] Unable to connect with Zabo API. Please check your credentials and try again. More details at: https://zabo.com/docs')
         }
 
-        if (this.autoConnect) {
-          return this.applications.get()
-        }
+        return this.api.resources.teams.get()
       }
     }
 
@@ -108,31 +104,33 @@ class ZaboSDK {
       return
     }
 
-    this.env = this.checkZaboEnv(o.env)
+    if (utils.isBrowser()) {
+      this.env = this.checkZaboEnv(o.env)
 
-    if (!o.clientId || typeof o.clientId !== 'string') {
-      throw new SDKError(400, '[Zabo] Please provide a valid Zabo app clientId. More details at: https://zabo.com/docs')
-    }
+      if (!o.clientId || typeof o.clientId !== 'string') {
+        throw new SDKError(400, '[Zabo] Please provide a valid Zabo app clientId. More details at: https://zabo.com/docs')
+      }
 
-    try {
-      this.api = new API({
-        baseUrl: o.baseUrl,
-        connectUrl: o.connectUrl,
-        clientId: o.clientId,
-        env: this.env
-      })
-      await this.setEndpointAliases()
-    } catch (err) {
-      console.error(err)
-    }
+      try {
+        this.api = new API({
+          baseUrl: o.baseUrl,
+          connectUrl: o.connectUrl,
+          clientId: o.clientId,
+          env: this.env
+        })
+        await this.setEndpointAliases()
+      } catch (err) {
+        console.error(err)
+      }
 
-    try {
-      const account = await this.accounts.get()
-      this.transactions._setAccount(account)
-      return this.applications.getInfo()
-    } catch (err) {
-      console.error('[Zabo] No account connected yet.')
-      return this.applications.getInfo()
+      try {
+        const account = await this.accounts.get()
+        this.transactions._setAccount(account)
+      } catch (err) {
+        console.error('[Zabo] No account connected yet.')
+      }
+
+      return this.api.resources.teams.get()
     }
   }
 
@@ -145,7 +143,9 @@ class ZaboSDK {
     while (!this.api.resources) {
       await utils.sleep(500)
     }
-    Object.assign(this, this.api.resources)
+
+    const { teams, ...apiResources } = this.api.resources
+    Object.assign(this, apiResources)
   }
 
   checkZaboEnv (env) {
@@ -190,6 +190,14 @@ class ZaboSDK {
     if (typeof fn !== 'function') { return }
     this.api._onError = fn.bind(this)
     return this
+  }
+
+  getTeam () {
+    return this.api.resources.teams.get()
+  }
+
+  get data () {
+    return this.api.resources.teams.data
   }
 }
 
