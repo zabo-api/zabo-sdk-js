@@ -179,6 +179,31 @@ const sleep = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
+// ListCursor class definition
+class ListCursor extends Array {
+  constructor (cursor = {}, api) {
+    super(...cursor.data)
+    this.api = api
+    this.list = cursor.data
+    this.cursor = cursor.list_cursor
+  }
+
+  get hasMore () {
+    return this.cursor.has_more
+  }
+
+  get limit () {
+    return this.cursor.limit
+  }
+
+  next () {
+    if (this.hasMore && this.cursor.next_uri) {
+      return this.api.request('GET', this.cursor.next_uri)
+    }
+    return new ListCursor({ data: [], list_cursor: this.cursor })
+  }
+}
+
 module.exports = {
   generateHMACSignature,
   getZaboSession,
@@ -188,5 +213,6 @@ module.exports = {
   isNode,
   sleep,
   isValidNodeUrl,
-  ErrorMessages
+  ErrorMessages,
+  ListCursor
 }

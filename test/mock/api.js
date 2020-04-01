@@ -14,8 +14,8 @@ class MockApi {
   request (method, path, data = {}) {
     const map = {
       GET: [{
-        regexp: /\/applications\/.+/,
-        data: dummy.application
+        regexp: /\/teams\/.+/,
+        data: dummy.team
       }, {
         regexp: /\/sessions/,
         data: dummy.account
