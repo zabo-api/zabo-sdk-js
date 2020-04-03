@@ -17,7 +17,7 @@ describe('Zabo SDK API', () => {
     sdk.api.connect.should.be.a.Function()
     sdk.api.resources.should.be.an.Object()
 
-    sdk.api.resources.should.have.property('applications')
+    sdk.api.resources.should.have.property('teams')
     sdk.api.resources.should.have.property('transactions')
     sdk.api.resources.should.have.property('providers')
     sdk.api.resources.should.have.property('currencies')

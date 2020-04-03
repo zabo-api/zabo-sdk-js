@@ -8,7 +8,7 @@ async function main () {
   })
   
   console.log('status:', zabo.status)
-  console.log('appId:', zabo.applications.data.id)
+  console.log('appId:', zabo.data.id)
   
   zabo.users.create({
     id: '<ZABO ACCOUNT ID>',

@@ -25,31 +25,6 @@ const resources = require('./resources')
 
 const { SDKError } = require('./err')
 
-// ListCursor class definition
-class ListCursor extends Array {
-  constructor (cursor = {}, api) {
-    super(...cursor.data)
-    this.api = api
-    this.list = cursor.data
-    this.cursor = cursor.list_cursor
-  }
-
-  get hasMore () {
-    return this.cursor.has_more
-  }
-
-  get limit () {
-    return this.cursor.limit
-  }
-
-  next () {
-    if (this.hasMore && this.cursor.next_uri) {
-      return this.api.request('GET', this.cursor.next_uri)
-    }
-    return new ListCursor({ data: [], list_cursor: this.cursor })
-  }
-}
-
 // Main API class definition
 class API {
   constructor (options) {
@@ -78,14 +53,14 @@ class API {
     let appId = null
 
     if (utils.isNode()) {
-      const res = await this.request('GET', '/applications/id')
+      const res = await this.request('GET', '/teams/id')
       appId = res.id
 
       if (!appId) {
         throw new SDKError(500, '[Zabo] Something went wrong on our end. Please note the time and let us know')
       }
 
-      this.resources.applications.setId(appId)
+      this.resources.teams.setId(appId)
       return appId
     } else {
       this.isWaitingForConnector = true
@@ -107,7 +82,7 @@ class API {
       const response = await this.axios(request)
 
       if (response.data && response.data.list_cursor) {
-        return new ListCursor(response.data, this)
+        return new utils.ListCursor(response.data, this)
       }
       return response.data
     } catch (err) {
