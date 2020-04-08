@@ -52,7 +52,7 @@ describe('Zabo SDK Teams Resource', () => {
     const team = await teams.get()
 
     team.should.be.ok()
-    team.should.have.properties(['id', 'name', 'status', 'currencies', 'providers', 'authorized_origins'])
+    team.should.have.properties(['id', 'name'])
 
     teams.data.should.be.eql(team)
     teams.id.should.be.equal(team.id)
@@ -67,7 +67,7 @@ describe('Zabo SDK Teams Resource', () => {
     const team = await teams.get()
 
     team.should.be.ok()
-    team.should.have.properties(['id', 'name', 'status', 'currencies', 'providers', 'authorized_origins'])
+    team.should.have.properties(['id', 'name'])
 
     teams.data.should.be.eql(team)
     teams.id.should.be.equal(team.id)
