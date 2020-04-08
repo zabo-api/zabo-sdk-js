@@ -35,7 +35,8 @@ module.exports = async (api, isNode) => {
     teams: require('./teams')(api),
     accounts: accounts,
     currencies: require('./currencies')(api),
-    transactions: require('./transactions')(api)
+    transactions: require('./transactions')(api),
+    providers: require('./providers')(api)
   }
 
   return resources

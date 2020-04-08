@@ -48,5 +48,8 @@ class Providers {
 }
 
 module.exports = (api) => {
+  if (api.decentralized) {
+    return null
+  }
   return new Providers(api)
 }
