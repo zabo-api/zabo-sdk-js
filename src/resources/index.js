@@ -19,7 +19,7 @@ module.exports = async (api, isNode) => {
   if (isNode) {
     return {
       users: require('./users')(api),
-      applications: require('./applications')(api),
+      teams: require('./teams')(api),
       currencies: require('./currencies')(api),
       transactions: require('./transactions')(api),
       providers: require('./providers')(api)
@@ -32,10 +32,11 @@ module.exports = async (api, isNode) => {
 
   const accounts = await require('./accounts')(api)
   const resources = {
-    applications: require('./applications')(api),
+    teams: require('./teams')(api),
     accounts: accounts,
     currencies: require('./currencies')(api),
-    transactions: require('./transactions')(api)
+    transactions: require('./transactions')(api),
+    providers: require('./providers')(api)
   }
 
   return resources

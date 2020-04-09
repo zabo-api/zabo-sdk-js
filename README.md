@@ -8,7 +8,7 @@ Zabo SDK for JS
 
 The Zabo SDK for JS provides convenient access to the Zabo API from applications written in browser and server-side JavaScript.  
 
-Please keep in mind that [you must register](https://zabo.com/login) and receive an application id to use in your client application, or if you are using the server side functions, [generate an API keypair from your dashboard](https://zabo.com/dashboard/applications).  
+Please keep in mind that [you must register](https://zabo.com/login) and receive a team id to use in your client application, or if you are using the server side functions, [generate an API keypair from your dashboard](https://zabo.com/dashboard).
 
 ## Documentation
 See the [Zabo API docs](https://zabo.com/docs).
@@ -64,7 +64,7 @@ The first step is always to allow a user to connect from your front-end:
 
       const output = document.querySelector('#output')
 
-      // Initiate Zabo SDK, replace the `clientId` field with your app key generated at {LINK}.
+      // Initiate Zabo SDK, replace the `clientId` field with your team client id.
       const zabo = await Zabo.init({
         clientId: 'YourClientIDFromTheZaboDotComDashboard',
         env: 'sandbox'
@@ -176,11 +176,11 @@ While instantiating your new Zabo SDK instance, you have a few configuration opt
 
 | Key           | Description   | Platform   |
 | ------------- | ------------- |----------- |
-| clientId      | App Key acquired when registering a new application in [Zabo Dashboard](https://zabo.com/login/). | Browser |
+| clientId      | App Key acquired when registering a team in [Zabo Dashboard](https://zabo.com/login/). | Browser |
 | env           | Zabo API environment the SDK is connecting with. Could be either `sandbox` or `live`. Only `sandbox` is available unless a `live` connection is approved. | Both |
-| apiKey        | API Key generated via the Application "Keys" tab at [Zabo Dashboard](https://zabo.com/login/). | Node |
-| secretKey     | Secret Key generated via the Application "Keys" tab at [Zabo Dashboard](https://zabo.com/login/). | Node |
-| autoConnect   | Optional boolean useful if you wish to stop the SDK from fetching the application data during Zabo.init(). Defaults to `true`. | Both |
+| apiKey        | API Key generated via the Developer Settings section at [Zabo Dashboard](https://zabo.com/login/). | Node |
+| secretKey     | Secret Key generated via the Developer Settings section at [Zabo Dashboard](https://zabo.com/login/). | Node |
+| autoConnect   | Optional boolean useful if you wish to stop the SDK from fetching the team data during Zabo.init(). Defaults to `true`. | Both |
 
 ### Server vs Client
 The SDK can be used in either the client or server environment after a user connects their wallet, however, they have different functions available to them and utilize different authentication methods. See [the Zabo API docs](https://zabo.com/docs) for more information.
@@ -189,7 +189,7 @@ The SDK can be used in either the client or server environment after a user conn
 ### Using Promises
 Every method returns a chainable promise which can be used:
 ```js
-zabo.applications.get().then(a => {
+zabo.getTeam().then(a => {
   console.log(a)
 }).catch(e => {
   console.log(e.message)
