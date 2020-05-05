@@ -29,11 +29,13 @@ const { SDKError } = require('./err')
 class API {
   constructor (options) {
     Object.assign(this, options)
+
     if (!this.env) {
       throw new SDKError(
         400, '[Zabo] Please provide an \'env\' value when initializing Zabo. More details at: https://zabo.com/docs'
       )
     }
+
     const urls = constants(this.baseUrl, this.connectUrl)[this.env]
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios.create()
@@ -44,9 +46,10 @@ class API {
       resources(this, true).then(resources => { this.resources = resources })
     } else {
       this.connectUrl = urls.CONNECT_BASE_URL
-      this._setEventListeners()
       resources(this, false).then(resources => { this.resources = resources })
     }
+
+    this._onMessage = this._onMessage.bind(this)
   }
 
   async connect ({ provider, width = 540, height = 960 } = {}) {
@@ -63,11 +66,21 @@ class API {
       this.resources.teams.setId(appId)
       return appId
     } else {
-      this.isWaitingForConnector = true
-      const providerUrl = provider && typeof provider === 'string' ? `/${provider}` : ''
-      const url = `${this.connectUrl}/connect${providerUrl}?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
-      this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
-      this._watchConnector()
+      const teamSession = await this.resources.teams.getSession()
+
+      let url = `${this.connectUrl}/connect`
+      url += (provider && typeof provider === 'string') ? `/${provider}` : ''
+      url += `?client_id=${this.clientId}`
+      url += `&origin=${encodeURIComponent(window.location.host)}`
+      url += `&zabo_env=${this.env}`
+      url += `&zabo_version=${process.env.PACKAGE_VERSION}`
+
+      if (teamSession) {
+        url += `&otp=${teamSession.one_time_password}`
+      }
+
+      this.connector = window.open(url, 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
+      this._watchConnector(teamSession)
     }
   }
 
@@ -113,63 +126,115 @@ class API {
     return { method, url, data, headers }
   }
 
-  _setEventListeners () {
-    window.addEventListener('message', this._onPostMessage.bind(this), false)
-  }
+  _watchConnector (teamSession) {
+    this.isWaitingForConnector = true
+    this._setListeners(teamSession)
 
-  _watchConnector () {
-    const interval = setInterval(() => {
+    // Connector timeout (10 minutes)
+    const connectorTimeout = setTimeout(() => {
+      this.isWaitingForConnector = false
+
+      if (this._onError) {
+        this._onError({ error_type: 400, message: 'Connection timeout' })
+      }
+    }, 10 * 60 * 1000)
+
+    // Watch interval
+    const watchInterval = setInterval(() => {
       if (this.isWaitingForConnector) {
         if (this.connector.closed) {
           this.isWaitingForConnector = false
 
           if (this._onError) {
-            this._onError({ error_type: 400, message: '[Zabo] Error in the connection process: Connection closed' })
+            this._onError({ error_type: 400, message: 'Connection closed' })
           }
         }
       } else {
-        clearInterval(interval)
+        this._removeListeners()
+
+        if (!this.connector.closed) {
+          this.connector.close()
+        }
+
+        clearInterval(watchInterval)
+        clearTimeout(connectorTimeout)
       }
     }, 1000)
   }
 
-  _onPostMessage (event) {
-    if (event.data.zabo) {
+  _setListeners (teamSession) {
+    // Listen to postMessage
+    window.addEventListener('message', this._onMessage, false)
+
+    // Listen to WebSocket
+    if (window.WebSocket && teamSession) {
+      const wsUrl = new URL(this.baseUrl)
+      wsUrl.protocol = 'wss:'
+      wsUrl.username = this.clientId
+      wsUrl.password = teamSession.one_time_password
+
+      this.ws = new window.WebSocket(wsUrl.toString() + '/accounts')
+      this.ws.onmessage = this._onMessage
+    }
+  }
+
+  _removeListeners () {
+    window.removeEventListener('message', this._onMessage, false)
+
+    if (this.ws) {
+      this.ws.close()
+      this.ws = null
+    }
+  }
+
+  _onMessage ({ origin, data }) {
+    try {
+      data = JSON.parse(data)
+    } catch (err) {}
+
+    if (data.zabo) {
+      if (origin !== this.connectUrl && !(/\.zabo\.com$/).test(new URL(origin).hostname)) {
+        throw new SDKError(401, '[Zabo] Unauthorized attempt to call SDK from origin: ' + origin)
+      }
+
       this.isWaitingForConnector = false
-      if (event.origin !== this.connectUrl) {
-        throw new SDKError(401, '[Zabo] Unauthorized attempt to call SDK from origin: ' + event.origin + '. Call can only come from: ' + this.connectUrl)
-      }
-    }
 
-    if (event.data.zabo && event.data.eventName === 'connectSuccess') {
-      if (event.data.account && event.data.account.token) {
-        this._setSession({
-          key: 'zabosession',
-          value: event.data.account.token,
-          exp_time: event.data.account.exp_time
-        })
-      }
+      switch (data.eventName) {
+        case 'connectSuccess': {
+          if (data.account && data.account.token) {
+            this._setAccountSession({
+              key: 'zabosession',
+              value: data.account.token,
+              exp_time: data.account.exp_time
+            })
+          }
 
-      if (this.resources.accounts && this.resources.transactions) {
-        this.resources.accounts._setAccount(event.data.account)
-        this.resources.transactions._setAccount(event.data.account)
-      }
+          if (this.resources.accounts && this.resources.transactions) {
+            this.resources.accounts._setAccount(data.account)
+            this.resources.transactions._setAccount(data.account)
+          }
 
-      if (this._onConnection) {
-        this._onConnection(event.data.account)
-      }
-    }
+          if (this._onConnection) {
+            this._onConnection(data.account)
+          }
 
-    if (event.data.zabo && event.data.eventName === 'connectError') {
-      if (this._onError) {
-        this._onError({ error_type: 400, message: '[Zabo] Error in the connection process: ' + event.data.error.message })
-      } else {
-        throw new SDKError(400, '[Zabo] Error in the connection process: ' + event.data.error.message)
+          break
+        }
+
+        case 'connectError': {
+          if (this._onError) {
+            this._onError(data.error)
+          } else {
+            throw new SDKError(data.error.error_type, data.error.message)
+          }
+
+          break
+        }
       }
     }
   }
 
-  _setSession (cookie) {
+  _setAccountSession (cookie) {
     const sExpires = '; expires=' + cookie.exp_time
     document.cookie = encodeURIComponent(cookie.key) + '=' + encodeURIComponent(cookie.value) + sExpires
     return true
