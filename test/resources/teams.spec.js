@@ -48,7 +48,7 @@ describe('Zabo SDK Teams Resource', () => {
     teams.id.should.equal(uuid)
   })
 
-  it('accounts.get() should return an team and cache team data [server-side]', async function () {
+  it('teams.get() should return an team and cache team data [server-side]', async function () {
     const team = await teams.get()
 
     team.should.be.ok()
@@ -58,7 +58,7 @@ describe('Zabo SDK Teams Resource', () => {
     teams.id.should.be.equal(team.id)
   })
 
-  it('accounts.get() should return team and cache team data [client-side]', async function () {
+  it('teams.get() should return team and cache team data [client-side]', async function () {
     // Mock DOM
     require('jsdom-global')()
     const originalGlobal = global
@@ -71,6 +71,23 @@ describe('Zabo SDK Teams Resource', () => {
 
     teams.data.should.be.eql(team)
     teams.id.should.be.equal(team.id)
+
+    // Undo mock DOM
+    global = originalGlobal // eslint-disable-line
+  })
+
+  it('teams.getSession() should return a valid session [client-side]', async function () {
+    // Mock DOM
+    require('jsdom-global')()
+    const originalGlobal = global
+    global = undefined // eslint-disable-line
+
+    const session = await teams.getSession()
+
+    session.should.be.ok()
+    session.should.have.properties(['one_time_password', 'expires_at'])
+
+    session.expires_at.should.be.above(Date.now())
 
     // Undo mock DOM
     global = originalGlobal // eslint-disable-line
