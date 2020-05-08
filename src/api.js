@@ -165,12 +165,11 @@ class API {
         if (!this.connector.closed) {
           this.connector.close()
         }
-        this.connector = null
 
         if (this.iframe) {
-          this.iframe.remove()
+          this.iframe.style.display = 'none'
+          this.iframe.src = ''
         }
-        this.iframe = null
 
         clearInterval(watchInterval)
         clearTimeout(connectorTimeout)
@@ -270,6 +269,7 @@ class API {
       document.body.appendChild(iframe)
     }
 
+    iframe.style.display = 'block'
     return iframe
   }
 }
