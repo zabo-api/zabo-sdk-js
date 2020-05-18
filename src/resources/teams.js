@@ -65,7 +65,7 @@ class Teams {
   async getSession () {
     const session = this.data && this.data.session
 
-    if (session && session.expires_at < Date.now()) {
+    if (session && new Date(session.expires_at) > Date.now()) {
       return session
     }
 
