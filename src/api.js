@@ -52,7 +52,7 @@ class API {
     this._onMessage = this._onMessage.bind(this)
   }
 
-  async connect ({ provider, width = 540, height = 960 } = {}) {
+  async connect ({ provider } = {}) {
     let appId = null
 
     if (utils.isNode()) {
@@ -66,21 +66,31 @@ class API {
       this.resources.teams.setId(appId)
       return appId
     } else {
-      const teamSession = await this.resources.teams.getSession()
+      try {
+        await window.fetch(`${this.connectUrl}/health-check`)
 
-      let url = `${this.connectUrl}/connect`
-      url += (provider && typeof provider === 'string') ? `/${provider}` : ''
-      url += `?client_id=${this.clientId}`
-      url += `&origin=${encodeURIComponent(window.location.host)}`
-      url += `&zabo_env=${this.env}`
-      url += `&zabo_version=${process.env.PACKAGE_VERSION}`
+        let url = `${this.connectUrl}/connect`
+        url += (provider && typeof provider === 'string') ? `/${provider}` : ''
+        url += `?client_id=${this.clientId}`
+        url += `&origin=${encodeURIComponent(window.location.host)}`
+        url += `&zabo_env=${this.env}`
+        url += `&zabo_version=${process.env.PACKAGE_VERSION}`
 
-      if (teamSession) {
-        url += `&otp=${teamSession.one_time_password}`
+        const teamSession = await this.resources.teams.getSession()
+        if (teamSession) {
+          url += `&otp=${teamSession.one_time_password}`
+        }
+
+        this.iframe = this._appendIframe('zabo-connect-widget')
+        this.connector = window.open(url, this.iframe.name)
+        this.connector.focus()
+
+        this._watchConnector(teamSession)
+      } catch (err) {
+        if (this._onError) {
+          this._onError({ error_type: 500, message: 'Connection refused' })
+        }
       }
-
-      this.connector = window.open(url, 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
-      this._watchConnector(teamSession)
     }
   }
 
@@ -154,6 +164,11 @@ class API {
 
         if (!this.connector.closed) {
           this.connector.close()
+        }
+
+        if (this.iframe) {
+          this.iframe.style.display = 'none'
+          this.iframe.src = ''
         }
 
         clearInterval(watchInterval)
@@ -238,6 +253,24 @@ class API {
     const sExpires = '; expires=' + cookie.exp_time
     document.cookie = encodeURIComponent(cookie.key) + '=' + encodeURIComponent(cookie.value) + sExpires
     return true
+  }
+
+  _appendIframe (name) {
+    let iframe = document.getElementsByName(name)[0]
+
+    if (!iframe) {
+      iframe = document.createElement('iframe')
+      iframe.setAttribute('style', 'position:fixed; top:0; left:0; right:0; bottom:0; z-index:2147483647;')
+      iframe.style.width = '100%'
+      iframe.style.height = '100%'
+      iframe.frameBorder = 0
+      iframe.name = name
+
+      document.body.appendChild(iframe)
+    }
+
+    iframe.style.display = 'block'
+    return iframe
   }
 }
 
