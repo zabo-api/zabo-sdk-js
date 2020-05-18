@@ -84,10 +84,12 @@ describe('Zabo SDK Teams Resource', () => {
 
     const session = await teams.getSession()
 
-    session.should.be.ok()
-    session.should.have.properties(['one_time_password', 'expires_at'])
-
-    session.expires_at.should.be.above(Date.now())
+    // Backwards compatible
+    if (session) {
+      session.should.be.ok()
+      session.should.have.properties(['one_time_password', 'expires_at'])
+      session.expires_at.should.be.above(Date.now())
+    }
 
     // Undo mock DOM
     global = originalGlobal // eslint-disable-line
