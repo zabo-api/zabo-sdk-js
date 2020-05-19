@@ -188,8 +188,12 @@ class API {
       wsUrl.username = this.clientId
       wsUrl.password = teamSession.one_time_password
 
-      this.ws = new window.WebSocket(wsUrl.toString() + '/accounts')
-      this.ws.onmessage = this._onMessage
+      try {
+        this.ws = new window.WebSocket(wsUrl.toString() + '/ws')
+        this.ws.onmessage = this._onMessage
+      } catch (err) {
+        console.warn('[Zabo] Error establishing WebSocket connection.', err.message)
+      }
     }
   }
 
