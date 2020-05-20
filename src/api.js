@@ -183,13 +183,14 @@ class API {
 
     // Listen to WebSocket
     if (window.WebSocket && teamSession) {
-      const wsUrl = new URL(this.baseUrl)
+      let wsUrl = new URL(this.baseUrl)
       wsUrl.protocol = 'wss:'
-      wsUrl.username = this.clientId
-      wsUrl.password = teamSession.one_time_password
+      wsUrl = wsUrl.toString() + '/ws'
+      wsUrl += `?client_id=${this.clientId}`
+      wsUrl += `&otp=${teamSession.one_time_password}`
 
       try {
-        this.ws = new window.WebSocket(wsUrl.toString() + '/ws')
+        this.ws = new window.WebSocket(wsUrl)
         this.ws.onmessage = this._onMessage
       } catch (err) {
         console.warn('[Zabo] Error establishing WebSocket connection.', err.message)
