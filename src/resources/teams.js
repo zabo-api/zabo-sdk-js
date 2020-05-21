@@ -61,6 +61,17 @@ class Teams {
 
     return this.data
   }
+
+  async getSession () {
+    const session = this.data && this.data.session
+
+    if (session && new Date(session.expires_at) > Date.now()) {
+      return session
+    }
+
+    const team = await this.get()
+    return team.session
+  }
 }
 
 module.exports = (api, appId) => {
