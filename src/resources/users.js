@@ -34,7 +34,7 @@ class Users {
     try {
       return this.api.request('POST', '/users', account)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -50,7 +50,7 @@ class Users {
     try {
       return this.api.request('POST', `/users/${user.id}/accounts`, account)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -64,7 +64,7 @@ class Users {
     try {
       return this.api.request('DELETE', `/users/${userId}/accounts/${accountId}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -76,7 +76,7 @@ class Users {
     try {
       return this.api.request('GET', `/users/${id}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -86,7 +86,7 @@ class Users {
     try {
       return this.api.request('GET', `/users?limit=${limit}&cursor=${cursor}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -100,7 +100,7 @@ class Users {
     try {
       return this.api.request('GET', `/users/${userId}/accounts/${accountId}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -120,7 +120,7 @@ class Users {
     try {
       return this.api.request('GET', `/users/${userId}/accounts/${accountId}/balances?currencies=${currencies}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -136,7 +136,7 @@ class Users {
     try {
       return this.api.request('POST', `/users/${userId}/accounts/${accountId}/deposit-addresses?currency=${currency}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -152,7 +152,7 @@ class Users {
     try {
       return this.api.request('GET', `/users/${userId}/accounts/${accountId}/deposit-addresses?currency=${currency}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 }

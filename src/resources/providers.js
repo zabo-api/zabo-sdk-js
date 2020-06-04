@@ -30,7 +30,7 @@ class Providers {
     try {
       return this.api.request('GET', `/providers?limit=${limit}&cursor=${cursor}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -42,7 +42,7 @@ class Providers {
     try {
       return this.api.request('GET', `/providers/${name}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 }

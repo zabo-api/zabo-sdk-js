@@ -111,7 +111,7 @@ class API {
       return response.data
     } catch (err) {
       if (err.response) {
-        throw new SDKError(err.response.status, err.response.data.message)
+        throw new SDKError(err.response.status, err.response.data.message, err.response.data.request_id)
       }
       throw new SDKError(500, err.message)
     }
@@ -243,7 +243,7 @@ class API {
           if (this._onError) {
             this._onError(data.error)
           } else {
-            throw new SDKError(data.error.error_type, data.error.message)
+            throw new SDKError(data.error.error_type, data.error.message, data.error.request_id)
           }
 
           break

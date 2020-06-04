@@ -17,8 +17,8 @@
 'use strict'
 
 class SDKError extends Error {
-  constructor (type, msg) {
-    super(...arguments)
+  constructor (type, msg, requestId, ...params) {
+    super(msg, ...params)
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {
@@ -26,7 +26,7 @@ class SDKError extends Error {
     }
 
     this.error_type = type
-    this.message = msg
+    this.request_id = requestId
 
     return this
   }
