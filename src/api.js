@@ -49,7 +49,8 @@ class API {
       resources(this, false).then(resources => { this.resources = resources })
     }
 
-    this._onMessage = this._onMessage.bind(this)
+    this._onConnectorMessage = this._onMessage.bind(this, 'connector')
+    this._onSocketMessage = this._onMessage.bind(this, 'socket')
   }
 
   async connect ({ provider } = {}) {
@@ -155,31 +156,26 @@ class API {
         if (this.connector.closed) {
           this.isWaitingForConnector = false
 
+          // Ensure that the connector has been destroyed
+          this._closeConnector()
+
           if (this._onError) {
             this._onError({ error_type: 400, message: 'Connection closed' })
           }
         }
       } else {
         this._removeListeners()
-
-        if (!this.connector.closed) {
-          this.connector.close()
-        }
-
-        if (this.iframe) {
-          this.iframe.style.display = 'none'
-          this.iframe.src = ''
-        }
-
         clearInterval(watchInterval)
         clearTimeout(connectorTimeout)
+
+        this._closeConnector()
       }
     }, 1000)
   }
 
   _setListeners (teamSession) {
     // Listen to postMessage
-    window.addEventListener('message', this._onMessage, false)
+    window.addEventListener('message', this._onConnectorMessage, false)
 
     // Listen to WebSocket
     if (window.WebSocket && teamSession) {
@@ -191,7 +187,7 @@ class API {
 
       try {
         this.ws = new window.WebSocket(wsUrl)
-        this.ws.onmessage = this._onMessage
+        this.ws.onmessage = this._onSocketMessage
       } catch (err) {
         console.warn('[Zabo] Error establishing WebSocket connection.', err.message)
       }
@@ -199,7 +195,7 @@ class API {
   }
 
   _removeListeners () {
-    window.removeEventListener('message', this._onMessage, false)
+    window.removeEventListener('message', this._onConnectorMessage, false)
 
     if (this.ws) {
       this.ws.close()
@@ -207,7 +203,7 @@ class API {
     }
   }
 
-  _onMessage ({ origin, data }) {
+  _onMessage (emitter, { origin, data }) {
     try {
       data = JSON.parse(data)
     } catch (err) {}
@@ -217,7 +213,9 @@ class API {
         throw new SDKError(401, '[Zabo] Unauthorized attempt to call SDK from origin: ' + origin)
       }
 
-      this.isWaitingForConnector = false
+      if (emitter === 'connector') {
+        this.isWaitingForConnector = false
+      }
 
       switch (data.eventName) {
         case 'connectSuccess': {
@@ -250,6 +248,11 @@ class API {
 
           break
         }
+
+        case 'connectClose': {
+          this._closeConnector()
+          break
+        }
       }
     }
   }
@@ -276,6 +279,17 @@ class API {
 
     iframe.style.display = 'block'
     return iframe
+  }
+
+  _closeConnector () {
+    if (!this.connector.closed) {
+      this.connector.close()
+    }
+
+    if (this.iframe) {
+      this.iframe.style.display = 'none'
+      this.iframe.src = ''
+    }
   }
 }
 
