@@ -181,26 +181,35 @@ const sleep = (milliseconds) => {
 
 // ListCursor class definition
 class ListCursor extends Array {
-  constructor (cursor = {}, api) {
-    super(...cursor.data)
-    this.api = api
-    this.list = cursor.data
-    this.cursor = cursor.list_cursor
+  constructor (payload, api) {
+    payload = payload || {}
+    super(...(payload.data || []))
+    this._payload = payload
+    this._api = api
+    this._cursor = payload.list_cursor || {}
   }
 
   get hasMore () {
-    return this.cursor.has_more
+    return !!this._cursor.has_more
   }
 
   get limit () {
-    return this.cursor.limit
+    return this._cursor.limit
   }
 
-  next () {
-    if (this.hasMore && this.cursor.next_uri) {
-      return this.api.request('GET', this.cursor.next_uri)
+  get delay () {
+    return this._payload.delay
+  }
+
+  get requestId () {
+    return this._payload.request_id
+  }
+
+  async next () {
+    if (this.hasMore && this._cursor.next_uri) {
+      return this._api.request('GET', this._cursor.next_uri)
     }
-    return new ListCursor({ data: [], list_cursor: this.cursor })
+    return new ListCursor()
   }
 }
 
