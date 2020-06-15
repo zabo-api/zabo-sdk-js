@@ -106,7 +106,7 @@ class API {
       const response = await this.axios(request)
 
       if (response.data && response.data.list_cursor) {
-        return new utils.ListCursor(response.data, this)
+        return new utils.Paginator(response.data, this)
       }
       return response.data
     } catch (err) {
