@@ -179,38 +179,23 @@ const sleep = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
-// Paginator class definition
-class Paginator extends Array {
-  constructor (payload, api) {
-    payload = payload || {}
-    super(...(payload.data || []))
-    this._payload = payload
-    this._api = api
-    this._cursor = payload.list_cursor || {}
+function createPaginator (payload, api) {
+  const { list_cursor = {}, ...data } = payload || {}
+
+  function Paginator (obj) {
+    Object.assign(this, obj || {})
   }
 
-  get hasMore () {
-    return !!this._cursor.has_more
-  }
-
-  get limit () {
-    return this._cursor.limit
-  }
-
-  get delay () {
-    return this._payload.delay
-  }
-
-  get requestId () {
-    return this._payload.request_id
-  }
-
-  async next () {
-    if (this.hasMore && this._cursor.next_uri) {
-      return this._api.request('GET', this._cursor.next_uri)
+  Paginator.prototype.hasMore = list_cursor.has_more
+  Paginator.prototype.limit = list_cursor.limit
+  Paginator.prototype.next = async function () {
+    if (list_cursor.has_more && list_cursor.next_uri) {
+      return api.request('GET', list_cursor.next_uri)
     }
     return new Paginator()
   }
+
+  return new Paginator(data)
 }
 
 module.exports = {
@@ -223,5 +208,5 @@ module.exports = {
   sleep,
   isValidNodeUrl,
   ErrorMessages,
-  Paginator
+  createPaginator
 }
