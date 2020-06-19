@@ -109,16 +109,19 @@ class Users {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     } else if (!accountId) {
       throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-a-specific-balance')
-    } else if (!currencies) {
-      throw new SDKError(400, '[Zabo] Missing `currencies` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     }
 
-    if (Array.isArray(currencies)) {
-      currencies = currencies.join(',')
+    let url = `/users/${userId}/accounts/${accountId}/balances`
+
+    if (currencies) {
+      if (Array.isArray(currencies)) {
+        currencies = currencies.join(',')
+      }
+      url = `${url}?currencies=${currencies}`
     }
 
     try {
-      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/balances?currencies=${currencies}`)
+      return this.api.request('GET', url)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
