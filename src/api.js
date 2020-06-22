@@ -29,11 +29,13 @@ const { SDKError } = require('./err')
 class API {
   constructor (options) {
     Object.assign(this, options)
+
     if (!this.env) {
       throw new SDKError(
         400, '[Zabo] Please provide an \'env\' value when initializing Zabo. More details at: https://zabo.com/docs'
       )
     }
+
     const urls = constants(this.baseUrl, this.connectUrl)[this.env]
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios.create()
@@ -44,12 +46,14 @@ class API {
       resources(this, true).then(resources => { this.resources = resources })
     } else {
       this.connectUrl = urls.CONNECT_BASE_URL
-      this._setEventListeners()
       resources(this, false).then(resources => { this.resources = resources })
     }
+
+    this._onConnectorMessage = this._onMessage.bind(this, 'connector')
+    this._onSocketMessage = this._onMessage.bind(this, 'socket')
   }
 
-  async connect ({ provider, width = 540, height = 960 } = {}) {
+  async connect ({ provider } = {}) {
     let appId = null
 
     if (utils.isNode()) {
@@ -63,11 +67,31 @@ class API {
       this.resources.teams.setId(appId)
       return appId
     } else {
-      this.isWaitingForConnector = true
-      const providerUrl = provider && typeof provider === 'string' ? `/${provider}` : ''
-      const url = `${this.connectUrl}/connect${providerUrl}?client_id=${this.clientId}&origin=${encodeURIComponent(window.location.host)}&zabo_env=${this.env}&zabo_version=${process.env.PACKAGE_VERSION}`
-      this.connector = window.open(url.trim(), 'Zabo Connect', `width=${width},height=${height},resizable,scrollbars=yes,status=1`)
-      this._watchConnector()
+      try {
+        await window.fetch(`${this.connectUrl}/health-check`)
+
+        let url = `${this.connectUrl}/connect`
+        url += (provider && typeof provider === 'string') ? `/${provider}` : ''
+        url += `?client_id=${this.clientId}`
+        url += `&origin=${encodeURIComponent(window.location.host)}`
+        url += `&zabo_env=${this.env}`
+        url += `&zabo_version=${process.env.PACKAGE_VERSION}`
+
+        const teamSession = await this.resources.teams.getSession()
+        if (teamSession) {
+          url += `&otp=${teamSession.one_time_password}`
+        }
+
+        this.iframe = this._appendIframe('zabo-connect-widget')
+        this.connector = window.open(url, this.iframe.name)
+        this.connector.focus()
+
+        this._watchConnector(teamSession)
+      } catch (err) {
+        if (this._onError) {
+          this._onError({ error_type: 500, message: 'Connection refused' })
+        }
+      }
     }
   }
 
@@ -82,12 +106,12 @@ class API {
       const response = await this.axios(request)
 
       if (response.data && response.data.list_cursor) {
-        return new utils.ListCursor(response.data, this)
+        return utils.createPaginator(response.data, this)
       }
       return response.data
     } catch (err) {
       if (err.response) {
-        throw new SDKError(err.response.status, err.response.data.message)
+        throw new SDKError(err.response.status, err.response.data.message, err.response.data.request_id)
       }
       throw new SDKError(500, err.message)
     }
@@ -113,66 +137,160 @@ class API {
     return { method, url, data, headers }
   }
 
-  _setEventListeners () {
-    window.addEventListener('message', this._onPostMessage.bind(this), false)
-  }
+  _watchConnector (teamSession) {
+    this.isWaitingForConnector = true
+    this._setListeners(teamSession)
 
-  _watchConnector () {
-    const interval = setInterval(() => {
+    // Connector timeout (10 minutes)
+    const connectorTimeout = setTimeout(() => {
+      this.isWaitingForConnector = false
+
+      if (this._onError) {
+        this._onError({ error_type: 400, message: 'Connection timeout' })
+      }
+    }, 10 * 60 * 1000)
+
+    // Watch interval
+    const watchInterval = setInterval(() => {
       if (this.isWaitingForConnector) {
         if (this.connector.closed) {
           this.isWaitingForConnector = false
 
+          // Ensure that the connector has been destroyed
+          this._closeConnector()
+
           if (this._onError) {
-            this._onError({ error_type: 400, message: '[Zabo] Error in the connection process: Connection closed' })
+            this._onError({ error_type: 400, message: 'Connection closed' })
           }
         }
       } else {
-        clearInterval(interval)
+        this._removeListeners()
+        clearInterval(watchInterval)
+        clearTimeout(connectorTimeout)
+
+        this._closeConnector()
       }
     }, 1000)
   }
 
-  _onPostMessage (event) {
-    if (event.data.zabo) {
-      this.isWaitingForConnector = false
-      if (event.origin !== this.connectUrl) {
-        throw new SDKError(401, '[Zabo] Unauthorized attempt to call SDK from origin: ' + event.origin + '. Call can only come from: ' + this.connectUrl)
-      }
-    }
+  _setListeners (teamSession) {
+    // Listen to postMessage
+    window.addEventListener('message', this._onConnectorMessage, false)
 
-    if (event.data.zabo && event.data.eventName === 'connectSuccess') {
-      if (event.data.account && event.data.account.token) {
-        this._setSession({
-          key: 'zabosession',
-          value: event.data.account.token,
-          exp_time: event.data.account.exp_time
-        })
-      }
+    // Listen to WebSocket
+    if (window.WebSocket && teamSession) {
+      let wsUrl = new URL(this.baseUrl)
+      wsUrl.protocol = 'wss:'
+      wsUrl = wsUrl.toString() + '/ws'
+      wsUrl += `?client_id=${this.clientId}`
+      wsUrl += `&otp=${teamSession.one_time_password}`
 
-      if (this.resources.accounts && this.resources.transactions) {
-        this.resources.accounts._setAccount(event.data.account)
-        this.resources.transactions._setAccount(event.data.account)
-      }
-
-      if (this._onConnection) {
-        this._onConnection(event.data.account)
-      }
-    }
-
-    if (event.data.zabo && event.data.eventName === 'connectError') {
-      if (this._onError) {
-        this._onError({ error_type: 400, message: '[Zabo] Error in the connection process: ' + event.data.error.message })
-      } else {
-        throw new SDKError(400, '[Zabo] Error in the connection process: ' + event.data.error.message)
+      try {
+        this.ws = new window.WebSocket(wsUrl)
+        this.ws.onmessage = this._onSocketMessage
+      } catch (err) {
+        console.warn('[Zabo] Error establishing WebSocket connection.', err.message)
       }
     }
   }
 
-  _setSession (cookie) {
+  _removeListeners () {
+    window.removeEventListener('message', this._onConnectorMessage, false)
+
+    if (this.ws) {
+      this.ws.close()
+      this.ws = null
+    }
+  }
+
+  _onMessage (emitter, { origin, data }) {
+    try {
+      data = JSON.parse(data)
+    } catch (err) {}
+
+    if (data.zabo) {
+      if (origin !== this.connectUrl && !(/\.zabo\.com$/).test(new URL(origin).hostname)) {
+        throw new SDKError(401, '[Zabo] Unauthorized attempt to call SDK from origin: ' + origin)
+      }
+
+      if (emitter === 'connector') {
+        this.isWaitingForConnector = false
+      }
+
+      switch (data.eventName) {
+        case 'connectSuccess': {
+          if (data.account && data.account.token) {
+            this._setAccountSession({
+              key: 'zabosession',
+              value: data.account.token,
+              exp_time: data.account.exp_time
+            })
+          }
+
+          if (this.resources.accounts && this.resources.transactions) {
+            this.resources.accounts._setAccount(data.account)
+            this.resources.transactions._setAccount(data.account)
+          }
+
+          if (this._onConnection) {
+            this._onConnection(data.account)
+          }
+
+          break
+        }
+
+        case 'connectError': {
+          if (this._onError) {
+            this._onError(data.error)
+          } else {
+            throw new SDKError(data.error.error_type, data.error.message, data.error.request_id)
+          }
+
+          break
+        }
+
+        case 'connectClose': {
+          this._closeConnector()
+          break
+        }
+      }
+    }
+  }
+
+  _setAccountSession (cookie) {
     const sExpires = '; expires=' + cookie.exp_time
     document.cookie = encodeURIComponent(cookie.key) + '=' + encodeURIComponent(cookie.value) + sExpires
     return true
+  }
+
+  _appendIframe (name) {
+    let iframe = document.getElementsByName(name)[0]
+
+    if (!iframe) {
+      iframe = document.createElement('iframe')
+      iframe.setAttribute('style', 'position:fixed; top:0; left:0; right:0; bottom:0; z-index:2147483647;')
+      iframe.style.width = '100%'
+      iframe.style.height = '100%'
+      iframe.frameBorder = 0
+      iframe.allow = 'usb *'
+      iframe.name = name
+
+      document.body.appendChild(iframe)
+    }
+
+    iframe.style.display = 'block'
+    return iframe
+  }
+
+  _closeConnector () {
+    if (!this.connector.closed) {
+      this.connector.close()
+    }
+
+    if (this.iframe) {
+      this.iframe.style.display = 'none'
+      this.iframe.src = ''
+    }
   }
 }
 

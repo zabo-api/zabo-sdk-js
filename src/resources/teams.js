@@ -44,7 +44,7 @@ class Teams {
       try {
         this.data = await this.api.request('GET', `/teams/${this.id}`)
       } catch (err) {
-        throw new SDKError(err.error_type, err.message)
+        throw new SDKError(err.error_type, err.message, err.request_id)
       }
     } else {
       if (!this.api.clientId) {
@@ -55,11 +55,22 @@ class Teams {
         const origin = encodeURIComponent(window ? window.location.host : '')
         this.data = await this.api.request('GET', `/teams/info?client_id=${this.api.clientId}&origin=${origin}`, {}, true)
       } catch (err) {
-        throw new SDKError(err.error_type, err.message)
+        throw new SDKError(err.error_type, err.message, err.request_id)
       }
     }
 
     return this.data
+  }
+
+  async getSession () {
+    const session = this.data && this.data.session
+
+    if (session && new Date(session.expires_at) > Date.now()) {
+      return session
+    }
+
+    const team = await this.get()
+    return team.session
   }
 }
 

@@ -30,7 +30,7 @@ class Currencies {
     try {
       return this.api.request('GET', `/currencies?limit=${limit}&cursor=${cursor}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -42,7 +42,7 @@ class Currencies {
     try {
       return this.api.request('GET', `/currencies/${currency}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 

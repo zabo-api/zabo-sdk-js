@@ -179,29 +179,23 @@ const sleep = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
-// ListCursor class definition
-class ListCursor extends Array {
-  constructor (cursor = {}, api) {
-    super(...cursor.data)
-    this.api = api
-    this.list = cursor.data
-    this.cursor = cursor.list_cursor
+function createPaginator (payload, api) {
+  const { list_cursor = {}, ...data } = payload || {}
+
+  function Paginator (obj) {
+    Object.assign(this, obj || {})
   }
 
-  get hasMore () {
-    return this.cursor.has_more
-  }
-
-  get limit () {
-    return this.cursor.limit
-  }
-
-  next () {
-    if (this.hasMore && this.cursor.next_uri) {
-      return this.api.request('GET', this.cursor.next_uri)
+  Paginator.prototype.hasMore = list_cursor.has_more
+  Paginator.prototype.limit = list_cursor.limit
+  Paginator.prototype.next = async function () {
+    if (list_cursor.has_more && list_cursor.next_uri) {
+      return api.request('GET', list_cursor.next_uri)
     }
-    return new ListCursor({ data: [], list_cursor: this.cursor })
+    return new Paginator()
   }
+
+  return new Paginator(data)
 }
 
 module.exports = {
@@ -214,5 +208,5 @@ module.exports = {
   sleep,
   isValidNodeUrl,
   ErrorMessages,
-  ListCursor
+  createPaginator
 }

@@ -47,7 +47,7 @@ class Transactions {
       try {
         return this.api.request('GET', `/users/${userId}/accounts/${accountId}/transactions/${txId}`)
       } catch (err) {
-        throw new SDKError(err.error_type, err.message)
+        throw new SDKError(err.error_type, err.message, err.request_id)
       }
     }
 
@@ -60,7 +60,7 @@ class Transactions {
     try {
       return this.api.request('GET', `/accounts/${this.account.id}/transactions/${txId}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -105,7 +105,7 @@ class Transactions {
     try {
       return this.api.request('GET', url)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 

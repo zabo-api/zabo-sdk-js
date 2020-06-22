@@ -39,7 +39,7 @@ class Accounts {
 
       return this.data
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -63,7 +63,7 @@ class Accounts {
       this._setAccount(account)
       return account
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -84,7 +84,7 @@ class Accounts {
     try {
       return this.api.request('GET', url)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -113,7 +113,7 @@ class Accounts {
     try {
       return this.api.request('POST', `/accounts/${this.id}/deposit-addresses?currency=${currency}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
@@ -127,7 +127,7 @@ class Accounts {
     try {
       return this.api.request('GET', `/accounts/${this.id}/deposit-addresses?currency=${currency}`)
     } catch (err) {
-      throw new SDKError(err.error_type, err.message)
+      throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 }
