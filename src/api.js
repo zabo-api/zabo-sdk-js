@@ -213,12 +213,12 @@ class API {
         throw new SDKError(401, '[Zabo] Unauthorized attempt to call SDK from origin: ' + origin)
       }
 
-      if (emitter === 'connector') {
-        this.isWaitingForConnector = false
-      }
-
       switch (data.eventName) {
         case 'connectSuccess': {
+          if (emitter === 'connector') {
+            this.isWaitingForConnector = false
+          }
+
           if (data.account && data.account.token) {
             this._setAccountSession({
               key: 'zabosession',
@@ -240,6 +240,10 @@ class API {
         }
 
         case 'connectError': {
+          if (emitter === 'connector') {
+            this.isWaitingForConnector = false
+          }
+
           if (this._onError) {
             this._onError(data.error)
           } else {
@@ -250,8 +254,18 @@ class API {
         }
 
         case 'connectClose': {
+          if (emitter === 'connector') {
+            this.isWaitingForConnector = false
+          }
+
           this._closeConnector()
           break
+        }
+
+        default: {
+          if (this._onEvent) {
+            this._onEvent(data.eventName, data.metadata || {})
+          }
         }
       }
     }

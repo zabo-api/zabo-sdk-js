@@ -194,6 +194,12 @@ class ZaboSDK {
     return this
   }
 
+  onEvent (fn) {
+    if (typeof fn !== 'function') { return }
+    this.api._onEvent = fn.bind(this)
+    return this
+  }
+
   getTeam () {
     return this.api.resources.teams.get()
   }
