@@ -1,4 +1,11 @@
 module.exports = {
+  blockchainsBlock: require('./blockchains/block.json'),
+  blockchainsBalances: require('./blockchains/balances.json'),
+  blockchainsContract: require('./blockchains/contract.json'),
+  blockchainsTokenTransfers: require('./blockchains/token-transfers.json'),
+  blockchainsTokens: require('./blockchains/tokens.json'),
+  blockchainsTransaction: require('./blockchains/transaction.json'),
+  blockchainsTransactions: require('./blockchains/transactions.json'),
   account: require('./account.json'),
   address: require('./address.json'),
   team: require('./team.json'),
