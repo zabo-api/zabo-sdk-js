@@ -46,10 +46,14 @@ function getZaboSession () {
   return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent('zabosession').replace(/[-.+*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null
 }
 
-function validateListParameters (limit, cursor) {
+function validateLimitParameter (limit) {
   if (limit && limit > 50) {
     throw new SDKError(400, ErrorMessages.invalidLimit)
   }
+}
+
+function validateListParameters (limit, cursor) {
+  validateLimitParameter(limit)
   if (cursor && !uuidValidate(cursor, 4)) {
     throw new SDKError(400, ErrorMessages.invalidUUID)
   }
