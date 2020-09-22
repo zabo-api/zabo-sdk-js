@@ -65,7 +65,7 @@ class Transactions {
   }
 
   async getList ({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
-    utils.validateLimitParameter(limit)
+    utils.validateListParameters(limit)
 
     let url = null
 
