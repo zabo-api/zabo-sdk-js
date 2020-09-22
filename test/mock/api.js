@@ -14,6 +14,30 @@ class MockApi {
   request (method, path, data = {}) {
     const map = {
       GET: [{
+        regexp: /\/blockchains\/.+\/blocks\/.+/,
+        data: dummy.blockchainsBlock
+      }, {
+        regexp: /\/blockchains\/.+\/contracts\/.+/,
+        data: dummy.blockchainsContract
+      }, {
+        regexp: /\/blockchains\/.+\/tokens\/.+/,
+        data: dummy.blockchainsTokens
+      }, {
+        regexp: /\/blockchains\/.+\/addresses\/.+\/balances/,
+        data: dummy.blockchainsBalances
+      }, {
+        regexp: /\/blockchains\/.+\/transactions\/.+/,
+        data: dummy.blockchainsTransaction
+      }, {
+        regexp: /\/blockchains\/.+\/addresses\/.+\/transactions/,
+        data: dummy.blockchainsTransactions
+      }, {
+        regexp: /\/blockchains\/.+\/token-transfers\/.+/,
+        data: dummy.blockchainsTokenTransfers
+      }, {
+        regexp: /\/blockchains\/.+\/addresses\/.+\/token-transfers/,
+        data: dummy.blockchainsTokenTransfers
+      }, {
         regexp: /\/teams\/.+/,
         data: dummy.team
       }, {

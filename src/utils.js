@@ -55,6 +55,14 @@ function validateListParameters (limit, cursor) {
   }
 }
 
+function validateEnumParameter (name, value, options) {
+  if (typeof value === 'undefined') {
+    throw new SDKError(400, `[Zabo] Missing \`${name}\` parameter.`)
+  } else if (!options.includes(value)) {
+    throw new SDKError(400, `[Zabo] Invalid \`${name}\` parameter. Available options: "${options.join('", "')}".`)
+  }
+}
+
 function isValidNodeUrl (nodeUrl) {
   if (!nodeUrl) {
     return false
@@ -202,6 +210,7 @@ module.exports = {
   generateHMACSignature,
   getZaboSession,
   validateListParameters,
+  validateEnumParameter,
   getTxObjectForEthereumRequest,
   isBrowser,
   isNode,

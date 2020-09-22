@@ -20,6 +20,7 @@ module.exports = async (api, isNode) => {
     return {
       users: require('./users')(api),
       teams: require('./teams')(api),
+      blockchains: require('./blockchains')(api),
       currencies: require('./currencies')(api),
       transactions: require('./transactions')(api),
       providers: require('./providers')(api)
