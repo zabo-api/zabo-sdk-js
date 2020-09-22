@@ -205,6 +205,7 @@ function createPaginator (payload, api) {
 module.exports = {
   generateHMACSignature,
   getZaboSession,
+  validateLimitParameter,
   validateListParameters,
   getTxObjectForEthereumRequest,
   isBrowser,
