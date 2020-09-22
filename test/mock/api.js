@@ -17,10 +17,16 @@ class MockApi {
         regexp: /\/blockchains\/.+\/blocks\/.+/,
         data: dummy.blockchainsBlock
       }, {
+        regexp: /\/blockchains\/.+\/blocks/,
+        data: dummy.blockchainsBlock
+      }, {
         regexp: /\/blockchains\/.+\/contracts\/.+/,
         data: dummy.blockchainsContract
       }, {
         regexp: /\/blockchains\/.+\/tokens\/.+/,
+        data: dummy.blockchainsTokens
+      }, {
+        regexp: /\/blockchains\/.+\/tokens/,
         data: dummy.blockchainsTokens
       }, {
         regexp: /\/blockchains\/.+\/addresses\/.+\/balances/,

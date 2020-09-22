@@ -51,17 +51,15 @@ describe('Zabo SDK Blockchains Resource', () => {
     response.message.should.containEql('blockchain')
   })
 
-  it('blockchains.getBlock() should fail if `blockNumber` is not provided', async function () {
-    const response = await blockchains.getBlock('ethereum')
-      .should.be.rejected()
-
-    response.should.be.an.Error()
-    response.error_type.should.be.equal(400)
-    response.message.should.containEql('blockNumber')
-  })
-
   it('blockchains.getBlock() should return one block', async function () {
     const response = await blockchains.getBlock('ethereum', 0)
+
+    response.should.be.ok()
+    response.should.have.properties(['number', 'hash', 'size', 'gas_limit', 'gas_used', 'transaction_count', 'timestamp'])
+  })
+
+  it('blockchains.getBlock() should return latest block if `blockNumber` is missing', async function () {
+    const response = await blockchains.getBlock('ethereum')
 
     response.should.be.ok()
     response.should.have.properties(['number', 'hash', 'size', 'gas_limit', 'gas_used', 'transaction_count', 'timestamp'])
@@ -139,16 +137,15 @@ describe('Zabo SDK Blockchains Resource', () => {
     response.message.should.containEql('blockchain')
   })
 
-  it('blockchains.getTokens() should fail if `tokenName` is not provided', async function () {
+  it('blockchains.getTokens() should return the list of tokens', async function () {
     const response = await blockchains.getTokens('ethereum')
-      .should.be.rejected()
 
-    response.should.be.an.Error()
-    response.error_type.should.be.equal(400)
-    response.message.should.containEql('tokenName')
+    response.should.be.ok()
+    response.data.should.be.an.Array()
+    response.data[0].should.have.properties(['contract', 'ticker', 'name', 'decimals', 'total_supply', 'is_erc20'])
   })
 
-  it('blockchains.getTokens() should return the list of tokens', async function () {
+  it('blockchains.getTokens() should return the list of tokens by name', async function () {
     const response = await blockchains.getTokens('ethereum', 'Wrapped Ether')
 
     response.should.be.ok()

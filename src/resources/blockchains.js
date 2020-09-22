@@ -27,12 +27,13 @@ class Blockchains {
   async getBlock (blockchain, blockNumber) {
     utils.validateEnumParameter('blockchain', blockchain, ['bitcoin', 'ethereum'])
 
-    if (typeof blockNumber === 'undefined') {
-      throw new SDKError(400, '[Zabo] Missing `blockNumber` parameter. See: https://zabo.com/docs#get-a-block')
+    let url = `/blockchains/${blockchain}/blocks`
+    if (typeof blockNumber !== 'undefined') {
+      url += '/' + blockNumber
     }
 
     try {
-      return this.api.request('GET', `/blockchains/${blockchain}/blocks/${blockNumber}`)
+      return this.api.request('GET', url)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
@@ -55,12 +56,13 @@ class Blockchains {
   async getTokens (blockchain, tokenName) {
     utils.validateEnumParameter('blockchain', blockchain, ['ethereum'])
 
-    if (typeof tokenName === 'undefined') {
-      throw new SDKError(400, '[Zabo] Missing `tokenName` parameter. See: https://zabo.com/docs#get-ethereum-tokens')
+    let url = `/blockchains/${blockchain}/tokens`
+    if (typeof tokenName !== 'undefined') {
+      url += '/' + tokenName
     }
 
     try {
-      return this.api.request('GET', `/blockchains/${blockchain}/tokens/${tokenName}`)
+      return this.api.request('GET', url)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
