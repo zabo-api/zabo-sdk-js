@@ -95,15 +95,6 @@ describe('Zabo SDK Transactions Resource', () => {
     response.message.should.containEql('limit')
   })
 
-  it('transactions.getList() should fail if an invalid `cursor` is provided', async function () {
-    const response = await transactions.getList({ cursor: 'not_a_valid_timestamp' }).should.be.rejected()
-
-    response.should.be.an.Error()
-
-    response.error_type.should.be.equal(400)
-    response.message.should.containEql('cursor')
-  })
-
   it('transactions.getList() should return the list of transactions', async function () {
     const data = {
       userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
