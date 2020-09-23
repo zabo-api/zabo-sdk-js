@@ -53,6 +53,18 @@ class MockApi {
         regexp: /\/transfer-request/,
         data: dummy.transferRequest
       }, {
+        regexp: /\/accounts\/.+\/trading-symbols/,
+        data: dummy.tradingSymbols
+      }, {
+        regexp: /\/accounts\/.+\/tickers\/.+/,
+        data: dummy.tradingTicker
+      }, {
+        regexp: /\/accounts\/.+\/orders\/.+/,
+        data: dummy.tradingOrder
+      }, {
+        regexp: /\/accounts\/.+\/orders/,
+        data: dummy.tradingOrders
+      }, {
         regexp: /\/accounts\/.+\/balances/,
         data: dummy.balances
       }, {
@@ -96,6 +108,9 @@ class MockApi {
         regexp: /\/accounts\/.+\/deposit-addresses/,
         data: dummy.address
       }, {
+        regexp: /\/accounts\/.+\/orders/,
+        data: dummy.tradingOrder
+      }, {
         regexp: /\/users\/.+\/accounts\/.+\/transactions/,
         data: {
           ...dummy.transaction,
@@ -133,6 +148,16 @@ class MockApi {
         data: {
           ...dummy.user,
           accounts: dummy.user.accounts.filter(a => !path.includes(a.id))
+        }
+      }, {
+        regexp: /\/accounts\/.+\/orders\/.+/,
+        data: {
+          data: [path.split('orders/')[1]]
+        }
+      }, {
+        regexp: /\/accounts\/.+\/orders/,
+        data: {
+          data: dummy.tradingOrders.data.map(o => o.id)
         }
       }]
     }

@@ -1,0 +1,18 @@
+{
+  "base_currency": "BTC",
+  "quote_currency": "USD",
+  "side": "buy",
+  "size": "0.02100000",
+  "price": "10522.00000000",
+  "time_in_force": "GTC",
+  "post_only": true,
+  "id": "c1bea143-15b1-4ae5-a33f-a25f32937559",
+  "type": "limit",
+  "status": "FILLED",
+  "created_at": 1599077719794,
+  "done_at": 1599077719794,
+  "done_reason": "FILLED",
+  "filled_size": "0.02100000",
+  "fill_fees": "0.0000000000000000",
+  "settled": true
+}
