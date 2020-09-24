@@ -86,7 +86,7 @@ class Trading {
     }
   }
 
-  async createOrder ({ baseCurrency, quoteCurrency, side, price, size, funds, postOnly, timeInForce, timeToLive } = {}) {
+  async createOrder ({ baseCurrency, quoteCurrency, buyOrSell, priceLimit, baseAmount, quoteAmount, provideLiquidityOnly, timeInForce, ttl } = {}) {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!baseCurrency) {
@@ -95,20 +95,20 @@ class Trading {
       throw new SDKError(400, '[Zabo] Missing `quoteCurrency` parameter. See: https://zabo.com/docs')
     }
 
-    utils.validateEnumParameter('side', side, ['buy', 'sell'])
+    utils.validateEnumParameter('buyOrSell', buyOrSell, ['buy', 'sell'])
     utils.validateEnumParameter('timeInForce', timeInForce, ['GTC', 'GTT', 'IOC', 'FOK'], true)
 
     try {
       return this.api.request('POST', `/accounts/${this.account.id}/orders`, {
         base_currency: baseCurrency,
         quote_currency: quoteCurrency,
-        side: side,
-        price: price,
-        size: size,
-        funds: funds,
-        post_only: postOnly,
+        buy_or_sell: buyOrSell,
+        price_limit: priceLimit,
+        base_amount: baseAmount,
+        quote_amount: quoteAmount,
+        provide_liquidity_only: provideLiquidityOnly,
         time_in_force: timeInForce,
-        ttl: timeToLive
+        ttl: ttl
       })
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
