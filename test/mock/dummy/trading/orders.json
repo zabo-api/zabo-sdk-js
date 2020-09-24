@@ -1,16 +1,24 @@
 {
   "data": [
     {
-      "base_currency":"BTC",
-      "quote_currency":"USD",
-      "side": "buy",
-      "id": "c1bea143-15b1-4ae5-a33f-a25f32937559"
-    },
-    {
-      "base_currency":"ETH",
-      "quote_currency":"USD",
-      "side": "sell",
-      "id": "34b6c185-c5fa-330c-6530-bc3693c5b7e9"
+      "id": "4545edd1-c9bb-4a50-9304-dd737f2c37c1",
+      "base_currency": "ETH",
+      "quote_currency": "USD",
+      "base_amount": "0.02000000",
+      "buy_or_sell": "buy",
+      "quote_amount": "",
+      "price": "1000.00000000",
+      "time_in_force": "GTC",
+      "ttl": 0,
+      "provide_liquidity_only": false,
+      "type": "limit",
+      "status": "NEW",
+      "created_at": 1600967765356,
+      "done_at": 0,
+      "done_reason": "",
+      "filled_size": "0.00000000",
+      "fill_fees": "0.0000000000000000",
+      "settled": false
     }
   ]
 }
