@@ -3,6 +3,27 @@
 const mockApi = require('../mock/api.js')
 require('should')
 
+const ORDER_PROPERTIES = [
+  'id',
+  'base_currency',
+  'quote_currency',
+  'base_amount',
+  'buy_or_sell',
+  'quote_amount',
+  'price',
+  'time_in_force',
+  'ttl',
+  'provide_liquidity_only',
+  'type',
+  'status',
+  'done_at',
+  'done_reason',
+  'filled_size',
+  'fill_fees',
+  'settled',
+  'created_at'
+]
+
 describe('Zabo SDK Trading Resource', () => {
   let trading
 
@@ -80,7 +101,7 @@ describe('Zabo SDK Trading Resource', () => {
     const response = await trading.getTickerInfo({ baseCurrency: 'BTC', quoteCurrency: 'USD' })
 
     response.should.be.ok()
-    response.should.have.properties(['price', 'size', 'ask', 'ask_size', 'bid', 'bid_size', 'volume', 'timestamp'])
+    response.should.have.properties(['last_price', 'last_size', 'ask', 'ask_size', 'bid', 'bid_size', 'volume', 'timestamp'])
   })
 
   // trading.getOrders()
@@ -103,7 +124,7 @@ describe('Zabo SDK Trading Resource', () => {
 
     list.should.be.ok()
     list.data.should.be.an.Array()
-    list.data[0].should.have.properties(['base_currency', 'quote_currency', 'side', 'id'])
+    list.data[0].should.have.properties(ORDER_PROPERTIES)
   })
 
   // trading.getOrder()
@@ -145,7 +166,7 @@ describe('Zabo SDK Trading Resource', () => {
     const response = await trading.getOrder({ orderId: 'c1bea143-15b1-4ae5-a33f-a25f32937559' })
 
     response.should.be.ok()
-    response.should.have.properties(['base_currency', 'quote_currency', 'side', 'size', 'price', 'time_in_force', 'post_only', 'id', 'type', 'status', 'created_at', 'done_at', 'done_reason', 'filled_size', 'fill_fees', 'settled'])
+    response.should.have.properties(ORDER_PROPERTIES)
   })
 
   // trading.createOrder()
@@ -166,11 +187,11 @@ describe('Zabo SDK Trading Resource', () => {
   it('trading.createOrder() should fail if `baseCurrency` is missing', async function () {
     const response = await trading.createOrder({
       quoteCurrency: 'USD',
-      side: 'buy',
-      size: '0.001',
-      price: '11537.56',
+      buyOrSell: 'buy',
+      baseAmount: '0.001',
+      priceLimit: '11537.56',
       timeInForce: 'GTC',
-      postOnly: true
+      provideLiquidityOnly: true
     })
       .should.be.rejected()
 
@@ -183,11 +204,11 @@ describe('Zabo SDK Trading Resource', () => {
   it('trading.createOrder() should fail if `quoteCurrency` is missing', async function () {
     const response = await trading.createOrder({
       baseCurrency: 'BTC',
-      side: 'buy',
-      size: '0.001',
-      price: '11537.56',
+      buyOrSell: 'buy',
+      baseAmount: '0.001',
+      priceLimit: '11537.56',
       timeInForce: 'GTC',
-      postOnly: true
+      provideLiquidityOnly: true
     })
       .should.be.rejected()
 
@@ -197,50 +218,50 @@ describe('Zabo SDK Trading Resource', () => {
     response.message.should.containEql('quoteCurrency')
   })
 
-  it('trading.createOrder() should fail if `side` is missing', async function () {
+  it('trading.createOrder() should fail if `buyOrSell` is missing', async function () {
     const response = await trading.createOrder({
       baseCurrency: 'BTC',
       quoteCurrency: 'USD',
-      size: '0.001',
-      price: '11537.56',
+      baseAmount: '0.001',
+      priceLimit: '11537.56',
       timeInForce: 'GTC',
-      postOnly: true
+      provideLiquidityOnly: true
     })
       .should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
     response.message.should.containEql('Missing')
-    response.message.should.containEql('side')
+    response.message.should.containEql('buyOrSell')
   })
 
-  it('trading.createOrder() should fail if `side` is not valid', async function () {
+  it('trading.createOrder() should fail if `buyOrSell` is not valid', async function () {
     const response = await trading.createOrder({
       baseCurrency: 'BTC',
       quoteCurrency: 'USD',
-      side: 'trade',
-      size: '0.001',
-      price: '11537.56',
+      buyOrSell: 'trade',
+      baseAmount: '0.001',
+      priceLimit: '11537.56',
       timeInForce: 'GTC',
-      postOnly: true
+      provideLiquidityOnly: true
     })
       .should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
     response.message.should.containEql('Invalid')
-    response.message.should.containEql('side')
+    response.message.should.containEql('buyOrSell')
   })
 
   it('trading.createOrder() should fail if `timeInForce` is not valid', async function () {
     const response = await trading.createOrder({
       baseCurrency: 'BTC',
       quoteCurrency: 'USD',
-      side: 'buy',
-      size: '0.001',
-      price: '11537.56',
+      buyOrSell: 'buy',
+      baseAmount: '0.001',
+      priceLimit: '11537.56',
       timeInForce: 'ABC',
-      postOnly: true
+      provideLiquidityOnly: true
     })
       .should.be.rejected()
 
@@ -254,15 +275,15 @@ describe('Zabo SDK Trading Resource', () => {
     const response = await trading.createOrder({
       baseCurrency: 'BTC',
       quoteCurrency: 'USD',
-      side: 'buy',
-      size: '0.001',
-      price: '11537.56',
+      buyOrSell: 'buy',
+      baseAmount: '0.001',
+      priceLimit: '11537.56',
       timeInForce: 'GTC',
-      postOnly: true
+      provideLiquidityOnly: true
     })
 
     response.should.be.ok()
-    response.should.have.properties(['base_currency', 'quote_currency', 'side', 'size', 'price', 'time_in_force', 'post_only', 'id', 'type', 'status', 'created_at', 'done_at', 'done_reason', 'filled_size', 'fill_fees', 'settled'])
+    response.should.have.properties(ORDER_PROPERTIES)
   })
 
   // trading.cancelOrders()
