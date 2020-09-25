@@ -35,6 +35,7 @@ module.exports = async (api, isNode) => {
   const resources = {
     teams: require('./teams')(api),
     accounts: accounts,
+    trading: require('./trading')(api),
     currencies: require('./currencies')(api),
     transactions: require('./transactions')(api),
     providers: require('./providers')(api)

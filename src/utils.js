@@ -55,8 +55,8 @@ function validateListParameters (limit, cursor) {
   }
 }
 
-function validateEnumParameter (name, value, options) {
-  if (typeof value === 'undefined') {
+function validateEnumParameter (name, value, options, optional = false) {
+  if (!optional && typeof value === 'undefined') {
     throw new SDKError(400, `[Zabo] Missing \`${name}\` parameter.`)
   } else if (!options.includes(value)) {
     throw new SDKError(400, `[Zabo] Invalid \`${name}\` parameter. Available options: "${options.join('", "')}".`)

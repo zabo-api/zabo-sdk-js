@@ -1,0 +1,21 @@
+{
+  "id": "4545edd1-c9bb-4a50-9304-dd737f2c37c1",
+  "base_currency": "ETH",
+  "quote_currency": "USD",
+  "base_amount": "0.02000000",
+  "buy_or_sell": "buy",
+  "quote_amount": "",
+  "price": "1000.00000000",
+  "time_in_force": "GTC",
+  "ttl": 0,
+  "provide_liquidity_only": false,
+  "type": "limit",
+  "status": "NEW",
+  "done_at": 0,
+  "done_reason": "",
+  "filled_size": "0.00000000",
+  "fill_fees": "0.0000000000000000",
+  "settled": false,
+  "created_at": 1600967765356,
+  "request_id": "9fa5155e-0189-40b0-a9be-718705a842f3"
+}

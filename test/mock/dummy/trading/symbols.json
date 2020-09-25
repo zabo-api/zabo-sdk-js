@@ -1,0 +1,12 @@
+{ 
+  "data": [
+    {
+      "base_currency": "BTC",
+      "quote_currency": "USD"
+    },
+    {
+      "base_currency": "LTC",
+      "quote_currency": "BTC"
+    }
+  ]
+}

@@ -227,6 +227,7 @@ class API {
           if (this.resources.accounts && this.resources.transactions) {
             this.resources.accounts._setAccount(data.account)
             this.resources.transactions._setAccount(data.account)
+            this.resources.trading._setAccount(data.account)
           }
 
           this._triggerCallback(CONNECTION_SUCCESS, data.account)
