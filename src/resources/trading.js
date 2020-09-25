@@ -46,9 +46,9 @@ class Trading {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!baseCurrency) {
-      throw new SDKError(400, '[Zabo] Missing `baseCurrency` parameter. See: https://zabo.com/docs')
+      throw new SDKError(400, '[Zabo] Missing `baseCurrency` parameter. See: https://zabo.com/docs/#get-ticker-info')
     } else if (!quoteCurrency) {
-      throw new SDKError(400, '[Zabo] Missing `quoteCurrency` parameter. See: https://zabo.com/docs')
+      throw new SDKError(400, '[Zabo] Missing `quoteCurrency` parameter. See: https://zabo.com/docs/#get-ticker-info')
     }
 
     try {
@@ -74,9 +74,9 @@ class Trading {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!orderId) {
-      throw new SDKError(400, '[Zabo] Missing `orderId` parameter. See: https://zabo.com/docs')
+      throw new SDKError(400, '[Zabo] Missing `orderId` parameter. See: https://zabo.com/docs/#get-an-order')
     } else if (!uuidValidate(orderId, 4)) {
-      throw new SDKError(400, '[Zabo] `orderId` must be a valid UUID v4. See: https://zabo.com/docs')
+      throw new SDKError(400, '[Zabo] `orderId` must be a valid UUID v4. See: https://zabo.com/docs/#get-an-order')
     }
 
     try {
@@ -90,9 +90,15 @@ class Trading {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!baseCurrency) {
-      throw new SDKError(400, '[Zabo] Missing `baseCurrency` parameter. See: https://zabo.com/docs')
+      throw new SDKError(400, '[Zabo] Missing `baseCurrency` parameter. See: https://zabo.com/docs/#place-new-order')
     } else if (!quoteCurrency) {
-      throw new SDKError(400, '[Zabo] Missing `quoteCurrency` parameter. See: https://zabo.com/docs')
+      throw new SDKError(400, '[Zabo] Missing `quoteCurrency` parameter. See: https://zabo.com/docs/#place-new-order')
+    } else if (typeof baseAmount !== 'undefined' && baseAmount <= 0) {
+      throw new SDKError(400, '[Zabo] `baseAmount` must be greater than 0. See: https://zabo.com/docs/#place-new-order')
+    } else if (typeof quoteAmount !== 'undefined' && quoteAmount <= 0) {
+      throw new SDKError(400, '[Zabo] `quoteAmount` must be greater than 0. See: https://zabo.com/docs/#place-new-order')
+    } else if (typeof priceLimit !== 'undefined' && priceLimit <= 0) {
+      throw new SDKError(400, '[Zabo] `priceLimit` must be greater than 0. See: https://zabo.com/docs/#place-new-order')
     }
 
     utils.validateEnumParameter('buyOrSell', buyOrSell, ['buy', 'sell'])
@@ -131,9 +137,9 @@ class Trading {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!orderId) {
-      throw new SDKError(400, '[Zabo] Missing `orderId` parameter. See: https://zabo.com/docs')
+      throw new SDKError(400, '[Zabo] Missing `orderId` parameter. See: https://zabo.com/docs/#cancel-an-order')
     } else if (!uuidValidate(orderId, 4)) {
-      throw new SDKError(400, '[Zabo] `orderId` must be a valid UUID v4. See: https://zabo.com/docs')
+      throw new SDKError(400, '[Zabo] `orderId` must be a valid UUID v4. See: https://zabo.com/docs/#cancel-an-order')
     }
 
     try {
