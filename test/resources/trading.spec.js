@@ -218,6 +218,102 @@ describe('Zabo SDK Trading Resource', () => {
     response.message.should.containEql('quoteCurrency')
   })
 
+  it('trading.createOrder() should fail if `baseAmount` is 0', async function () {
+    const response = await trading.createOrder({
+      baseCurrency: 'BTC',
+      quoteCurrency: 'USD',
+      buyOrSell: 'buy',
+      baseAmount: '0',
+      timeInForce: 'GTC'
+    })
+      .should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('greater')
+    response.message.should.containEql('baseAmount')
+  })
+
+  it('trading.createOrder() should fail if `baseAmount` is negative', async function () {
+    const response = await trading.createOrder({
+      baseCurrency: 'BTC',
+      quoteCurrency: 'USD',
+      buyOrSell: 'buy',
+      baseAmount: '-1',
+      timeInForce: 'GTC'
+    })
+      .should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('greater')
+    response.message.should.containEql('baseAmount')
+  })
+
+  it('trading.createOrder() should fail if `quoteAmount` is 0', async function () {
+    const response = await trading.createOrder({
+      baseCurrency: 'BTC',
+      quoteCurrency: 'USD',
+      buyOrSell: 'buy',
+      quoteAmount: '0',
+      timeInForce: 'GTC'
+    })
+      .should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('greater')
+    response.message.should.containEql('quoteAmount')
+  })
+
+  it('trading.createOrder() should fail if `quoteAmount` is negative', async function () {
+    const response = await trading.createOrder({
+      baseCurrency: 'BTC',
+      quoteCurrency: 'USD',
+      buyOrSell: 'buy',
+      quoteAmount: '-1',
+      timeInForce: 'GTC'
+    })
+      .should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('greater')
+    response.message.should.containEql('quoteAmount')
+  })
+
+  it('trading.createOrder() should fail if `priceLimit` is 0', async function () {
+    const response = await trading.createOrder({
+      baseCurrency: 'BTC',
+      quoteCurrency: 'USD',
+      buyOrSell: 'buy',
+      priceLimit: '0',
+      timeInForce: 'GTC'
+    })
+      .should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('greater')
+    response.message.should.containEql('priceLimit')
+  })
+
+  it('trading.createOrder() should fail if `priceLimit` is negative', async function () {
+    const response = await trading.createOrder({
+      baseCurrency: 'BTC',
+      quoteCurrency: 'USD',
+      buyOrSell: 'buy',
+      priceLimit: '-1',
+      timeInForce: 'GTC'
+    })
+      .should.be.rejected()
+
+    response.should.be.an.Error()
+    response.error_type.should.be.equal(400)
+    response.message.should.containEql('greater')
+    response.message.should.containEql('priceLimit')
+  })
+
   it('trading.createOrder() should fail if `buyOrSell` is missing', async function () {
     const response = await trading.createOrder({
       baseCurrency: 'BTC',
