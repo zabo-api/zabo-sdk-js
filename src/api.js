@@ -25,6 +25,9 @@ const resources = require('./resources')
 
 const { SDKError } = require('./err')
 
+const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS'
+const CONNECTION_FAILURE = 'CONNECTION_FAILURE'
+
 // Main API class definition
 class API {
   constructor (options) {
@@ -51,6 +54,9 @@ class API {
 
     this._onConnectorMessage = this._onMessage.bind(this, 'connector')
     this._onSocketMessage = this._onMessage.bind(this, 'socket')
+
+    this._isConnecting = false
+    this._isWaitingForConnector = false
   }
 
   async connect ({ provider } = {}) {
@@ -67,6 +73,8 @@ class API {
       this.resources.teams.setId(appId)
       return appId
     } else {
+      this._isConnecting = true
+
       try {
         await window.fetch(`${this.connectUrl}/health-check`)
 
@@ -86,11 +94,10 @@ class API {
         this.connector = window.open(url, this.iframe.name)
         this.connector.focus()
 
+        this._isWaitingForConnector = true
         this._watchConnector(teamSession)
       } catch (err) {
-        if (this._onError) {
-          this._onError({ error_type: 500, message: 'Connection refused' })
-        }
+        this._triggerCallback(CONNECTION_FAILURE, { error_type: 500, message: 'Connection refused' })
       }
     }
   }
@@ -138,30 +145,20 @@ class API {
   }
 
   _watchConnector (teamSession) {
-    this.isWaitingForConnector = true
     this._setListeners(teamSession)
 
     // Connector timeout (10 minutes)
     const connectorTimeout = setTimeout(() => {
-      this.isWaitingForConnector = false
-
-      if (this._onError) {
-        this._onError({ error_type: 400, message: 'Connection timeout' })
-      }
+      this._closeConnector()
+      this._triggerCallback(CONNECTION_FAILURE, { error_type: 400, message: 'Connection timeout' })
     }, 10 * 60 * 1000)
 
     // Watch interval
     const watchInterval = setInterval(() => {
-      if (this.isWaitingForConnector) {
+      if (this._isWaitingForConnector) {
         if (this.connector.closed) {
-          this.isWaitingForConnector = false
-
-          // Ensure that the connector has been destroyed
-          this._closeConnector()
-
-          if (this._onError) {
-            this._onError({ error_type: 400, message: 'Connection closed' })
-          }
+          this._closeConnector() // Ensure that the connector has been destroyed
+          this._triggerCallback(CONNECTION_FAILURE, { error_type: 400, message: 'Connection closed' })
         }
       } else {
         this._removeListeners()
@@ -213,12 +210,12 @@ class API {
         throw new SDKError(401, '[Zabo] Unauthorized attempt to call SDK from origin: ' + origin)
       }
 
-      if (emitter === 'connector') {
-        this.isWaitingForConnector = false
-      }
-
       switch (data.eventName) {
         case 'connectSuccess': {
+          if (emitter === 'connector') {
+            this._isWaitingForConnector = false
+          }
+
           if (data.account && data.account.token) {
             this._setAccountSession({
               key: 'zabosession',
@@ -230,28 +227,31 @@ class API {
           if (this.resources.accounts && this.resources.transactions) {
             this.resources.accounts._setAccount(data.account)
             this.resources.transactions._setAccount(data.account)
+            this.resources.trading._setAccount(data.account)
           }
 
-          if (this._onConnection) {
-            this._onConnection(data.account)
-          }
-
+          this._triggerCallback(CONNECTION_SUCCESS, data.account)
           break
         }
 
         case 'connectError': {
-          if (this._onError) {
-            this._onError(data.error)
-          } else {
-            throw new SDKError(data.error.error_type, data.error.message, data.error.request_id)
+          if (emitter === 'connector') {
+            this._isWaitingForConnector = false
           }
 
+          this._triggerCallback(CONNECTION_FAILURE, data.error)
           break
         }
 
         case 'connectClose': {
           this._closeConnector()
           break
+        }
+
+        default: {
+          if (this._onEvent) {
+            this._onEvent(data.eventName, data.metadata || {})
+          }
         }
       }
     }
@@ -283,6 +283,8 @@ class API {
   }
 
   _closeConnector () {
+    this._isWaitingForConnector = false
+
     if (!this.connector.closed) {
       this.connector.close()
     }
@@ -290,6 +292,20 @@ class API {
     if (this.iframe) {
       this.iframe.style.display = 'none'
       this.iframe.src = ''
+    }
+  }
+
+  _triggerCallback (type, data) {
+    if (this._isConnecting) {
+      this._isConnecting = false
+
+      if (type === CONNECTION_SUCCESS && this._onConnection) {
+        this._onConnection(data)
+      }
+
+      if (type === CONNECTION_FAILURE && this._onError) {
+        this._onError(data)
+      }
     }
   }
 }

@@ -1,0 +1,18 @@
+{ 
+  "data": [
+    {
+      "token": {
+        "contract": {
+          "address": "0xtheTokenAddress"
+        },
+        "symbol": "ABC",
+        "name": "No Zabo Tokens",
+        "decimals": 18,
+        "total_supply": "100000000000000000000000000",
+        "is_erc20": true
+      },
+      "address": "0x62a6ebC0ac598819CCad368788F6d2357FaE0d9e",
+      "balance": "250000000"
+    }
+  ]
+}

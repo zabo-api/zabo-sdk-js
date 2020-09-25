@@ -128,6 +128,7 @@ class ZaboSDK {
       try {
         const account = await this.accounts.get()
         this.transactions._setAccount(account)
+        this.trading._setAccount(account)
       } catch (err) {
         console.error('[Zabo] No account connected yet.')
       }
@@ -191,6 +192,12 @@ class ZaboSDK {
   onError (fn) {
     if (typeof fn !== 'function') { return }
     this.api._onError = fn.bind(this)
+    return this
+  }
+
+  onEvent (fn) {
+    if (typeof fn !== 'function') { return }
+    this.api._onEvent = fn.bind(this)
     return this
   }
 

@@ -136,6 +136,7 @@ jobs:
             cd dist
             if [ $CIRCLE_BRANCH == 'develop' ]; then
               aws s3 sync ./ "s3://cdn.zabo.com/develop/$THISVER"
+              aws s3 sync ./ "s3://cdn.zabo.com/develop/latest"
             elif [[ "$CIRCLE_BRANCH" =~ ^(master|stage|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
               if [ $CIRCLE_BRANCH == 'master' ]; then
                 aws s3 sync ./ "s3://cdn.zabo.com/$THISVER"

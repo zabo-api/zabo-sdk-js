@@ -14,6 +14,36 @@ class MockApi {
   request (method, path, data = {}) {
     const map = {
       GET: [{
+        regexp: /\/blockchains\/.+\/blocks\/.+/,
+        data: dummy.blockchainsBlock
+      }, {
+        regexp: /\/blockchains\/.+\/blocks/,
+        data: dummy.blockchainsBlock
+      }, {
+        regexp: /\/blockchains\/.+\/contracts\/.+/,
+        data: dummy.blockchainsContract
+      }, {
+        regexp: /\/blockchains\/.+\/tokens\/.+/,
+        data: dummy.blockchainsTokens
+      }, {
+        regexp: /\/blockchains\/.+\/tokens/,
+        data: dummy.blockchainsTokens
+      }, {
+        regexp: /\/blockchains\/.+\/addresses\/.+\/balances/,
+        data: dummy.blockchainsBalances
+      }, {
+        regexp: /\/blockchains\/.+\/transactions\/.+/,
+        data: dummy.blockchainsTransaction
+      }, {
+        regexp: /\/blockchains\/.+\/addresses\/.+\/transactions/,
+        data: dummy.blockchainsTransactions
+      }, {
+        regexp: /\/blockchains\/.+\/token-transfers\/.+/,
+        data: dummy.blockchainsTokenTransfers
+      }, {
+        regexp: /\/blockchains\/.+\/addresses\/.+\/token-transfers/,
+        data: dummy.blockchainsTokenTransfers
+      }, {
         regexp: /\/teams\/.+/,
         data: dummy.team
       }, {
@@ -22,6 +52,18 @@ class MockApi {
       }, {
         regexp: /\/transfer-request/,
         data: dummy.transferRequest
+      }, {
+        regexp: /\/accounts\/.+\/trading-symbols/,
+        data: dummy.tradingSymbols
+      }, {
+        regexp: /\/accounts\/.+\/tickers\/.+/,
+        data: dummy.tradingTicker
+      }, {
+        regexp: /\/accounts\/.+\/orders\/.+/,
+        data: dummy.tradingOrder
+      }, {
+        regexp: /\/accounts\/.+\/orders/,
+        data: dummy.tradingOrders
       }, {
         regexp: /\/accounts\/.+\/balances/,
         data: dummy.balances
@@ -66,6 +108,9 @@ class MockApi {
         regexp: /\/accounts\/.+\/deposit-addresses/,
         data: dummy.address
       }, {
+        regexp: /\/accounts\/.+\/orders/,
+        data: dummy.tradingOrder
+      }, {
         regexp: /\/users\/.+\/accounts\/.+\/transactions/,
         data: {
           ...dummy.transaction,
@@ -103,6 +148,16 @@ class MockApi {
         data: {
           ...dummy.user,
           accounts: dummy.user.accounts.filter(a => !path.includes(a.id))
+        }
+      }, {
+        regexp: /\/accounts\/.+\/orders\/.+/,
+        data: {
+          data: [path.split('orders/')[1]]
+        }
+      }, {
+        regexp: /\/accounts\/.+\/orders/,
+        data: {
+          data: dummy.tradingOrders.data.map(o => o.id)
         }
       }]
     }

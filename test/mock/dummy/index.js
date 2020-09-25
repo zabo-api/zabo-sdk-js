@@ -11,5 +11,18 @@ module.exports = {
   transferRequest: require('./transfer-request.json'),
   user: require('./user.json'),
   users: require('./users.json'),
-  providers: require('./providers.json')
+  providers: require('./providers.json'),
+  // Blockchains
+  blockchainsBlock: require('./blockchains/block.json'),
+  blockchainsBalances: require('./blockchains/balances.json'),
+  blockchainsContract: require('./blockchains/contract.json'),
+  blockchainsTokenTransfers: require('./blockchains/token-transfers.json'),
+  blockchainsTokens: require('./blockchains/tokens.json'),
+  blockchainsTransaction: require('./blockchains/transaction.json'),
+  blockchainsTransactions: require('./blockchains/transactions.json'),
+  // Trading
+  tradingOrder: require('./trading/order.json'),
+  tradingOrders: require('./trading/orders.json'),
+  tradingSymbols: require('./trading/symbols.json'),
+  tradingTicker: require('./trading/ticker.json')
 }
