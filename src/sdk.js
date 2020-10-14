@@ -18,7 +18,6 @@
 
 const API = require('./api')
 const utils = require('./utils')
-const resources = require('./resources')
 const { SDKError } = require('./err')
 
 // SDK main class definition
