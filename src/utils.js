@@ -17,8 +17,9 @@
 'use strict'
 
 const crypto = require('crypto')
-const uuidValidate = require('uuid-validate')
 const { SDKError } = require('./err')
+
+const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 function generateHMACSignature (secretKey, url, body, timestamp) {
   const text = timestamp + url + body
@@ -29,11 +30,35 @@ function getZaboSession () {
   return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent('zabosession').replace(/[-.+*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null
 }
 
+function uuidValidate (uuid) {
+  if (typeof uuid !== 'string') {
+    return false
+  }
+
+  uuid = uuid.toLowerCase()
+
+  if (!uuidPattern.test(uuid)) {
+    return false
+  }
+
+  switch (uuid.charAt(14) | 0) {
+    case 1:
+    case 2:
+      return true
+    case 3:
+    case 4:
+    case 5:
+      return ['8', '9', 'a', 'b'].indexOf(uuid.charAt(19)) !== -1
+    default:
+      return false
+  }
+}
+
 function validateListParameters (limit, cursor) {
   if (limit && limit > 50) {
     throw new SDKError(400, '[Zabo] Values for `limit` must be 50 or below. See: https://zabo.com/docs#pagination')
   }
-  if (cursor && !uuidValidate(cursor, 4)) {
+  if (cursor && !uuidValidate(cursor)) {
     throw new SDKError(400, '[Zabo] `cursor` must be a valid UUID version 4. See: https://zabo.com/docs#pagination')
   }
 }
@@ -75,6 +100,7 @@ const isNode = new Function("return typeof global !== 'undefined'") // eslint-di
 module.exports = {
   generateHMACSignature,
   getZaboSession,
+  uuidValidate,
   validateListParameters,
   validateEnumParameter,
   createPaginator,

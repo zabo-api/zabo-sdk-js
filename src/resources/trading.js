@@ -16,7 +16,6 @@
 
 'use strict'
 
-const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
@@ -75,7 +74,7 @@ class Trading {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!orderId) {
       throw new SDKError(400, '[Zabo] Missing `orderId` parameter. See: https://zabo.com/docs/#get-an-order')
-    } else if (!uuidValidate(orderId, 4)) {
+    } else if (!utils.uuidValidate(orderId)) {
       throw new SDKError(400, '[Zabo] `orderId` must be a valid UUID v4. See: https://zabo.com/docs/#get-an-order')
     }
 
@@ -138,7 +137,7 @@ class Trading {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
     } else if (!orderId) {
       throw new SDKError(400, '[Zabo] Missing `orderId` parameter. See: https://zabo.com/docs/#cancel-an-order')
-    } else if (!uuidValidate(orderId, 4)) {
+    } else if (!utils.uuidValidate(orderId)) {
       throw new SDKError(400, '[Zabo] `orderId` must be a valid UUID v4. See: https://zabo.com/docs/#cancel-an-order')
     }
 

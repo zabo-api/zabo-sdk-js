@@ -16,7 +16,6 @@
 
 'use strict'
 
-const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
@@ -28,7 +27,7 @@ class Teams {
   }
 
   setId (id) {
-    if (!uuidValidate(id, 4)) {
+    if (!utils.uuidValidate(id)) {
       throw new SDKError(400, '[Zabo] Team id must be a valid UUID version 4. See: https://zabo.com/docs')
     }
 

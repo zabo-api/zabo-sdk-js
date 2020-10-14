@@ -16,7 +16,6 @@
 
 'use strict'
 
-const uuidValidate = require('uuid-validate')
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
@@ -34,11 +33,11 @@ class Transactions {
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
-      } else if (!uuidValidate(userId, 4)) {
+      } else if (!utils.uuidValidate(userId)) {
         throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#get-a-specific-transaction')
       } else if (!accountId) {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
-      } else if (!uuidValidate(accountId, 4)) {
+      } else if (!utils.uuidValidate(accountId)) {
         throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#get-a-specific-transaction')
       } else if (!txId) {
         throw new SDKError(400, '[Zabo] Missing `txId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -72,11 +71,11 @@ class Transactions {
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-transaction-history')
-      } else if (!uuidValidate(userId, 4)) {
+      } else if (!utils.uuidValidate(userId)) {
         throw new SDKError(400, '[Zabo] `userId` must be a valid UUID v4. See: https://zabo.com/docs#get-transaction-history')
       } else if (!accountId) {
         throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-transaction-history')
-      } else if (!uuidValidate(accountId, 4)) {
+      } else if (!utils.uuidValidate(accountId)) {
         throw new SDKError(400, '[Zabo] `accountId` must be a valid UUID v4. See: https://zabo.com/docs#get-transaction-history')
       }
 
