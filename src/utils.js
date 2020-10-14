@@ -16,14 +16,14 @@
 
 'use strict'
 
-const crypto = require('crypto')
+const createHmac = require('create-hmac')
 const { SDKError } = require('./err')
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 function generateHMACSignature (secretKey, url, body, timestamp) {
   const text = timestamp + url + body
-  return crypto.createHmac('sha256', secretKey).update(text).digest('hex')
+  return createHmac('sha256', secretKey).update(text).digest('hex')
 }
 
 function getZaboSession () {
