@@ -75,8 +75,5 @@ class Teams {
 }
 
 module.exports = (api, appId) => {
-  if (api.decentralized) {
-    return null
-  }
   return new Teams(api, appId)
 }

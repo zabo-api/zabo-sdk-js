@@ -62,8 +62,5 @@ class Currencies {
 }
 
 module.exports = (api) => {
-  if (api.decentralized) {
-    return null
-  }
   return new Currencies(api)
 }

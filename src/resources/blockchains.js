@@ -140,8 +140,5 @@ class Blockchains {
 }
 
 module.exports = (api) => {
-  if (api.decentralized) {
-    return null
-  }
   return new Blockchains(api)
 }

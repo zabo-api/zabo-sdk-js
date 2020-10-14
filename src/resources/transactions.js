@@ -101,24 +101,9 @@ class Transactions {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
-
-  async send () {
-    console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs')
-    throw new SDKError(400, '[Zabo] Not supported for this provider. See: https://zabo.com/docs/#unsupported-functions')
-  }
-
-  onConfirmation () {
-    console.warn('This method was deprecated in version 0.8. See: https://zabo.com/docs')
-    throw new SDKError(400, '[Zabo] Not supported for this provider. See: https://zabo.com/docs/#unsupported-functions')
-  }
 }
 
 // Export class instance
 module.exports = (api) => {
-  const transactions = new Transactions(api)
-  if (api.ethereum) {
-    transactions.getOne = ({ txId } = {}) => { return api.ethereum.getTransaction(txId) }
-    transactions.getList = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs') }
-  }
-  return transactions
+  return new Transactions(api)
 }
