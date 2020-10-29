@@ -132,19 +132,6 @@ class Accounts {
   }
 }
 
-module.exports = async (api) => {
-  const accounts = new Accounts(api)
-  if (api.ethereum) {
-    const ethConnection = await api.ethereum.connect(api.useNode, api.useAddress)
-    accounts.data = ethConnection.data
-    accounts.node = ethConnection.node
-    accounts.get = () => { return accounts.data }
-    accounts.getBalances = ({ currencies } = {}) => { return ethConnection.getBalance(currencies) }
-    accounts.createDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
-    if (!api.sendAppCryptoData) {
-      accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs') }
-    }
-    accounts.getDepositAddress = () => { return { currency: 'ETH', address: accounts.data.address } }
-  }
-  return accounts
+module.exports = (api) => {
+  return new Accounts(api)
 }

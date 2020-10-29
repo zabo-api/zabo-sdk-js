@@ -18,7 +18,6 @@
 
 const API = require('./api')
 const utils = require('./utils')
-const resources = require('./resources')
 const { SDKError } = require('./err')
 
 // SDK main class definition
@@ -47,8 +46,7 @@ class ZaboSDK {
         baseUrl: o.baseUrl,
         apiKey: o.apiKey,
         secretKey: o.secretKey,
-        env: this.env,
-        sendAppCryptoData: true
+        env: this.env
       })
       await this.setEndpointAliases()
 
@@ -63,47 +61,6 @@ class ZaboSDK {
 
         return this.api.resources.teams.get()
       }
-    }
-
-    if (o.decentralized) {
-      try {
-        this.status = 'connecting'
-        if (o.sendAppCryptoData) {
-          this.api = new API({
-            baseUrl: o.baseUrl,
-            clientId: o.clientId,
-            env: o.env,
-            decentralized: true,
-            useNode: o.useNode,
-            useAddress: o.useAddress,
-            sendAppCryptoData: true
-          })
-          await this.setEndpointAliases()
-          const trackingAccount = await this.accounts.create({
-            clientId: o.clientId,
-            credentials: [this.accounts.data.address],
-            provider: 'address-only',
-            origin: window.location.host
-          })
-          this.accounts.create = () => { throw new SDKError(400, '[Zabo] Not available in decentralized mode. See: https://zabo.com/docs') }
-
-          return trackingAccount
-        }
-
-        const resourcesReturn = await resources({
-          decentralized: true,
-          clientId: o.clientId,
-          useNode: o.useNode,
-          useAddress: o.useAddress,
-          baseUrl: o.baseUrl
-        }, false)
-        Object.assign(this, resourcesReturn)
-        this.status = 'online'
-        return this.accounts.data
-      } catch (err) {
-        console.error(err)
-      }
-      return
     }
 
     if (utils.isBrowser()) {
@@ -163,11 +120,6 @@ class ZaboSDK {
   }
 
   connect (config = {}) {
-    // TODO: Remove warnings
-    if (config.interfaceType) {
-      console.warn('[ZABO] "interfaceType" has been deprecated. More details at: https://zabo.com/docs/#connecting-a-user')
-    }
-
     if (this.api && utils.isBrowser()) {
       this.api.connect(config)
       return this

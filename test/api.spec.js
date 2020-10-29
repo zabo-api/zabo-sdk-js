@@ -2,7 +2,10 @@
 
 const crypto = require('crypto')
 const sdk = require('../src/sdk.js')
+const constants = require('../src/constants.js')
 require('should')
+
+const URLS = constants()
 
 describe('Zabo SDK API', () => {
   it('should be instantiated during zabo.init()', async function () {
@@ -29,7 +32,7 @@ describe('Zabo SDK API', () => {
     request.should.be.instanceof(Object)
 
     request.method.should.equal('get')
-    request.url.should.equal('https://api.zabo.com/sandbox-v0/sessions')
+    request.url.should.equal(URLS.sandbox.API_BASE_URL + '/sessions')
 
     request.headers.should.have.property('X-Zabo-Sig')
     request.headers.should.have.property('X-Zabo-Timestamp')
@@ -51,7 +54,7 @@ describe('Zabo SDK API', () => {
     request.should.be.instanceof(Object)
 
     request.method.should.equal('get')
-    request.url.should.equal('https://api.zabo.com/sandbox-v0/users?limit=25')
+    request.url.should.equal(URLS.sandbox.API_BASE_URL + '/users?limit=25')
 
     const timestamp = request.headers['X-Zabo-Timestamp']
     const text = timestamp + request.url
