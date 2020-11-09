@@ -24,7 +24,6 @@ describe('Zabo SDK Transactions Resource', () => {
 
     transactions.should.have.property('getOne')
     transactions.should.have.property('getList')
-    transactions.should.have.property('send')
   })
 
   it('transactions.getOne() should fail if `userId` is not provided', async function () {

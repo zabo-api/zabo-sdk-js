@@ -19,9 +19,7 @@ const { isBrowser } = require('./utils')
 const DEFAULT_API_HOST = 'https://api.zabo.com'
 const DEFAULT_CONNECT_PATH = 'https://connect.zabo.com'
 
-// This should be updated to {PACKAGE_VERSION} in the future, in order to call
-// the right Zabo API instance running for this specific version.
-const VERSION = 0 // const VERSION = PACKAGE_VERSION
+const VERSION = 1
 const SANDBOX_BASE_PATH = `/sandbox-v${VERSION}`
 const LIVE_BASE_PATH = `/v${VERSION}`
 

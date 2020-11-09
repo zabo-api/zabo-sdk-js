@@ -80,11 +80,4 @@ describe('Zabo SDK Module', () => {
     sdk.transactions.should.have.property('getOne')
     sdk.transactions.should.have.property('getList')
   })
-
-  it('should initialize in decentralized mode', async function () {
-    await sdk.init({
-      decentralized: true,
-      sendCryptoData: false
-    }).should.be.ok()
-  })
 })

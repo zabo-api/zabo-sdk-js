@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { ethereum } = require('../networks')
 
 module.exports = async (api, isNode) => {
   if (isNode) {
@@ -27,14 +26,9 @@ module.exports = async (api, isNode) => {
     }
   }
 
-  if (api.decentralized) {
-    api.ethereum = ethereum
-  }
-
-  const accounts = await require('./accounts')(api)
   const resources = {
     teams: require('./teams')(api),
-    accounts: accounts,
+    accounts: require('./accounts')(api),
     trading: require('./trading')(api),
     currencies: require('./currencies')(api),
     transactions: require('./transactions')(api),
