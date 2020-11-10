@@ -1,10 +1,16 @@
-Zabo SDK for JS
+What is Zabo? A unified cryptocurrency API.
 =========================
-
 [![CircleCI](https://circleci.com/gh/zabo-api/zabo-sdk-js/tree/master.svg?style=svg)](https://circleci.com/gh/zabo-api/zabo-sdk-js/tree/master)
-[![Join the chat at https://gitter.im/zabo-api/community](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zabo-api/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Discord](https://img.shields.io/discord/533336922970521600)](https://discord.gg/vGHYuUT)
 [![Discourse](https://img.shields.io/discourse/https/forum.zabo.com/status)](https://forum.zabo.com)   
+
+[Zabo](https://zabo.com) is an API for connecting with cryptocurrency exchanges, wallets and protocols like Bitcoin. Instead of manually integrating with [Coinbase API](https://zabo.com/integrations/coinbase), [Binance API](https://zabo.com/integrations/binance), [Bitcoin APIs](https://zabo.com/integrations/bitcoin) or the hundreds of other cryptocurrency APIs - you can simply use Zabo for them all.  
+
+We believe teams and developers should focus on building great products, not worry about the fragmented landscape of exchange APIs and blockchain protocols.  
+
+For our updated list of integrations, [check out our Zabo integrations](https://zabo.com/integrations).
+
+# Zabo API Javascript (JS) SDK
 
 The Zabo SDK for JS provides convenient access to the Zabo API from applications written in browser and server-side JavaScript.  
 
