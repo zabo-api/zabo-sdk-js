@@ -26,8 +26,31 @@ function generateHMACSignature (secretKey, url, body, timestamp) {
   return createHmac('sha256', secretKey).update(text).digest('hex')
 }
 
+function setCookie (name, value, expires, path) {
+  const valueStr = value ? encodeURIComponent(value) : ''
+  const expiresStr = expires ? ('; expires=' + expires) : ''
+  const pathStr = '; path=' + (path || '/')
+  document.cookie = encodeURIComponent(name) + '=' + valueStr + expiresStr + pathStr
+}
+
+function getCookie (name) {
+  const regexp = new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(name).replace(/[-.+*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$')
+  return decodeURIComponent(document.cookie.replace(regexp, '$1')) || null
+}
+
+function deleteCookie (name, path) {
+  setCookie(name, null, 'Thu, 01 Jan 1970 00:00:01 GMT', path)
+}
+
 function getZaboSession () {
-  return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent('zabosession').replace(/[-.+*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null
+  // Clean up session cookie on child paths
+  const path = window.location.pathname.substr(1).split('/')
+  while (path.length) {
+    deleteCookie('zabosession', '/' + path.join('/'))
+    path.pop()
+  }
+
+  return getCookie('zabosession')
 }
 
 function uuidValidate (uuid) {
@@ -99,6 +122,9 @@ const isNode = new Function("return typeof global !== 'undefined'") // eslint-di
 
 module.exports = {
   generateHMACSignature,
+  setCookie,
+  getCookie,
+  deleteCookie,
   getZaboSession,
   uuidValidate,
   validateListParameters,
