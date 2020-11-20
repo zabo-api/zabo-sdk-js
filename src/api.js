@@ -258,8 +258,7 @@ class API {
   }
 
   _setAccountSession (cookie) {
-    const sExpires = '; expires=' + cookie.exp_time
-    document.cookie = encodeURIComponent(cookie.key) + '=' + encodeURIComponent(cookie.value) + sExpires
+    utils.setCookie(cookie.key, cookie.value, cookie.exp_time)
     return true
   }
 
