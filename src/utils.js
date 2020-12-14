@@ -43,13 +43,6 @@ function deleteCookie (name, path) {
 }
 
 function getZaboSession () {
-  // Clean up session cookie on child paths
-  const path = window.location.pathname.substr(1).split('/')
-  while (path.length) {
-    deleteCookie('zabosession', '/' + path.join('/'))
-    path.pop()
-  }
-
   return getCookie('zabosession')
 }
 
