@@ -61,9 +61,7 @@ class ZaboSDK {
 
         return this.api.resources.teams.get()
       }
-    }
-
-    if (utils.isBrowser()) {
+    } else {
       this.env = this.checkZaboEnv(o.env)
 
       if (!o.clientId || typeof o.clientId !== 'string') {
