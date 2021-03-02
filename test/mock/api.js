@@ -50,9 +50,6 @@ class MockApi {
         regexp: /\/sessions/,
         data: dummy.account
       }, {
-        regexp: /\/transfer-request/,
-        data: dummy.transferRequest
-      }, {
         regexp: /\/accounts\/.+\/trading-symbols/,
         data: dummy.tradingSymbols
       }, {
@@ -100,9 +97,6 @@ class MockApi {
       }, {
         regexp: /\/exchange-rates/,
         data: dummy.exchangeRates
-      }, {
-        regexp: /\/bytecode/,
-        data: dummy.bytecode
       }],
       POST: [{
         regexp: /\/accounts\/.+\/deposit-addresses/,

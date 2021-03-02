@@ -2,21 +2,185 @@
   "list_cursor": {
     "limit": 25,
     "has_more": false,
-    "self_uri": "/exchange-rates?limit=25&fiat_currency=USD",
+    "self_uri": "/exchange-rates?to_crypto=false&limit=25",
     "next_uri": ""
   },
   "data": [
     {
       "from": "BTC",
       "to": "USD",
-      "rate": "8000.00",
-      "timestamp": 145824503000
+      "rate": "9300.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
     },
     {
       "from": "ETH",
       "to": "USD",
-      "rate": "300.00",
-      "timestamp": 145824503000
+      "rate": "183.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "XRP",
+      "to": "USD",
+      "rate": "0.30",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "LINK",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "BCH",
+      "to": "USD",
+      "rate": "450.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "LTC",
+      "to": "USD",
+      "rate": "55.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "BNB",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "EOS",
+      "to": "USD",
+      "rate": "3.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "XTZ",
+      "to": "USD",
+      "rate": "0.90",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "XLM",
+      "to": "USD",
+      "rate": "0.64",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "ATOM",
+      "to": "USD",
+      "rate": "3.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "USDC",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "DASH",
+      "to": "USD",
+      "rate": "69.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "ZEC",
+      "to": "USD",
+      "rate": "37.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "ETC",
+      "to": "USD",
+      "rate": "3.00",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "MKR",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "BAT",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "THETA",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "ZRX",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "TUSD",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "ICX",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "PAX",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "HBAR",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "HYN",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
+    },
+    {
+      "from": "WETH",
+      "to": "USD",
+      "rate": "0",
+      "timestamp": 1571767336000,
+      "resource_type": "exchange_rate"
     }
-  ]
+  ],
+  "request_id": "52101631-5674-455d-b138-e99deb1ca6b6"
 }
