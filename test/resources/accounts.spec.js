@@ -28,7 +28,7 @@ describe('Zabo SDK Accounts Resource', () => {
   })
 
   it('accounts.getBalances() should fail if an account has not connected yet', async function () {
-    const response = await accounts.getBalances({ currencies: 'BTC' }).should.be.rejected()
+    const response = await accounts.getBalances({ tickers: 'BTC' }).should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(401)
@@ -39,7 +39,7 @@ describe('Zabo SDK Accounts Resource', () => {
     const account = await accounts.get()
 
     account.should.be.ok()
-    account.should.have.properties(['id', 'address', 'provider', 'balances'])
+    account.should.have.properties(['id', 'provider', 'balances'])
 
     accounts.data.should.be.eql(account)
     accounts.id.should.be.equal(account.id)
@@ -56,26 +56,26 @@ describe('Zabo SDK Accounts Resource', () => {
     const account = await accounts.create(data)
 
     account.should.be.ok()
-    account.should.have.properties(['id', 'address', 'provider', 'balances'])
+    account.should.have.properties(['id', 'provider', 'balances'])
     account.provider.name.should.have.equal(data.provider)
   })
 
-  it('accounts.getBalances() should return balances for the required currencies', async function () {
-    const currencies = ['BTC', 'ETH']
-    const balances = await accounts.getBalances({ currencies })
+  it('accounts.getBalances() should return balances for the required tickers', async function () {
+    const tickers = ['BTC', 'ETH']
+    const balances = await accounts.getBalances({ tickers })
 
     balances.data.should.be.ok()
     balances.data.should.be.an.Array()
 
-    const tickers = balances.data.map(b => b.currency)
-    tickers.should.containDeep(currencies)
+    const currencyTickers = balances.data.map(b => b.ticker)
+    currencyTickers.should.containDeep(tickers)
   })
 
   it('accounts.createDepositAddress() should create and return an address', async function () {
     const resp = await accounts.createDepositAddress('BTC')
 
     resp.should.be.ok()
-    resp.should.have.properties(['currency', 'address'])
+    resp.should.have.properties(['ticker', 'provider_ticker', 'address'])
   })
 
   it('accounts.getDepositAddresses() should return a list of addresses', async function () {
@@ -83,6 +83,6 @@ describe('Zabo SDK Accounts Resource', () => {
 
     resp.should.be.ok()
     resp.should.be.an.Array()
-    resp[0].should.have.properties(['currency', 'address'])
+    resp[0].should.have.properties(['ticker', 'provider_ticker', 'address'])
   })
 })

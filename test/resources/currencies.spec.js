@@ -36,17 +36,17 @@ describe('Zabo SDK Currencies Resource', () => {
     response.message.should.containEql('limit')
   })
 
-  it('currencies.getOne() should fail if a currency ticker is not provided', async function () {
+  it('currencies.getOne() should fail if a ticker is not provided', async function () {
     const response = await currencies.getOne().should.be.rejected()
 
     response.should.be.an.Error()
     response.error_type.should.be.equal(400)
-    response.message.should.containEql('currency')
+    response.message.should.containEql('ticker')
   })
 
   it('currencies.getExchangeRates() should fail if an invalid `limit` is provided', async function () {
     const response = await currencies.getExchangeRates({
-      cryptoCurrency: 'BTC',
+      tickers: 'BTC',
       limit: 51
     }).should.be.rejected()
 
