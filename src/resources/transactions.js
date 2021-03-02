@@ -63,7 +63,7 @@ class Transactions {
     }
   }
 
-  async getList ({ userId, accountId, currency = '', limit = 25, cursor = '' } = {}) {
+  async getList ({ userId, accountId, ticker = '', limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit)
 
     let url = null
@@ -80,8 +80,8 @@ class Transactions {
       }
 
       url = `/users/${userId}/accounts/${accountId}/transactions?limit=${limit}&cursor=${cursor}`
-      if (currency !== '') {
-        url = `${url}&currency=${currency}`
+      if (ticker !== '') {
+        url = `${url}&ticker=${ticker}`
       }
     } else {
       if (!this.account.id) {
@@ -89,8 +89,8 @@ class Transactions {
       }
 
       url = `/accounts/${this.account.id}/transactions?limit=${limit}&cursor=${cursor}`
-      if (currency !== '') {
-        url = `${url}&currency=${currency}`
+      if (ticker !== '') {
+        url = `${url}&ticker=${ticker}`
       }
     }
 

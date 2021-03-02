@@ -104,7 +104,7 @@ class Users {
     }
   }
 
-  async getBalances ({ userId, accountId, currencies } = {}) {
+  async getBalances ({ userId, accountId, tickers } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-balance')
     } else if (!accountId) {
@@ -113,11 +113,11 @@ class Users {
 
     let url = `/users/${userId}/accounts/${accountId}/balances`
 
-    if (currencies) {
-      if (Array.isArray(currencies)) {
-        currencies = currencies.join(',')
+    if (tickers) {
+      if (Array.isArray(tickers)) {
+        tickers = tickers.join(',')
       }
-      url = `${url}?currencies=${currencies}`
+      url = `${url}?tickers=${tickers}`
     }
 
     try {
@@ -127,33 +127,33 @@ class Users {
     }
   }
 
-  async createDepositAddress ({ userId, accountId, currency } = {}) {
+  async createDepositAddress ({ userId, accountId, ticker } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#create-a-deposit-address')
     } else if (!accountId) {
       throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#create-a-deposit-address')
-    } else if (!currency) {
-      throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+    } else if (!ticker || typeof ticker !== 'string') {
+      throw new SDKError(400, '[Zabo] Missing or invalid `ticker` parameter. See: https://zabo.com/docs#create-a-deposit-address')
     }
 
     try {
-      return this.api.request('POST', `/users/${userId}/accounts/${accountId}/deposit-addresses?currency=${currency}`)
+      return this.api.request('POST', `/users/${userId}/accounts/${accountId}/deposit-addresses?ticker=${ticker}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
-  async getDepositAddresses ({ userId, accountId, currency } = {}) {
+  async getDepositAddresses ({ userId, accountId, ticker } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-deposit-addresses')
     } else if (!accountId) {
       throw new SDKError(400, '[Zabo] Missing `accountId` parameter. See: https://zabo.com/docs#get-deposit-addresses')
-    } else if (!currency) {
-      throw new SDKError(400, '[Zabo] Missing `currency` parameter. See: https://zabo.com/docs#get-deposit-addresses')
+    } else if (!ticker || typeof ticker !== 'string') {
+      throw new SDKError(400, '[Zabo] Missing or invalid `ticker` parameter. See: https://zabo.com/docs#get-deposit-addresses')
     }
 
     try {
-      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/deposit-addresses?currency=${currency}`)
+      return this.api.request('GET', `/users/${userId}/accounts/${accountId}/deposit-addresses?ticker=${ticker}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }

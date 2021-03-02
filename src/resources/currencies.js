@@ -34,27 +34,28 @@ class Currencies {
     }
   }
 
-  async getOne (currency) {
-    if (!currency) {
-      throw new SDKError(400, '[Zabo] Missing `currency` input. See: https://zabo.com/docs#get-specific-currency')
+  async getOne (ticker) {
+    if (!ticker) {
+      throw new SDKError(400, '[Zabo] Missing `ticker` input. See: https://zabo.com/docs#get-specific-currency')
     }
 
     try {
-      return this.api.request('GET', `/currencies/${currency}`)
+      return this.api.request('GET', `/currencies/${ticker}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
-  async getExchangeRates ({ fiatCurrency = 'USD', cryptoCurrency = '', toCrypto = false, limit = 25, cursor = '' } = {}) {
+  async getExchangeRates ({ toCrypto = false, limit = 25, cursor = '', tickers = '' } = {}) {
     utils.validateListParameters(limit)
 
-    let url = '/exchange-rates'
+    let url = `/exchange-rates?to_crypto=${!!toCrypto}&limit=${limit}&cursor=${cursor}`
 
-    if (cryptoCurrency) {
-      url = `${url}?crypto_currency=${cryptoCurrency}&to_crypto=${toCrypto}`
-    } else {
-      url = `${url}?to_crypto=${toCrypto}&limit=${limit}&cursor=${cursor}`
+    if (tickers) {
+      if (Array.isArray(tickers)) {
+        tickers = tickers.join(',')
+      }
+      url = `${url}&tickers=${tickers}`
     }
 
     return this.api.request('GET', url)
