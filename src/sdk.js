@@ -85,7 +85,7 @@ class ZaboSDK {
         this.transactions._setAccount(account)
         this.trading._setAccount(account)
       } catch (err) {
-        console.error('[Zabo] No account connected yet.')
+        console.info('[Zabo] No account connected yet.')
       }
 
       return this.api.resources.teams.get()

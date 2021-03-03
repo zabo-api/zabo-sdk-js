@@ -117,7 +117,7 @@
         console.log('zabo', zabo)
         document.querySelector('#getBalance').addEventListener('click', ev => {
           // Get ETH balance
-          zabo.accounts.getBalances({ currencies: ["ETH"] }).then(balances => {
+          zabo.accounts.getBalances({ tickers: ["ETH"] }).then(balances => {
             printOutput(balances)
           }).catch(error => {
             /* User has not yet connected or doesn't have an ether wallet */
@@ -127,7 +127,7 @@
 
         document.querySelector('#getHistory').addEventListener('click', ev => {
           // Get account transactions history
-          zabo.transactions.getList({ currency: 'ETH' }).then(history => {
+          zabo.transactions.getList({ ticker: 'ETH' }).then(history => {
             printOutput(history)
           }).catch(error => {
             /* User has not yet connected */

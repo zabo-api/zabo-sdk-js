@@ -90,7 +90,7 @@ The first step is always to allow a user to connect from your front-end:
       function bindOtherMethods () {
         document.querySelector('#getBalance').addEventListener('click', ev => {
           // Get ETH balance
-          zabo.accounts.getBalances({ currencies: ["ETH"] }).then(balances => {
+          zabo.accounts.getBalances({ tickers: ["ETH"] }).then(balances => {
             console.log(balances)
           }).catch(error => {
             /* User has not yet connected or doesn't have an ether wallet */
@@ -100,7 +100,7 @@ The first step is always to allow a user to connect from your front-end:
 
         document.querySelector('#getHistory').addEventListener('click', ev => {
           // Get account transactions history
-          zabo.transactions.getList({ currency: 'ETH' }).then(history => {
+          zabo.transactions.getList({ ticker: 'ETH' }).then(history => {
             console.log(history)
           }).catch(error => {
             /* User has not yet connected */
@@ -147,7 +147,7 @@ import Zabo from 'zabo-sdk-js'
 ### After connecting
 After a user connects, the client SDK can continued to be used for the connected wallet:
 ```js
-zabo.transactions.getList({ currency: 'ETH' }).then(history => {
+zabo.transactions.getList({ ticker: 'ETH' }).then(history => {
   console.log(history)
 }).catch(error => {
   /* User has not yet connected */

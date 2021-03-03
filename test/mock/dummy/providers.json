@@ -7,11 +7,275 @@
   },
   "data": [
     {
-      "name": "coinbase",
-      "display_name": "Coinbase",
-      "logo": "https://cdn.zabo.com/assets/providers/coinbase.png",
-      "auth_type": "oauth",
+      "name": "status",
+      "display_name": "Status",
+      "auth_type": "read_only",
+      "logo": "https://cdn.zabo.com/assets/providers/status.png",
       "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "MANA",
+            "SNT",
+            "DGX",
+            "NEXO",
+            "SPANK",
+            "LRC",
+            "GEN",
+            "MLN",
+            "AMPL",
+            "ANT",
+            "SNX",
+            "PNK",
+            "RDN",
+            "C20",
+            "FOAM",
+            "MKR",
+            "GNO",
+            "WBTC",
+            "LINK",
+            "KNC",
+            "FUN",
+            "SALT",
+            "CVC",
+            "SAI",
+            "XCHF",
+            "TUSD",
+            "NMR",
+            "UNI-V1",
+            "LQD",
+            "HOT",
+            "RLC",
+            "GRID",
+            "LPT",
+            "MATIC",
+            "POA20",
+            "RPL",
+            "TKN",
+            "BNT",
+            "REP",
+            "MGN",
+            "TAUD",
+            "QCH",
+            "PAN",
+            "WETH",
+            "sETH (new",
+            "THKD",
+            "DGD",
+            "VERI",
+            "STORJ",
+            "USDC",
+            "TCAD",
+            "sUSD",
+            "PAX",
+            "RHOC",
+            "TGBP",
+            "RCN",
+            "LOOM",
+            "sETH (old)",
+            "MOD",
+            "BAT",
+            "WCK",
+            "cDAI",
+            "BLT",
+            "DIP",
+            "ZRX",
+            "KIN",
+            "DATA",
+            "REN",
+            "DAI"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "nifty-wallet",
+      "display_name": "Nifty Wallet",
+      "auth_type": "web3",
+      "logo": "https://cdn.zabo.com/assets/providers/nifty-wallet.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "LPT",
+            "DIP",
+            "HOT",
+            "C20",
+            "MATIC",
+            "WBTC",
+            "ZRX",
+            "SALT",
+            "KNC",
+            "TKN",
+            "NMR",
+            "SAI",
+            "GEN",
+            "RCN",
+            "PNK",
+            "USDC",
+            "WETH",
+            "POA20",
+            "LINK",
+            "LOOM",
+            "RHOC",
+            "GNO",
+            "cDAI",
+            "XCHF",
+            "NEXO",
+            "BNT",
+            "REN",
+            "STORJ",
+            "LQD",
+            "sETH (new",
+            "SNT",
+            "QCH",
+            "REP",
+            "UNI-V1",
+            "BLT",
+            "DATA",
+            "RPL",
+            "WCK",
+            "GRID",
+            "SPANK",
+            "TAUD",
+            "MANA",
+            "AMPL",
+            "FOAM",
+            "ANT",
+            "MGN",
+            "sETH (old)",
+            "DGD",
+            "FUN",
+            "TUSD",
+            "MLN",
+            "KIN",
+            "PAX",
+            "sUSD",
+            "TGBP",
+            "MOD",
+            "SNX",
+            "TCAD",
+            "RDN",
+            "LRC",
+            "MKR",
+            "CVC",
+            "VERI",
+            "RLC",
+            "PAN",
+            "DAI",
+            "DGX",
+            "BAT",
+            "THKD"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
       "available_scopes": [
         {
           "name": "read_balances",
@@ -19,34 +283,2562 @@
           "description": "Can read all balance information."
         },
         {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
           "name": "read_transaction_history",
           "display_name": "Read Transaction History",
-          "description": "Can read all past transactions.",
-          "resource_type": "scope"
+          "description": "Can read all past transactions."
         }
       ],
-      "available_currencies": [{ "type": "account", "list": [ "ETH" ] },{ "type": "UTXO", "list": [ "BTC" ] }],
-      "resource_type": "provider"
+      "is_beta": false
+    },
+    {
+      "name": "mew",
+      "display_name": "MyEtherWallet",
+      "auth_type": "web3",
+      "logo": "https://cdn.zabo.com/assets/providers/mew.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "SAI",
+            "sETH (old)",
+            "NMR",
+            "GEN",
+            "XCHF",
+            "SNT",
+            "ANT",
+            "TCAD",
+            "DAI",
+            "LPT",
+            "SPANK",
+            "sETH (new",
+            "FUN",
+            "BAT",
+            "QCH",
+            "WCK",
+            "THKD",
+            "PAX",
+            "AMPL",
+            "REP",
+            "WBTC",
+            "LRC",
+            "DGD",
+            "GNO",
+            "MOD",
+            "USDC",
+            "CVC",
+            "KIN",
+            "DIP",
+            "SALT",
+            "MGN",
+            "SNX",
+            "REN",
+            "LQD",
+            "BNT",
+            "LINK",
+            "sUSD",
+            "STORJ",
+            "TKN",
+            "MATIC",
+            "TAUD",
+            "DATA",
+            "RHOC",
+            "GRID",
+            "DGX",
+            "RPL",
+            "PNK",
+            "FOAM",
+            "MLN",
+            "POA20",
+            "RDN",
+            "TGBP",
+            "MANA",
+            "TUSD",
+            "C20",
+            "HOT",
+            "KNC",
+            "VERI",
+            "UNI-V1",
+            "ZRX",
+            "MKR",
+            "WETH",
+            "PAN",
+            "cDAI",
+            "RCN",
+            "RLC",
+            "NEXO",
+            "BLT",
+            "LOOM"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "liquid",
+      "display_name": "Liquid",
+      "auth_type": "token",
+      "logo": "https://cdn.zabo.com/assets/providers/liquid.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC",
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "fiat",
+          "list": [
+            "USD"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_supported_currencies",
+            "details": "Endpoint is slow.",
+            "status": "slow"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "go-wallet",
+      "display_name": "Go! Wallet",
+      "auth_type": "read_only",
+      "logo": "https://cdn.zabo.com/assets/providers/go-wallet.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "CVC",
+            "MOD",
+            "sETH (new",
+            "FUN",
+            "WETH",
+            "LINK",
+            "NMR",
+            "RDN",
+            "MGN",
+            "TCAD",
+            "PNK",
+            "FOAM",
+            "MANA",
+            "TGBP",
+            "MATIC",
+            "GNO",
+            "SALT",
+            "DGX",
+            "REN",
+            "THKD",
+            "sUSD",
+            "GRID",
+            "STORJ",
+            "RPL",
+            "KIN",
+            "sETH (old)",
+            "TKN",
+            "ZRX",
+            "DGD",
+            "RLC",
+            "VERI",
+            "WBTC",
+            "DATA",
+            "SAI",
+            "UNI-V1",
+            "USDC",
+            "SPANK",
+            "KNC",
+            "NEXO",
+            "AMPL",
+            "LRC",
+            "BAT",
+            "TAUD",
+            "QCH",
+            "TUSD",
+            "C20",
+            "LPT",
+            "REP",
+            "HOT",
+            "MLN",
+            "SNT",
+            "WCK",
+            "DIP",
+            "XCHF",
+            "PAN",
+            "GEN",
+            "LOOM",
+            "PAX",
+            "DAI",
+            "SNX",
+            "ANT",
+            "RHOC",
+            "BLT",
+            "RCN",
+            "BNT",
+            "MKR",
+            "LQD",
+            "cDAI",
+            "POA20"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "gateio",
+      "display_name": "Gate.io",
+      "auth_type": "token",
+      "logo": "https://cdn.zabo.com/assets/providers/gateio.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "partial_outage",
+        "details": "Partial outage.",
+        "endpoints": [
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_supported_currencies",
+            "details": "Endpoint is slow.",
+            "status": "slow"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "frost-wallet",
+      "display_name": "Frost",
+      "auth_type": "web3",
+      "logo": "https://cdn.zabo.com/assets/providers/frost-wallet.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "ZRX",
+            "RHOC",
+            "SNX",
+            "TKN",
+            "FOAM",
+            "MOD",
+            "XCHF",
+            "DGX",
+            "MLN",
+            "RCN",
+            "KNC",
+            "SNT",
+            "DIP",
+            "BNT",
+            "LPT",
+            "RDN",
+            "cDAI",
+            "QCH",
+            "THKD",
+            "AMPL",
+            "TGBP",
+            "LRC",
+            "ANT",
+            "PAX",
+            "NEXO",
+            "WETH",
+            "GNO",
+            "KIN",
+            "MANA",
+            "BAT",
+            "STORJ",
+            "REN",
+            "VERI",
+            "C20",
+            "MATIC",
+            "DGD",
+            "LOOM",
+            "USDC",
+            "GRID",
+            "POA20",
+            "REP",
+            "HOT",
+            "UNI-V1",
+            "MKR",
+            "MGN",
+            "TAUD",
+            "PNK",
+            "WBTC",
+            "TUSD",
+            "PAN",
+            "sETH (old)",
+            "sETH (new",
+            "BLT",
+            "FUN",
+            "RLC",
+            "DAI",
+            "SPANK",
+            "RPL",
+            "DATA",
+            "GEN",
+            "TCAD",
+            "SAI",
+            "LINK",
+            "sUSD",
+            "CVC",
+            "SALT",
+            "WCK",
+            "LQD",
+            "NMR"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "cipher",
+      "display_name": "Cipher",
+      "auth_type": "read_only",
+      "logo": "https://cdn.zabo.com/assets/providers/cipher.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "POA20",
+            "THKD",
+            "KIN",
+            "NEXO",
+            "cDAI",
+            "RDN",
+            "FOAM",
+            "BLT",
+            "LINK",
+            "DIP",
+            "DAI",
+            "PAN",
+            "DGX",
+            "MOD",
+            "SNX",
+            "QCH",
+            "DGD",
+            "SALT",
+            "SPANK",
+            "CVC",
+            "MATIC",
+            "GNO",
+            "WBTC",
+            "FUN",
+            "REN",
+            "sUSD",
+            "ZRX",
+            "MKR",
+            "C20",
+            "REP",
+            "BAT",
+            "MANA",
+            "RPL",
+            "WCK",
+            "AMPL",
+            "TKN",
+            "sETH (old)",
+            "MGN",
+            "TAUD",
+            "HOT",
+            "KNC",
+            "RHOC",
+            "LQD",
+            "ANT",
+            "sETH (new",
+            "LOOM",
+            "TCAD",
+            "MLN",
+            "BNT",
+            "RCN",
+            "DATA",
+            "PAX",
+            "VERI",
+            "GRID",
+            "UNI-V1",
+            "SNT",
+            "RLC",
+            "PNK",
+            "XCHF",
+            "WETH",
+            "STORJ",
+            "USDC",
+            "TUSD",
+            "TGBP",
+            "SAI",
+            "LRC",
+            "NMR",
+            "LPT",
+            "GEN"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "blockchainCom",
+      "display_name": "Blockchain.com",
+      "auth_type": "password",
+      "logo": "https://cdn.zabo.com/assets/providers/blockchainCom.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "fiat",
+          "list": [
+            "USD"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC",
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": null,
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "bittrex",
+      "display_name": "Bittrex",
+      "auth_type": "token",
+      "logo": "https://cdn.zabo.com/assets/providers/bittrex.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC",
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_supported_currencies",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "alpha-wallet",
+      "display_name": "AlphaWallet",
+      "auth_type": "read_only",
+      "logo": "https://cdn.zabo.com/assets/providers/alpha-wallet.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "REP",
+            "RCN",
+            "VERI",
+            "USDC",
+            "RPL",
+            "GNO",
+            "TCAD",
+            "WETH",
+            "RDN",
+            "BNT",
+            "LINK",
+            "DATA",
+            "sETH (old)",
+            "MLN",
+            "STORJ",
+            "KIN",
+            "RLC",
+            "BLT",
+            "MGN",
+            "GEN",
+            "MATIC",
+            "TUSD",
+            "DGD",
+            "LPT",
+            "KNC",
+            "GRID",
+            "LOOM",
+            "AMPL",
+            "TGBP",
+            "REN",
+            "sETH (new",
+            "LQD",
+            "MANA",
+            "NEXO",
+            "TKN",
+            "MOD",
+            "SALT",
+            "DIP",
+            "PNK",
+            "FUN",
+            "FOAM",
+            "UNI-V1",
+            "RHOC",
+            "SPANK",
+            "WCK",
+            "SNX",
+            "BAT",
+            "C20",
+            "PAX",
+            "sUSD",
+            "DGX",
+            "DAI",
+            "HOT",
+            "NMR",
+            "XCHF",
+            "PAN",
+            "LRC",
+            "SNT",
+            "ANT",
+            "TAUD",
+            "THKD",
+            "cDAI",
+            "CVC",
+            "POA20",
+            "SAI",
+            "MKR",
+            "QCH",
+            "ZRX",
+            "WBTC"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "blockFi",
+      "display_name": "BlockFi",
+      "auth_type": "password",
+      "logo": "https://cdn.zabo.com/assets/providers/blockFi.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC",
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "fiat",
+          "list": [
+            "USD"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": null,
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": true
+    },
+    {
+      "name": "xpub-key",
+      "display_name": "XPub Key",
+      "auth_type": "xpub",
+      "logo": "https://cdn.zabo.com/assets/providers/xpub-key.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "MOD",
+            "RLC",
+            "SALT",
+            "AMPL",
+            "FOAM",
+            "LINK",
+            "MGN",
+            "DGX",
+            "GRID",
+            "MATIC",
+            "WCK",
+            "USDC",
+            "LQD",
+            "POA20",
+            "LRC",
+            "VERI",
+            "PAN",
+            "RDN",
+            "BLT",
+            "KIN",
+            "DAI",
+            "MKR",
+            "NEXO",
+            "sUSD",
+            "SNT",
+            "LPT",
+            "QCH",
+            "NMR",
+            "KNC",
+            "CVC",
+            "TAUD",
+            "MLN",
+            "WBTC",
+            "TUSD",
+            "UNI-V1",
+            "TCAD",
+            "LOOM",
+            "TKN",
+            "WETH",
+            "RCN",
+            "SNX",
+            "REP",
+            "XCHF",
+            "GNO",
+            "STORJ",
+            "sETH (old)",
+            "MANA",
+            "ANT",
+            "SPANK",
+            "BAT",
+            "RHOC",
+            "DGD",
+            "TGBP",
+            "GEN",
+            "ZRX",
+            "C20",
+            "DATA",
+            "FUN",
+            "sETH (new",
+            "THKD",
+            "REN",
+            "HOT",
+            "PAX",
+            "RPL",
+            "PNK",
+            "SAI",
+            "DIP",
+            "BNT",
+            "cDAI"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "down",
+        "details": "Provider down.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint is down.",
+            "status": "down"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "trust",
+      "display_name": "Trust Wallet",
+      "auth_type": "read_only",
+      "logo": "https://cdn.zabo.com/assets/providers/trust.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "KIN",
+            "AMPL",
+            "KNC",
+            "TKN",
+            "SAI",
+            "FUN",
+            "WBTC",
+            "GRID",
+            "RPL",
+            "ANT",
+            "HOT",
+            "DIP",
+            "PAN",
+            "NEXO",
+            "TAUD",
+            "UNI-V1",
+            "DATA",
+            "LOOM",
+            "NMR",
+            "sETH (new",
+            "SALT",
+            "DGX",
+            "GEN",
+            "LQD",
+            "REP",
+            "QCH",
+            "SNT",
+            "MLN",
+            "BNT",
+            "MOD",
+            "PAX",
+            "RCN",
+            "ZRX",
+            "USDC",
+            "MATIC",
+            "C20",
+            "RDN",
+            "STORJ",
+            "REN",
+            "TCAD",
+            "cDAI",
+            "DAI",
+            "CVC",
+            "RLC",
+            "THKD",
+            "BLT",
+            "PNK",
+            "LINK",
+            "MKR",
+            "LPT",
+            "SPANK",
+            "sETH (old)",
+            "POA20",
+            "BAT",
+            "WCK",
+            "XCHF",
+            "LRC",
+            "VERI",
+            "FOAM",
+            "MANA",
+            "DGD",
+            "MGN",
+            "TGBP",
+            "sUSD",
+            "GNO",
+            "RHOC",
+            "WETH",
+            "TUSD",
+            "SNX"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "down",
+        "details": "Provider down.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint is down.",
+            "status": "down"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "trezor",
+      "display_name": "Trezor Hardware Wallet",
+      "auth_type": "hardware_xpub",
+      "logo": "https://cdn.zabo.com/assets/providers/trezor.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "down",
+        "details": "Provider down.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint is down.",
+            "status": "down"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "is_beta": false
     },
     {
       "name": "metamask",
       "display_name": "MetaMask",
+      "auth_type": "web3",
       "logo": "https://cdn.zabo.com/assets/providers/metamask.png",
-      "auth_type": "private_key",
       "resource_type": "provider",
-      "available_scopes": ["read_balances","read_transaction_history"],
-      "available_currencies": [{ "type": "account", "list": [ "ETH" ] }, { "type": "ERC20", "list": [ "ALL" ] }],
-      "resource_type": "provider"
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "RLC",
+            "WBTC",
+            "MANA",
+            "RPL",
+            "SAI",
+            "ANT",
+            "LRC",
+            "REP",
+            "WETH",
+            "RDN",
+            "UNI-V1",
+            "NEXO",
+            "MLN",
+            "LQD",
+            "ZRX",
+            "sETH (old)",
+            "DAI",
+            "RCN",
+            "MATIC",
+            "FOAM",
+            "KNC",
+            "GEN",
+            "NMR",
+            "STORJ",
+            "LOOM",
+            "GRID",
+            "TUSD",
+            "AMPL",
+            "C20",
+            "KIN",
+            "PAN",
+            "RHOC",
+            "TKN",
+            "BLT",
+            "sETH (new",
+            "MKR",
+            "REN",
+            "MOD",
+            "FUN",
+            "HOT",
+            "VERI",
+            "MGN",
+            "CVC",
+            "PNK",
+            "USDC",
+            "SPANK",
+            "SNT",
+            "BAT",
+            "TGBP",
+            "XCHF",
+            "DATA",
+            "cDAI",
+            "sUSD",
+            "SNX",
+            "LINK",
+            "DGD",
+            "SALT",
+            "WCK",
+            "POA20",
+            "QCH",
+            "GNO",
+            "TCAD",
+            "TAUD",
+            "DIP",
+            "BNT",
+            "PAX",
+            "DGX",
+            "THKD",
+            "LPT"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        }
+      ],
+      "is_beta": false
     },
     {
       "name": "ledger",
       "display_name": "Ledger Hardware Wallet",
+      "auth_type": "hardware_xpub",
       "logo": "https://cdn.zabo.com/assets/providers/ledger.png",
-      "auth_type": "private_key",
       "resource_type": "provider",
-      "available_scopes": ["read_balances","read_transaction_history"],
-      "available_currencies": [{ "type": "account", "list": [ "all" ] }, { "type": "ERC20", "list": [ "ALL" ] }],
-      "resource_type": "provider"
+      "available_currencies": [
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "down",
+        "details": "Provider down.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint is down.",
+            "status": "down"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "kucoin",
+      "display_name": "KuCoin",
+      "auth_type": "token",
+      "logo": "https://cdn.zabo.com/assets/providers/kucoin.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC",
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_supported_currencies",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "kraken",
+      "display_name": "Kraken",
+      "auth_type": "token",
+      "logo": "https://cdn.zabo.com/assets/providers/kraken.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "fiat",
+          "list": [
+            "USD"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC",
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "get_transactions",
+            "details": "Endpoint is slow.",
+            "status": "slow"
+          },
+          {
+            "name": "get_supported_currencies",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "huobi",
+      "display_name": "Huobi",
+      "auth_type": "token",
+      "logo": "https://cdn.zabo.com/assets/providers/huobi.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC",
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_supported_currencies",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "gemini",
+      "display_name": "Gemini",
+      "auth_type": "token",
+      "logo": "https://cdn.zabo.com/assets/providers/gemini.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "fiat",
+          "list": [
+            "USD"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BTC"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "partial_outage",
+        "details": "Partial outage.",
+        "endpoints": [
+          {
+            "name": "get_transactions",
+            "details": "Unable to test this endpoint.",
+            "status": "test_failure"
+          },
+          {
+            "name": "get_supported_currencies",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "ethereum",
+      "display_name": "Ethereum Address",
+      "auth_type": "read_only",
+      "logo": "https://cdn.zabo.com/assets/providers/ethereum.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "KIN",
+            "HOT",
+            "LRC",
+            "TKN",
+            "TAUD",
+            "C20",
+            "SAI",
+            "cDAI",
+            "PNK",
+            "TUSD",
+            "MKR",
+            "DATA",
+            "WBTC",
+            "THKD",
+            "LPT",
+            "MOD",
+            "TCAD",
+            "XCHF",
+            "STORJ",
+            "PAN",
+            "GNO",
+            "BAT",
+            "POA20",
+            "KNC",
+            "VERI",
+            "RPL",
+            "RHOC",
+            "REP",
+            "MLN",
+            "SALT",
+            "sETH (old)",
+            "WCK",
+            "MATIC",
+            "REN",
+            "sETH (new",
+            "USDC",
+            "UNI-V1",
+            "LINK",
+            "RDN",
+            "BNT",
+            "SPANK",
+            "AMPL",
+            "SNT",
+            "ANT",
+            "GEN",
+            "LOOM",
+            "QCH",
+            "sUSD",
+            "CVC",
+            "TGBP",
+            "NMR",
+            "DAI",
+            "RCN",
+            "RLC",
+            "GRID",
+            "FOAM",
+            "ZRX",
+            "MGN",
+            "MANA",
+            "DGX",
+            "FUN",
+            "WETH",
+            "LQD",
+            "BLT",
+            "PAX",
+            "DIP",
+            "DGD",
+            "SNX",
+            "NEXO"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "equal",
+      "display_name": "EQUAL",
+      "auth_type": "web3",
+      "logo": "https://cdn.zabo.com/assets/providers/equal.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "SAI",
+            "PAN",
+            "ANT",
+            "UNI-V1",
+            "LPT",
+            "LQD",
+            "LOOM",
+            "sETH (new",
+            "WCK",
+            "WETH",
+            "KNC",
+            "cDAI",
+            "DIP",
+            "NMR",
+            "NEXO",
+            "HOT",
+            "USDC",
+            "PNK",
+            "RLC",
+            "TKN",
+            "sETH (old)",
+            "MLN",
+            "DGD",
+            "QCH",
+            "AMPL",
+            "DGX",
+            "TCAD",
+            "RDN",
+            "SNX",
+            "C20",
+            "SNT",
+            "REN",
+            "BAT",
+            "BNT",
+            "SALT",
+            "RPL",
+            "WBTC",
+            "XCHF",
+            "SPANK",
+            "MANA",
+            "BLT",
+            "LINK",
+            "FOAM",
+            "sUSD",
+            "RHOC",
+            "MATIC",
+            "MOD",
+            "MKR",
+            "RCN",
+            "ZRX",
+            "GRID",
+            "DATA",
+            "STORJ",
+            "POA20",
+            "TUSD",
+            "LRC",
+            "VERI",
+            "GEN",
+            "PAX",
+            "TGBP",
+            "THKD",
+            "DAI",
+            "REP",
+            "KIN",
+            "CVC",
+            "FUN",
+            "MGN",
+            "GNO",
+            "TAUD"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        },
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "dapper",
+      "display_name": "Dapper",
+      "auth_type": "web3",
+      "logo": "https://cdn.zabo.com/assets/providers/dapper.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "ERC20",
+          "list": [
+            "MATIC",
+            "MGN",
+            "HOT",
+            "VERI",
+            "TGBP",
+            "ZRX",
+            "UNI-V1",
+            "DGX",
+            "STORJ",
+            "PAX",
+            "BNT",
+            "SPANK",
+            "GRID",
+            "LQD",
+            "PAN",
+            "TAUD",
+            "DIP",
+            "NMR",
+            "cDAI",
+            "BAT",
+            "AMPL",
+            "SAI",
+            "DAI",
+            "POA20",
+            "SNT",
+            "LRC",
+            "RLC",
+            "DGD",
+            "THKD",
+            "WCK",
+            "RHOC",
+            "sETH (old)",
+            "SALT",
+            "SNX",
+            "WETH",
+            "RDN",
+            "sETH (new",
+            "NEXO",
+            "MANA",
+            "MKR",
+            "PNK",
+            "LINK",
+            "FUN",
+            "USDC",
+            "RCN",
+            "MOD",
+            "WBTC",
+            "REN",
+            "RPL",
+            "TUSD",
+            "KIN",
+            "LPT",
+            "ANT",
+            "XCHF",
+            "FOAM",
+            "sUSD",
+            "BLT",
+            "TCAD",
+            "GEN",
+            "DATA",
+            "GNO",
+            "C20",
+            "TKN",
+            "CVC",
+            "MLN",
+            "KNC",
+            "QCH",
+            "REP",
+            "LOOM"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "good",
+        "details": "Fully operational.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint working as expected.",
+            "status": "good"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
+    },
+    {
+      "name": "coinbase-wallet",
+      "display_name": "Coinbase Wallet",
+      "auth_type": "read_only",
+      "logo": "https://cdn.zabo.com/assets/providers/coinbase-wallet.png",
+      "resource_type": "provider",
+      "available_currencies": [
+        {
+          "type": "account",
+          "list": [
+            "ETH"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "ERC20",
+          "list": [
+            "PAN",
+            "sETH (new",
+            "LINK",
+            "DIP",
+            "BLT",
+            "STORJ",
+            "TAUD",
+            "RHOC",
+            "ANT",
+            "LRC",
+            "PNK",
+            "HOT",
+            "TGBP",
+            "LPT",
+            "KNC",
+            "SALT",
+            "PAX",
+            "GNO",
+            "MATIC",
+            "WBTC",
+            "UNI-V1",
+            "XCHF",
+            "TUSD",
+            "MLN",
+            "BAT",
+            "QCH",
+            "LQD",
+            "THKD",
+            "TCAD",
+            "SNT",
+            "AMPL",
+            "BNT",
+            "SAI",
+            "sUSD",
+            "MGN",
+            "DATA",
+            "CVC",
+            "MANA",
+            "cDAI",
+            "MOD",
+            "sETH (old)",
+            "C20",
+            "WCK",
+            "RCN",
+            "FOAM",
+            "SNX",
+            "DAI",
+            "POA20",
+            "VERI",
+            "LOOM",
+            "DGX",
+            "MKR",
+            "FUN",
+            "WETH",
+            "REN",
+            "GRID",
+            "RDN",
+            "NMR",
+            "GEN",
+            "NEXO",
+            "REP",
+            "TKN",
+            "USDC",
+            "ZRX",
+            "KIN",
+            "DGD",
+            "RPL",
+            "SPANK",
+            "RLC"
+          ],
+          "resource_type": "currency_list"
+        },
+        {
+          "type": "UTXO",
+          "list": [
+            "BCH"
+          ],
+          "resource_type": "currency_list"
+        }
+      ],
+      "status": {
+        "name": "down",
+        "details": "Provider down.",
+        "endpoints": [
+          {
+            "name": "create_deposit_address",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_transactions",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_deposit_addresses",
+            "details": "Endpoint is down.",
+            "status": "down"
+          },
+          {
+            "name": "get_balances",
+            "details": "Endpoint is down.",
+            "status": "down"
+          }
+        ]
+      },
+      "available_scopes": [
+        {
+          "name": "read_transaction_history",
+          "display_name": "Read Transaction History",
+          "description": "Can read all past transactions."
+        },
+        {
+          "name": "read_balances",
+          "display_name": "Read Balances",
+          "description": "Can read all balance information."
+        },
+        {
+          "name": "get_deposit_addresses",
+          "display_name": "Read Deposit Addresses",
+          "description": "Can obtain all cryptocurrency deposit addresses for the account."
+        },
+        {
+          "name": "create_deposit_address",
+          "display_name": "Can Produce A Deposit Address",
+          "description": "Ability to provide an address for cryptocurrency deposits."
+        }
+      ],
+      "is_beta": false
     }
-  ]
+  ],
+  "request_id": "e05805f4-dc14-469a-a15b-e2b980673cc2"
 }
