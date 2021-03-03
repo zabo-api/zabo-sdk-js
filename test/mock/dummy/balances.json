@@ -1,16 +1,68 @@
 {
   "data": [
     {
-      "balance": "5.068",
-      "currency": "ETH",
-      "type": "account",
-      "updated_at": 1560134750000
+      "ticker": "RANDOMZABO",
+      "provider_ticker": "RANDOMZABO",
+      "name": "",
+      "asset_is_verified": false,
+      "asset_type": "",
+      "amount": "10438.480388",
+      "decimals": 0,
+      "fiat_ticker": "",
+      "fiat_value": "",
+      "fiat_asset_is_verified": false,
+      "logo": "",
+      "updated_at": 1614609696650,
+      "misc": null,
+      "resource_type": "balance"
     },
     {
-      "balance": "0.932",
-      "currency": "BTC",
-      "type": "UTXO",
-      "updated_at": 1560134750000
+      "ticker": "ETH",
+      "provider_ticker": "ETH",
+      "name": "Ether",
+      "asset_is_verified": true,
+      "asset_type": "account",
+      "amount": "1.159320000047394086",
+      "decimals": 18,
+      "fiat_ticker": "USD",
+      "fiat_value": "448.10",
+      "fiat_asset_is_verified": true,
+      "logo": "https://cdn.zabo.com/assets/currencies/ETH.png",
+      "updated_at": 1614609696650,
+      "misc": null,
+      "resource_type": "balance"
+    },
+    {
+      "ticker": "XYZ",
+      "provider_ticker": "XYZ",
+      "name": "",
+      "asset_is_verified": false,
+      "asset_type": "",
+      "amount": "10438.480388",
+      "decimals": 0,
+      "fiat_ticker": "",
+      "fiat_value": "",
+      "fiat_asset_is_verified": false,
+      "logo": "",
+      "updated_at": 1614609696650,
+      "misc": null,
+      "resource_type": "balance"
+    },
+    {
+      "ticker": "BTC",
+      "provider_ticker": "BTC",
+      "name": "Bitcoin",
+      "asset_is_verified": true,
+      "asset_type": "UTXO",
+      "amount": "0.1932",
+      "decimals": 8,
+      "fiat_ticker": "USD",
+      "fiat_value": "2210.93",
+      "fiat_asset_is_verified": true,
+      "logo": "https://cdn.zabo.com/assets/currencies/BTC.png",
+      "updated_at": 1614609696650,
+      "misc": null,
+      "resource_type": "balance"
     }
   ]
 }

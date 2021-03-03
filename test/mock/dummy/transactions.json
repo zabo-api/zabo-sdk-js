@@ -1,304 +1,948 @@
 {
-  "list_cursor":{
-    "limit":25,
-    "has_more":false,
-    "self_uri":"/accounts/ff0dc466-547b-45f6-a34c-f45463489e2f/transactions?limit=25",
-    "next_uri":""
+  "list_cursor": {
+    "limit": 25,
+    "has_more": false,
+    "self_uri": "/accounts/13ffee8e-0982-4393-b163-e2eefa1f5b7d/transactions?limit=25",
+    "next_uri": ""
   },
-  "data":[
+  "delay": 0,
+  "last_updated_at": 1614610210210,
+  "data": [
     {
-      "id":"a34681a8917b60202e0a30383162f6c54d397a3372d81b9d653f17ce05a40739",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.001",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "b066b7e5-36b2-43ff-b866-707452b6dcd7",
+      "status": "completed",
+      "transaction_type": "deposit",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "ETH",
+          "provider_ticker": "ETH",
+          "amount": "9.4550571",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "3654.56",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "0xbdfa60A3ec7F0786DaFB3B86949A617c7b81f3A7"
+          ]
+        }
       ],
-      "initiated_at":1575483935,
-      "confirmed_at":null
+      "fees": [],
+      "misc": [],
+      "fiat_calculated_at": 1589532397043,
+      "initiated_at": 1589532396043,
+      "confirmed_at": 1589532397043,
+      "resource_type": "transaction"
     },
     {
-      "id":"0xaf70b895e1f63089d5019558631e1a912c4bbd4aa01dfa7e00d35416132134a5",
-      "type":"sent",
-      "currency":"ETH",
-      "amount":"0.01",
-      "status":"completed",
-      "other_parties":[
-        "0xbc4a04697dB6c9fBd743725536E1c3f0161305e2"
+      "id": "932e2040-32ce-4f3a-a67b-f1f37bcb74ba",
+      "status": "completed",
+      "transaction_type": "withdrawal",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "ETH",
+          "provider_ticker": "ETH",
+          "amount": "3.7062262",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "1432.52",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "0xbdfa60A3ec7F0786DaFB3B86949A617c7b81f3A7"
+          ]
+        }
       ],
-      "initiated_at":1575396663,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "network",
+          "ticker": "ETH",
+          "provider_ticker": "ETH",
+          "amount": "0.0185311",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1589390065699,
+      "initiated_at": 1589390064699,
+      "confirmed_at": 1589390065699,
+      "resource_type": "transaction"
     },
     {
-      "id":"27f894701a9647f2083f02c4828bd0b8c4f873969f790d131bdeae4636c101cc",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.0001",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "96a885c3-3b6b-47c0-8094-a27f4971ad68",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "7.4506117",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "sent",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "0.00",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1575396588,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "1.05",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1589173112928,
+      "initiated_at": 1589173111928,
+      "confirmed_at": 1589173112928,
+      "resource_type": "transaction"
     },
     {
-      "id":"0x4f807272e6391082651af9627739c4bb6521b66be14ced98590f43f024746fe5",
-      "type":"sent",
-      "currency":"ETH",
-      "amount":"0.1",
-      "status":"completed",
-      "other_parties":[
-        "0xbc4a04697dB6c9fBd743725536E1c3f0161305e2"
+      "id": "f85da508-c926-45f5-81ae-753113841cdb",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "2207.64",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "2207.64",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "sent",
+          "ticker": "BCH",
+          "provider_ticker": "BCH",
+          "amount": "8.0349411",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "2207.64",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574872002,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "2.74",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1588865056042,
+      "initiated_at": 1588865055042,
+      "confirmed_at": 1588865056042,
+      "resource_type": "transaction"
     },
     {
-      "id":"54e2954a265fe1b6d2ae7aa94af036bfcbdd93b499c5ed54fe21a037248df63d",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.0001",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "662afd18-2849-47b0-bfa7-63bd92672755",
+      "status": "completed",
+      "transaction_type": "deposit",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "BCH",
+          "provider_ticker": "BCH",
+          "amount": "1.931688",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "530.74",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "18ciiHvWVDn64ZZUT725wh6bBpmaBpSVmF"
+          ]
+        }
       ],
-      "initiated_at":1574871966,
-      "confirmed_at":null
+      "fees": [],
+      "misc": [],
+      "fiat_calculated_at": 1588714976892,
+      "initiated_at": 1588714975892,
+      "confirmed_at": 1588714976892,
+      "resource_type": "transaction"
     },
     {
-      "id":"6929eed6e35fed7f7e08c346e6397c0757e5160b09a3e1f5a571c52c9e68ccc4",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.00000999",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "c28b4fd0-8653-4bb2-b49a-4b0bfa07e2ae",
+      "status": "completed",
+      "transaction_type": "deposit",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "ETH",
+          "provider_ticker": "ETH",
+          "amount": "8.8807586",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "3432.58",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "0xbdfa60A3ec7F0786DaFB3B86949A617c7b81f3A7"
+          ]
+        }
       ],
-      "initiated_at":1574871657,
-      "confirmed_at":null
+      "fees": [],
+      "misc": [],
+      "fiat_calculated_at": 1588684856947,
+      "initiated_at": 1588684855947,
+      "confirmed_at": 1588684856947,
+      "resource_type": "transaction"
     },
     {
-      "id":"7ec435679dcf97c19df957a9e87aa9ab8b3522fb53a4ce1e8937a437899e6e4f",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.00000999",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "0c24f516-1f1f-47cb-b921-921918f697b9",
+      "status": "completed",
+      "transaction_type": "withdrawal",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "RANDOMZABO",
+          "provider_ticker": "RANDOMZABO",
+          "amount": "3.4381291",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574705223,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "network",
+          "ticker": "RANDOMZABO",
+          "provider_ticker": "RANDOMZABO",
+          "amount": "0.0171906",
+          "asset_is_verified": false,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1588561271528,
+      "initiated_at": 1588561270528,
+      "confirmed_at": 1588561271528,
+      "resource_type": "transaction"
     },
     {
-      "id":"2c21b8e2c7ea67d6a15ff81f95da29f674dec4179580908f01a3c94930a8e772",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.0001",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "766dde10-569e-4281-a887-a712a38ff43b",
+      "status": "completed",
+      "transaction_type": "deposit",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "4.3077669",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574694676,
-      "confirmed_at":null
+      "fees": [],
+      "misc": [],
+      "fiat_calculated_at": 1588004454083,
+      "initiated_at": 1588004453083,
+      "confirmed_at": 1588004454083,
+      "resource_type": "transaction"
     },
     {
-      "id":"a435dc53de4d266f209c8f63f6689840163d0b36f15e0cf7ac841950dc1ac0d7",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.0001",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "c0e13890-3f19-4e6d-94d7-1237377858ef",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "BTC",
+          "provider_ticker": "BTC",
+          "amount": "0.4418606",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "5056.53",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "received",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "5056.53",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "5056.53",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574694455,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "114.43",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1587851118143,
+      "initiated_at": 1587851117143,
+      "confirmed_at": 1587851118143,
+      "resource_type": "transaction"
     },
     {
-      "id":"0x14d74c26f12c9aacff15de62140930e6af8480db66fa4e3e21ccf25d970a61fd",
-      "type":"sent",
-      "currency":"ETH",
-      "amount":"1",
-      "status":"completed",
-      "other_parties":[
-        "0xbc4a04697dB6c9fBd743725536E1c3f0161305e2"
+      "id": "360bed56-3bb9-4af2-9391-83c8185f3f66",
+      "status": "completed",
+      "transaction_type": "withdrawal",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "3.2476138",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574287776,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "network",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "0.0162380",
+          "asset_is_verified": false,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1587662887100,
+      "initiated_at": 1587662886100,
+      "confirmed_at": 1587662887100,
+      "resource_type": "transaction"
     },
     {
-      "id":"0x3e4f35bdf6fd5f2f0ba486cb0c9a8ad70e797c59b037ed731235360674331a08",
-      "type":"sent",
-      "currency":"ETH",
-      "amount":"0.1",
-      "status":"completed",
-      "other_parties":[
-        "0xbc4a04697dB6c9fBd743725536E1c3f0161305e2"
+      "id": "4d94b566-ebb3-4f4b-8fd6-8a6ee1555899",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "RANDOMZABO",
+          "provider_ticker": "RANDOMZABO",
+          "amount": "4.9681889",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "sent",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "0.00",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574258317,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "1.05",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1587556164671,
+      "initiated_at": 1587556163671,
+      "confirmed_at": 1587556164671,
+      "resource_type": "transaction"
     },
     {
-      "id":"0xb277fbe61ad83118d9823a6a5332791c2ad7358d434d710020dcde36f4e9ba4d",
-      "type":"sent",
-      "currency":"ETH",
-      "amount":"0.0001",
-      "status":"completed",
-      "other_parties":[
-        "0xbc4a04697dB6c9fBd743725536E1c3f0161305e2"
+      "id": "07e552dd-3e4c-490b-a82e-20da8ac9ff5c",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "3.6619429",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "received",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "0.00",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574207132,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "1.05",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1587520898243,
+      "initiated_at": 1587520897243,
+      "confirmed_at": 1587520898243,
+      "resource_type": "transaction"
     },
     {
-      "id":"9a7d87058ae955e7e7bf84e792f6c918c58bbd3e42d66bbb2eb297c15576e198",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.0001",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "9e39b6cd-3147-4c8f-9caf-4bd4e97c1440",
+      "status": "completed",
+      "transaction_type": "deposit",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "BTC",
+          "provider_ticker": "BTC",
+          "amount": "0.5130103",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "5870.75",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "1JdH9enMREoU9f6v6TscKxZEzkfohvpqvR"
+          ]
+        }
       ],
-      "initiated_at":1574206199,
-      "confirmed_at":null
+      "fees": [],
+      "misc": [],
+      "fiat_calculated_at": 1587304334886,
+      "initiated_at": 1587304333886,
+      "confirmed_at": 1587304334886,
+      "resource_type": "transaction"
     },
     {
-      "id":"0:0:49904@1574205375.999891874",
-      "type":"sent",
-      "currency":"HBAR",
-      "amount":"1",
-      "status":"completed",
-      "other_parties":[
-        "98862"
+      "id": "2e77efb3-a1ee-45e2-9fda-a51f237864c9",
+      "status": "completed",
+      "transaction_type": "withdrawal",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "BCH",
+          "provider_ticker": "BCH",
+          "amount": "4.6249668",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "1270.73",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "18ciiHvWVDn64ZZUT725wh6bBpmaBpSVmF"
+          ]
+        }
       ],
-      "initiated_at":1574205386,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "network",
+          "ticker": "BCH",
+          "provider_ticker": "BCH",
+          "amount": "0.0231248",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1587009274384,
+      "initiated_at": 1587009273384,
+      "confirmed_at": 1587009274384,
+      "resource_type": "transaction"
     },
     {
-      "id":"0x77601e6a2260449dee3b5e313a47de856189e3da17d99e888f1cb055557b1bdd",
-      "type":"sent",
-      "currency":"ETH",
-      "amount":"0.01",
-      "status":"completed",
-      "other_parties":[
-        "0xbc4a04697dB6c9fBd743725536E1c3f0161305e2"
+      "id": "61fe8745-4055-4079-b68b-ab8963863e44",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "BCH",
+          "provider_ticker": "BCH",
+          "amount": "3.5970054",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "988.29",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "sent",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "988.29",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "988.29",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574204118,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "2.74",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1586535427866,
+      "initiated_at": 1586535426866,
+      "confirmed_at": 1586535427866,
+      "resource_type": "transaction"
     },
     {
-      "id":"02fccdbc2a2dfc89c86c0886285d17d23a1d23ffabe906b5833cbbc7e6833632",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.0001",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "6b0a20c6-830a-4edb-915b-b9ed496d7fcf",
+      "status": "completed",
+      "transaction_type": "deposit",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "ETH",
+          "provider_ticker": "ETH",
+          "amount": "4.9617948",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "1917.83",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "0xbdfa60A3ec7F0786DaFB3B86949A617c7b81f3A7"
+          ]
+        }
       ],
-      "initiated_at":1574203289,
-      "confirmed_at":null
+      "fees": [],
+      "misc": [],
+      "fiat_calculated_at": 1586506627369,
+      "initiated_at": 1586506626369,
+      "confirmed_at": 1586506627369,
+      "resource_type": "transaction"
     },
     {
-      "id":"99b2bf9fbeda6a3e64a0d0c0eb29efb0b1bb4156014c58eee37c5f3bf29127f4",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.001",
-      "status":"completed",
-      "other_parties":[
-        "mfcSEPR8EkJrpX91YkTJ9iscdAzppJrG9j"
+      "id": "25ecb899-884e-48f6-a912-5e08d4de03ef",
+      "status": "completed",
+      "transaction_type": "withdrawal",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "5.2993659",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574199195,
-      "confirmed_at":null
+      "fees": [
+        {
+          "type": "network",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "0.0264968",
+          "asset_is_verified": false,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1585847322981,
+      "initiated_at": 1585847321981,
+      "confirmed_at": 1585847322981,
+      "resource_type": "transaction"
     },
     {
-      "id":"f9ca9219deb353d20e181ef3dfa028590503f2a808a680d200598d07e997d23c",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.00436347",
-      "status":"completed",
-      "other_parties":[
-        "ms339qE3qeGVLjCBQcs46Fqg5zpfssQeuH",
-        "mybTHz9Z38tvAtMNUSgeiZBNaE1vkWzYZQ"
+      "id": "413c1a95-fa89-4fff-93c2-a49c57cebf6f",
+      "status": "completed",
+      "transaction_type": "deposit",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "4.7985790",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574197368,
-      "confirmed_at":1574198507
+      "fees": [],
+      "misc": [],
+      "fiat_calculated_at": 1585742248231,
+      "initiated_at": 1585742247231,
+      "confirmed_at": 1585742248231,
+      "resource_type": "transaction"
     },
     {
-      "id":"4a990c080e1b617dc4ce70742cec7112e91c59a7aa1476c40ea89ef3b6d87baa",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.00510047",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5",
-        "ms339qE3qeGVLjCBQcs46Fqg5zpfssQeuH"
+      "id": "68d02e27-9697-48bd-8f7f-aa7294835244",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "XYZ",
+          "provider_ticker": "XYZ",
+          "amount": "2.1550869",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "received",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "0.00",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574197054,
-      "confirmed_at":1574197054
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "1.05",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1585382952636,
+      "initiated_at": 1585382951636,
+      "confirmed_at": 1585382952636,
+      "resource_type": "transaction"
     },
     {
-      "id":"85e24e125f1391e10df5074039fbad00a83a1d82d681ba72abb389ac5bed9c9a",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.00823747",
-      "status":"completed",
-      "other_parties":[
-        "ms339qE3qeGVLjCBQcs46Fqg5zpfssQeuH",
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "71a52013-7ad3-4efd-a4d4-a6572cabecca",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "223.08",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "223.08",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "received",
+          "ticker": "ETH",
+          "provider_ticker": "ETH",
+          "amount": "0.577165",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "223.08",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574197044,
-      "confirmed_at":1574197054
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "3.86",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1585273892330,
+      "initiated_at": 1585273891330,
+      "confirmed_at": 1585273892330,
+      "resource_type": "transaction"
     },
     {
-      "id":"5753227d7ee753f88cff02a414feb0275d8b8e23c767a641e6b69fff350fdfea",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.01137447",
-      "status":"completed",
-      "other_parties":[
-        "mybTHz9Z38tvAtMNUSgeiZBNaE1vkWzYZQ",
-        "ms339qE3qeGVLjCBQcs46Fqg5zpfssQeuH"
+      "id": "292614b4-46f1-43d0-8549-b6b1d9ec7596",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "RANDOMZABO",
+          "provider_ticker": "RANDOMZABO",
+          "amount": "9.5445064",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "received",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "0.00",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574196413,
-      "confirmed_at":1574196413
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "1.05",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1584923270071,
+      "initiated_at": 1584923269071,
+      "confirmed_at": 1584923270071,
+      "resource_type": "transaction"
     },
     {
-      "id":"0x200b3595e5ff73c60f0f27ed4b02e7c7e54da2a1a826a655e85a8965307ed56d",
-      "type":"received",
-      "currency":"ETH",
-      "amount":"0.01",
-      "status":"completed",
-      "other_parties":[
-        "0x49868cd37f4db7b8629ead28203e1575e35b00b1"
+      "id": "dcf2527e-7eb2-4f37-ba74-568228e7e41b",
+      "status": "completed",
+      "transaction_type": "deposit",
+      "parts": [
+        {
+          "direction": "received",
+          "ticker": "BTC",
+          "provider_ticker": "BTC",
+          "amount": "8.7801293",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "100477.51",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "1JdH9enMREoU9f6v6TscKxZEzkfohvpqvR"
+          ]
+        }
       ],
-      "initiated_at":1574196155,
-      "confirmed_at":1574196230
+      "fees": [],
+      "misc": [],
+      "fiat_calculated_at": 1584756587423,
+      "initiated_at": 1584756586423,
+      "confirmed_at": 1584756587423,
+      "resource_type": "transaction"
     },
     {
-      "id":"725c0502a8ae28c5e2b21782b4593daa2a22548b9c3538739927f91c45d08e91",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.01251147",
-      "status":"completed",
-      "other_parties":[
-        "ms339qE3qeGVLjCBQcs46Fqg5zpfssQeuH",
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5"
+      "id": "04b36697-4a89-4a5e-a6e3-e6d6d7a3dcf6",
+      "status": "completed",
+      "transaction_type": "trade",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "RANDOMZABO",
+          "provider_ticker": "RANDOMZABO",
+          "amount": "8.7648502",
+          "asset_is_verified": false,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        },
+        {
+          "direction": "received",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "0.00",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "0.00",
+          "fiat_asset_is_verified": true,
+          "other_parties": []
+        }
       ],
-      "initiated_at":1574195396,
-      "confirmed_at":1574196413
+      "fees": [
+        {
+          "type": "exchange",
+          "ticker": "USD",
+          "provider_ticker": "USD",
+          "amount": "1.05",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1584715988095,
+      "initiated_at": 1584715987095,
+      "confirmed_at": 1584715988095,
+      "resource_type": "transaction"
     },
     {
-      "id":"6e8274d2c732bce4f4987851ce8a8438a831a11698820ae58068f461396f788f",
-      "type":"sent",
-      "currency":"BTC",
-      "amount":"0.01364847",
-      "status":"completed",
-      "other_parties":[
-        "mjsejamKYxsznJVHrL8RpFWCn5XKV3KHU5",
-        "ms339qE3qeGVLjCBQcs46Fqg5zpfssQeuH"
+      "id": "aeb5b8d1-0926-4a7d-98c2-85ca1df4cbf3",
+      "status": "completed",
+      "transaction_type": "withdrawal",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "ETH",
+          "provider_ticker": "ETH",
+          "amount": "3.7124301",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "1434.92",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "0xbdfa60A3ec7F0786DaFB3B86949A617c7b81f3A7"
+          ]
+        }
       ],
-      "initiated_at":1574195227,
-      "confirmed_at":1574195227
+      "fees": [
+        {
+          "type": "network",
+          "ticker": "ETH",
+          "provider_ticker": "ETH",
+          "amount": "0.0185621",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1584695744889,
+      "initiated_at": 1584695743889,
+      "confirmed_at": 1584695744889,
+      "resource_type": "transaction"
+    },
+    {
+      "id": "6e430d18-3e6f-465d-8438-41188f93e43f",
+      "status": "completed",
+      "transaction_type": "withdrawal",
+      "parts": [
+        {
+          "direction": "sent",
+          "ticker": "BTC",
+          "provider_ticker": "BTC",
+          "amount": "8.6925024",
+          "asset_is_verified": true,
+          "fiat_ticker": "USD",
+          "fiat_value": "99474.73",
+          "fiat_asset_is_verified": true,
+          "other_parties": [
+            "1JdH9enMREoU9f6v6TscKxZEzkfohvpqvR"
+          ]
+        }
+      ],
+      "fees": [
+        {
+          "type": "network",
+          "ticker": "BTC",
+          "provider_ticker": "BTC",
+          "amount": "0.0434625",
+          "asset_is_verified": true,
+          "fiat_ticker": "",
+          "fiat_value": "",
+          "fiat_asset_is_verified": false,
+          "resource_type": "transaction_fee"
+        }
+      ],
+      "misc": [],
+      "fiat_calculated_at": 1584493498371,
+      "initiated_at": 1584493497371,
+      "confirmed_at": 1584493498371,
+      "resource_type": "transaction"
     }
-  ]
+  ],
+  "has_errors": false,
+  "request_id": "6b8341fc-9a1f-49de-9a4e-f6b232dfb9fd"
 }

@@ -11,9 +11,25 @@
       "name": "Bitcoin",
       "type": "UTXO",
       "logo": "https://cdn.zabo.com/assets/currencies/BTC.png",
-      "priority": 1,
-      "decimals": 9,
+      "decimals": 8,
       "address": null,
+      "supporting_providers": [
+        "gateio",
+        "kucoin",
+        "bitmex",
+        "bittrex",
+        "binanceUS",
+        "bybit",
+        "coinbase",
+        "testnet",
+        "blockcypher",
+        "bitstamp",
+        "gemini",
+        "liquid",
+        "coinbasePro",
+        "nomics",
+        "huobi"
+      ],
       "resource_type": "currency"
     },
     {
@@ -21,9 +37,287 @@
       "name": "Ether",
       "type": "account",
       "logo": "https://cdn.zabo.com/assets/currencies/ETH.png",
-      "priority": 2,
       "decimals": 18,
       "address": null,
+      "supporting_providers": [
+        "gateio",
+        "bittrex",
+        "binanceUS",
+        "bybit",
+        "binance",
+        "coinbase",
+        "testnet",
+        "bitstamp",
+        "liquid",
+        "nomics",
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "USDT",
+      "name": "USD coin",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/USDT.png",
+      "decimals": 6,
+      "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "supporting_providers": [
+        "gateio"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "XRP",
+      "name": "Ripple",
+      "type": "account",
+      "logo": "https://cdn.zabo.com/assets/currencies/XRP.png",
+      "decimals": 6,
+      "address": null,
+      "supporting_providers": [
+        "coinbase",
+        "bitstamp",
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "LINK",
+      "name": "ChainLink Token",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/LINK.png",
+      "decimals": 18,
+      "address": "0x1dff79CfcE03751D254fd2322F52FEe0107bFC86",
+      "supporting_providers": [
+        "coinbase",
+        "nomics",
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "BCH",
+      "name": "Bitcoin Cash",
+      "type": "UTXO",
+      "logo": "https://cdn.zabo.com/assets/currencies/BCH.png",
+      "decimals": 8,
+      "address": null,
+      "supporting_providers": [
+        "coinbase",
+        "testnet",
+        "bitstamp",
+        "liquid",
+        "nomics",
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "LTC",
+      "name": "Litecoin",
+      "type": "UTXO",
+      "logo": "https://cdn.zabo.com/assets/currencies/LTC.png",
+      "decimals": 8,
+      "address": null,
+      "supporting_providers": [
+        "gateio",
+        "kucoin",
+        "coinbase",
+        "bitstamp",
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "BNB",
+      "name": "Binance Coin",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/BNB.png",
+      "decimals": 18,
+      "address": "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
+      "supporting_providers": [
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "EOS",
+      "name": "EOS",
+      "type": "account",
+      "logo": "https://cdn.zabo.com/assets/currencies/EOS.png",
+      "decimals": 4,
+      "address": null,
+      "supporting_providers": [
+        "binanceUS",
+        "bybit",
+        "coinbase",
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "XTZ",
+      "name": "Tezos",
+      "type": "account",
+      "logo": "https://cdn.zabo.com/assets/currencies/XTZ.png",
+      "decimals": 8,
+      "address": null,
+      "supporting_providers": [
+        "coinbase",
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "XLM",
+      "name": "Stellar Lumens",
+      "type": "account",
+      "logo": "https://cdn.zabo.com/assets/currencies/XLM.png",
+      "decimals": 7,
+      "address": null,
+      "supporting_providers": [
+        "coinbase",
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "ATOM",
+      "name": "Cosmos",
+      "type": "account",
+      "logo": "https://cdn.zabo.com/assets/currencies/ATOM.png",
+      "decimals": 8,
+      "address": null,
+      "supporting_providers": [
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "USDC",
+      "name": "USD//C",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/USDC.png",
+      "decimals": 6,
+      "address": "0x7fAe10a97e6bE2cB84747D32dFe3444cbd799DbE",
+      "supporting_providers": [
+        "coinbase",
+        "nomics",
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "SNX",
+      "name": "Synthetix Network Token",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/SNX.png",
+      "decimals": 18,
+      "address": "0x924Ba5bfF703f20EA28EC31B5dDa82AaF4a9E020",
+      "supporting_providers": [
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "DASH",
+      "name": "DASH",
+      "type": "UTXO",
+      "logo": "https://cdn.zabo.com/assets/currencies/DASH.png",
+      "decimals": 8,
+      "address": null,
+      "supporting_providers": [
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "ZEC",
+      "name": "Zcash",
+      "type": "UTXO",
+      "logo": "https://cdn.zabo.com/assets/currencies/ZEC.png",
+      "decimals": 8,
+      "address": null,
+      "supporting_providers": [
+        "coinbase",
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "ETC",
+      "name": "Ethereum Classic",
+      "type": "account",
+      "logo": "https://cdn.zabo.com/assets/currencies/ETC.png",
+      "decimals": 18,
+      "address": null,
+      "supporting_providers": [
+        "coinbasePro",
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "MKR",
+      "name": "Maker",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/MKR.png",
+      "decimals": 18,
+      "address": "0xA85f49574CDa7EC6D48c9b74f0D4A092eE453242",
+      "supporting_providers": [
+        "coinbase",
+        "nomics",
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "BAT",
+      "name": "Basic Attention Token",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/BAT.png",
+      "decimals": 18,
+      "address": "0x180716c2a99429Bc4f19a10ea28693bA44a6B26f",
+      "supporting_providers": [
+        "gateio",
+        "nomics",
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "REN",
+      "name": "Republic Token",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/REN.png",
+      "decimals": 18,
+      "address": "0xb93962880ecD52536E487Df46165c77a0887Edbe",
+      "supporting_providers": [
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "THETA",
+      "name": "Theta Token",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/THETA.png",
+      "decimals": 18,
+      "address": "0x3883f5e181fccaf8410fa61e12b59bad963fb645",
+      "supporting_providers": [
+        "nomics"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "AMPL",
+      "name": "Ampleforth",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/AMPL.png",
+      "decimals": 9,
+      "address": "0x021c724e5737f0B883C8898EceCF4DCE89E62a75",
+      "supporting_providers": [
+        "zaboethereum"
+      ],
       "resource_type": "currency"
     },
     {
@@ -31,10 +325,42 @@
       "name": "Dai",
       "type": "ERC20",
       "logo": "https://cdn.zabo.com/assets/currencies/DAI.png",
-      "priority": 5,
       "decimals": 18,
-      "address": "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359",
+      "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "supporting_providers": [
+        "gateio",
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "ZRX",
+      "name": "0x Protocol Token",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/ZRX.png",
+      "decimals": 18,
+      "address": "0x00BEF1E237958621D07Ce5a7E1C01B0c9c172677",
+      "supporting_providers": [
+        "nomics",
+        "zaboethereum"
+      ],
+      "resource_type": "currency"
+    },
+    {
+      "ticker": "TUSD",
+      "name": "TrueUSD",
+      "type": "ERC20",
+      "logo": "https://cdn.zabo.com/assets/currencies/TUSD.png",
+      "decimals": 18,
+      "address": "0x8a5f7a5dC251baEC7F23810D5C79E200bb7192b7",
+      "supporting_providers": [
+        "gateio",
+        "binance",
+        "nomics",
+        "zaboethereum"
+      ],
       "resource_type": "currency"
     }
-  ]
+  ],
+  "request_id": "8d891edf-b2ed-4661-a630-eed46367532d"
 }

@@ -86,9 +86,10 @@ describe('Zabo SDK Teams Resource', () => {
 
     // Backwards compatible
     if (session) {
+      console.log(session)
       session.should.be.ok()
       session.should.have.properties(['one_time_password', 'expires_at'])
-      session.expires_at.should.be.above(Date.now())
+      new Date(session.expires_at).should.be.above(Date.now())
     }
 
     // Undo mock DOM

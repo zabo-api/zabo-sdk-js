@@ -1,10 +1,38 @@
 {
-  "id": "0x158be2ad4ba161c1a67e9b5646d2ed35bd4940b708103635dfd84f5ef252c18a",
-  "type": "send",
-  "amount": "1",
-  "currency": "ETH",
-  "status": "pending",
-  "other_parties": ["0x839395e20bbb182fa440d08f850e6c7a8f6f0780"],
-  "initiated_at": 123456789000,
-  "confirmed_at": 123456789000
+  "id": "932e2040-32ce-4f3a-a67b-f1f37bcb74ba",
+  "status": "completed",
+  "transaction_type": "withdrawal",
+  "parts": [
+    {
+      "direction": "sent",
+      "ticker": "ETH",
+      "provider_ticker": "ETH",
+      "amount": "3.7062262",
+      "asset_is_verified": true,
+      "fiat_ticker": "USD",
+      "fiat_value": "1432.52",
+      "fiat_asset_is_verified": true,
+      "other_parties": [
+        "0xbdfa60A3ec7F0786DaFB3B86949A617c7b81f3A7"
+      ]
+    }
+  ],
+  "fees": [
+    {
+      "type": "network",
+      "ticker": "ETH",
+      "provider_ticker": "ETH",
+      "amount": "0.0185311",
+      "asset_is_verified": true,
+      "fiat_ticker": "",
+      "fiat_value": "",
+      "fiat_asset_is_verified": false,
+      "resource_type": "transaction_fee"
+    }
+  ],
+  "misc": [],
+  "fiat_calculated_at": 1589390065699,
+  "initiated_at": 1589390064699,
+  "confirmed_at": 1589390065699,
+  "resource_type": "transaction"
 }

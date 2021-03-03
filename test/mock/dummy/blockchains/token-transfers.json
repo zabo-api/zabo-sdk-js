@@ -1,4 +1,4 @@
-{ 
+{
   "list_cursor": {
     "limit": 25,
     "has_more": false,
@@ -27,7 +27,11 @@
       },
       "token": {
         "contract": {
-          "address": "0xtheTokenAddress"
+          "address": {
+            "hex": "0xtheTokenAddress",
+            "nonce": 1,
+            "name": null
+          }
         },
         "symbol": "ABC",
         "name": "No Zabo Tokens",

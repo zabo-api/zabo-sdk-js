@@ -1,11 +1,11 @@
 {
   "name": "zabo-sdk-js",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Zabo SDK for JS",
   "main": "dist/index.js",
   "scripts": {
     "getv": "echo $npm_package_version",
-    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha -r jsdom-global/register --recursive test/ --exit",
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha -r jsdom-global/register --recursive test/ --exit --timeout 10000",
     "test:ethereum": "TEST_TYPE=ethereum npm run test",
     "prepublishOnly": "npm run build",
     "build": "PACKAGE_VERSION=$npm_package_version npx webpack --config webpack.config.js --progress --colors",
@@ -49,7 +49,7 @@
     "webpack-cli": "^3.3.3"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "create-hmac": "^1.1.7"
   },
   "engines": {

@@ -1,18 +1,27 @@
-{ 
+{
   "data": [
     {
       "token": {
         "contract": {
-          "address": "0xtheTokenAddress"
+          "address": {
+            "hex": "0x0000000000000000000000000000000000000000",
+            "nonce": 0,
+            "name": null
+          },
+          "bytecode": ""
         },
-        "symbol": "ABC",
-        "name": "No Zabo Tokens",
+        "ticker": "ETH",
+        "name": "Ether",
         "decimals": 18,
-        "total_supply": "100000000000000000000000000",
-        "is_erc20": true
+        "total_supply": null,
+        "is_erc20": false
       },
-      "address": "0x62a6ebC0ac598819CCad368788F6d2357FaE0d9e",
-      "balance": "250000000"
+      "address": {
+        "hex": "0xa43D8937C77644eb0DAa242A8F5F7eA3cB83F1ce",
+        "nonce": 62,
+        "name": null
+      },
+      "balance": "22657836000003000"
     }
   ]
 }

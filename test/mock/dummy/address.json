@@ -1,4 +1,6 @@
 {
-  "currency": "BTC",
-  "address": "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2"
+  "ticker": "BTC",
+  "provider_ticker": "BTC",
+  "address": "1JdH9enMREoU9f6v6TscKxZEzkfohvpqvR",
+  "resource_type": "deposit_address"
 }

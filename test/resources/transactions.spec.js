@@ -62,7 +62,7 @@ describe('Zabo SDK Transactions Resource', () => {
   it('transactions.getList() should fail if `userId` is not provided', async function () {
     const response = await transactions.getList({
       accountId: '7a1e6a76-f7d0-4b8c-8c16-8972041c970a',
-      currency: 'ETH',
+      ticker: 'ETH',
       limit: 10
     }).should.be.rejected()
 
@@ -75,7 +75,7 @@ describe('Zabo SDK Transactions Resource', () => {
   it('transactions.getList() should fail if `accountId` is not provided', async function () {
     const response = await transactions.getList({
       userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
-      currency: 'ETH',
+      ticker: 'ETH',
       limit: 10
     }).should.be.rejected()
 
@@ -103,19 +103,19 @@ describe('Zabo SDK Transactions Resource', () => {
 
     list.should.be.ok()
     list.data.should.be.an.Array()
-    list.data[0].should.have.properties(['id', 'type', 'currency', 'amount', 'status', 'other_parties', 'initiated_at', 'confirmed_at'])
+    list.data[0].should.have.properties(['id', 'status', 'transaction_type', 'parts', 'fees', 'misc', 'fiat_calculated_at', 'initiated_at', 'confirmed_at'])
   })
 
   it('transactions.getOne() should return one transaction', async function () {
     const data = {
       userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
       accountId: 'ff0dc466-547b-45f6-a34c-f45463489e2f',
-      txId: 'a34681a8917b60202e0a30383162f6c54d397a3372d81b9d653f17ce05a40739'
+      txId: '932e2040-32ce-4f3a-a67b-f1f37bcb74ba'
     }
     const tx = await transactions.getOne(data)
 
     tx.should.be.ok()
-    tx.should.have.properties(['id', 'type', 'currency', 'amount', 'status', 'other_parties', 'initiated_at', 'confirmed_at'])
+    tx.should.have.properties(['id', 'status', 'transaction_type', 'parts', 'fees', 'misc', 'fiat_calculated_at', 'initiated_at', 'confirmed_at'])
     tx.id.should.be.eql(data.txId)
   })
 })

@@ -67,18 +67,18 @@ class Accounts {
     }
   }
 
-  async getBalances ({ currencies } = {}) {
+  async getBalances ({ tickers } = {}) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
     }
 
     let url = `/accounts/${this.id}/balances`
 
-    if (currencies) {
-      if (Array.isArray(currencies)) {
-        currencies = currencies.join(',')
+    if (tickers) {
+      if (Array.isArray(tickers)) {
+        tickers = tickers.join(',')
       }
-      url = `${url}?currencies=${currencies}`
+      url = `${url}?tickers=${tickers}`
     }
 
     try {
@@ -88,11 +88,11 @@ class Accounts {
     }
   }
 
-  async createDepositAddress (currency) {
+  async createDepositAddress (ticker) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
-    } else if (!currency || typeof currency !== 'string') {
-      throw new SDKError(400, '[Zabo] Missing or invalid `currency` parameter. See: https://zabo.com/docs#create-a-deposit-address')
+    } else if (!ticker || typeof ticker !== 'string') {
+      throw new SDKError(400, '[Zabo] Missing or invalid `ticker` parameter. See: https://zabo.com/docs#create-a-deposit-address')
     }
 
     const providersWithStaticDepositAddresses = [
@@ -106,26 +106,26 @@ class Accounts {
     for (const provider of providersWithStaticDepositAddresses) {
       if (provider === this.data.provider.name) {
         console.warn(`[Zabo] Provider '${provider}' does not support dynamic address generation. Fallbacking to accounts.getDepositAddresses()... More details: https://zabo.com/docs#get-deposit-addresses`)
-        return this.getDepositAddresses(currency)
+        return this.getDepositAddresses(ticker)
       }
     }
 
     try {
-      return this.api.request('POST', `/accounts/${this.id}/deposit-addresses?currency=${currency}`)
+      return this.api.request('POST', `/accounts/${this.id}/deposit-addresses?ticker=${ticker}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
   }
 
-  async getDepositAddresses (currency) {
+  async getDepositAddresses (ticker) {
     if (!this.id) {
       throw new SDKError(401, '[Zabo] Account not yet connected. See: https://zabo.com/docs#connecting-a-user')
-    } else if (!currency || typeof currency !== 'string') {
-      throw new SDKError(400, '[Zabo] Invalid `currency` parameter. See: https://zabo.com/docs#get-deposit-addresses')
+    } else if (!ticker || typeof ticker !== 'string') {
+      throw new SDKError(400, '[Zabo] Invalid `ticker` parameter. See: https://zabo.com/docs#get-deposit-addresses')
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.id}/deposit-addresses?currency=${currency}`)
+      return this.api.request('GET', `/accounts/${this.id}/deposit-addresses?ticker=${ticker}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
