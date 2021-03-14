@@ -64,3 +64,6 @@ dist/
 .next
 
 .npmrc
+
+# JetBrains
+.idea

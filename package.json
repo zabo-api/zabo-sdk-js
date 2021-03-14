@@ -50,7 +50,9 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "create-hmac": "^1.1.7"
+    "create-hmac": "^1.1.7",
+    "google-protobuf": "^3.15.6",
+    "grpc-web": "^1.2.1"
   },
   "engines": {
     "node": ">=12"
