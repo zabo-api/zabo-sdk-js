@@ -27,7 +27,7 @@ const proto = require('./service_pb.js');
  * @struct
  * @final
  */
-proto.GreeterClient =
+proto.ZaboClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
   options['format'] = 'text';
@@ -53,7 +53,7 @@ proto.GreeterClient =
  * @struct
  * @final
  */
-proto.GreeterPromiseClient =
+proto.ZaboPromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
   options['format'] = 'text';
@@ -74,11 +74,171 @@ proto.GreeterPromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.Empty,
+ *   !proto.GetProvidersResponse>}
+ */
+const methodDescriptor_Zabo_GetProviders = new grpc.web.MethodDescriptor(
+  '/Zabo/GetProviders',
+  grpc.web.MethodType.UNARY,
+  proto.Empty,
+  proto.GetProvidersResponse,
+  /**
+   * @param {!proto.Empty} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.GetProvidersResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.Empty,
+ *   !proto.GetProvidersResponse>}
+ */
+const methodInfo_Zabo_GetProviders = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.GetProvidersResponse,
+  /**
+   * @param {!proto.Empty} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.GetProvidersResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.Empty} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.GetProvidersResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.GetProvidersResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.ZaboClient.prototype.getProviders =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/Zabo/GetProviders',
+      request,
+      metadata || {},
+      methodDescriptor_Zabo_GetProviders,
+      callback);
+};
+
+
+/**
+ * @param {!proto.Empty} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.GetProvidersResponse>}
+ *     Promise that resolves to the response
+ */
+proto.ZaboPromiseClient.prototype.getProviders =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/Zabo/GetProviders',
+      request,
+      metadata || {},
+      methodDescriptor_Zabo_GetProviders);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.RegisterProviderRequest,
+ *   !proto.RegisterProviderResponse>}
+ */
+const methodDescriptor_Zabo_RegisterProvider = new grpc.web.MethodDescriptor(
+  '/Zabo/RegisterProvider',
+  grpc.web.MethodType.UNARY,
+  proto.RegisterProviderRequest,
+  proto.RegisterProviderResponse,
+  /**
+   * @param {!proto.RegisterProviderRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.RegisterProviderResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.RegisterProviderRequest,
+ *   !proto.RegisterProviderResponse>}
+ */
+const methodInfo_Zabo_RegisterProvider = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.RegisterProviderResponse,
+  /**
+   * @param {!proto.RegisterProviderRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.RegisterProviderResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.RegisterProviderRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.RegisterProviderResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.RegisterProviderResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.ZaboClient.prototype.registerProvider =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/Zabo/RegisterProvider',
+      request,
+      metadata || {},
+      methodDescriptor_Zabo_RegisterProvider,
+      callback);
+};
+
+
+/**
+ * @param {!proto.RegisterProviderRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.RegisterProviderResponse>}
+ *     Promise that resolves to the response
+ */
+proto.ZaboPromiseClient.prototype.registerProvider =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/Zabo/RegisterProvider',
+      request,
+      metadata || {},
+      methodDescriptor_Zabo_RegisterProvider);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.GetBalancesRequest,
  *   !proto.GetBalancesResponse>}
  */
-const methodDescriptor_Greeter_GetBalances = new grpc.web.MethodDescriptor(
-  '/Greeter/GetBalances',
+const methodDescriptor_Zabo_GetBalances = new grpc.web.MethodDescriptor(
+  '/Zabo/GetBalances',
   grpc.web.MethodType.UNARY,
   proto.GetBalancesRequest,
   proto.GetBalancesResponse,
@@ -99,7 +259,7 @@ const methodDescriptor_Greeter_GetBalances = new grpc.web.MethodDescriptor(
  *   !proto.GetBalancesRequest,
  *   !proto.GetBalancesResponse>}
  */
-const methodInfo_Greeter_GetBalances = new grpc.web.AbstractClientBase.MethodInfo(
+const methodInfo_Zabo_GetBalances = new grpc.web.AbstractClientBase.MethodInfo(
   proto.GetBalancesResponse,
   /**
    * @param {!proto.GetBalancesRequest} request
@@ -122,13 +282,13 @@ const methodInfo_Greeter_GetBalances = new grpc.web.AbstractClientBase.MethodInf
  * @return {!grpc.web.ClientReadableStream<!proto.GetBalancesResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.GreeterClient.prototype.getBalances =
+proto.ZaboClient.prototype.getBalances =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/Greeter/GetBalances',
+      '/Zabo/GetBalances',
       request,
       metadata || {},
-      methodDescriptor_Greeter_GetBalances,
+      methodDescriptor_Zabo_GetBalances,
       callback);
 };
 
@@ -141,13 +301,173 @@ proto.GreeterClient.prototype.getBalances =
  * @return {!Promise<!proto.GetBalancesResponse>}
  *     Promise that resolves to the response
  */
-proto.GreeterPromiseClient.prototype.getBalances =
+proto.ZaboPromiseClient.prototype.getBalances =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/Greeter/GetBalances',
+      '/Zabo/GetBalances',
       request,
       metadata || {},
-      methodDescriptor_Greeter_GetBalances);
+      methodDescriptor_Zabo_GetBalances);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.GetTransactionsRequest,
+ *   !proto.GetTransactionsResponse>}
+ */
+const methodDescriptor_Zabo_GetTransactions = new grpc.web.MethodDescriptor(
+  '/Zabo/GetTransactions',
+  grpc.web.MethodType.UNARY,
+  proto.GetTransactionsRequest,
+  proto.GetTransactionsResponse,
+  /**
+   * @param {!proto.GetTransactionsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.GetTransactionsResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.GetTransactionsRequest,
+ *   !proto.GetTransactionsResponse>}
+ */
+const methodInfo_Zabo_GetTransactions = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.GetTransactionsResponse,
+  /**
+   * @param {!proto.GetTransactionsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.GetTransactionsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.GetTransactionsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.GetTransactionsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.GetTransactionsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.ZaboClient.prototype.getTransactions =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/Zabo/GetTransactions',
+      request,
+      metadata || {},
+      methodDescriptor_Zabo_GetTransactions,
+      callback);
+};
+
+
+/**
+ * @param {!proto.GetTransactionsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.GetTransactionsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.ZaboPromiseClient.prototype.getTransactions =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/Zabo/GetTransactions',
+      request,
+      metadata || {},
+      methodDescriptor_Zabo_GetTransactions);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.GetSessionRequest,
+ *   !proto.GetSessionResponse>}
+ */
+const methodDescriptor_Zabo_GetSession = new grpc.web.MethodDescriptor(
+  '/Zabo/GetSession',
+  grpc.web.MethodType.UNARY,
+  proto.GetSessionRequest,
+  proto.GetSessionResponse,
+  /**
+   * @param {!proto.GetSessionRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.GetSessionResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.GetSessionRequest,
+ *   !proto.GetSessionResponse>}
+ */
+const methodInfo_Zabo_GetSession = new grpc.web.AbstractClientBase.MethodInfo(
+  proto.GetSessionResponse,
+  /**
+   * @param {!proto.GetSessionRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.GetSessionResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.GetSessionRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.GetSessionResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.GetSessionResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.ZaboClient.prototype.getSession =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/Zabo/GetSession',
+      request,
+      metadata || {},
+      methodDescriptor_Zabo_GetSession,
+      callback);
+};
+
+
+/**
+ * @param {!proto.GetSessionRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.GetSessionResponse>}
+ *     Promise that resolves to the response
+ */
+proto.ZaboPromiseClient.prototype.getSession =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/Zabo/GetSession',
+      request,
+      metadata || {},
+      methodDescriptor_Zabo_GetSession);
 };
 
 
