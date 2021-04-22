@@ -15,35 +15,24 @@
  */
 
 'use strict'
-const { isBrowser } = require('./utils')
+
 const DEFAULT_API_HOST = 'https://api.zabo.com'
 const DEFAULT_CONNECT_PATH = 'https://connect.zabo.com'
+const DEFAULT_API_VERSION = 'v1'
 
-const VERSION = 1
-const SANDBOX_BASE_PATH = `/sandbox-v${VERSION}`
-const LIVE_BASE_PATH = `/v${VERSION}`
+module.exports = (host, connectHost, apiVersion) => {
+  host = host || DEFAULT_API_HOST
+  connectHost = connectHost || DEFAULT_CONNECT_PATH
+  apiVersion = apiVersion || DEFAULT_API_VERSION
 
-module.exports = (host, connectHost) => {
-  let thisHost, thisConnectHost
-  if (host && host !== '') {
-    thisHost = host
-    if (isBrowser()) {
-      thisConnectHost = connectHost
-    }
-  } else {
-    thisHost = DEFAULT_API_HOST
-    if (isBrowser()) {
-      thisConnectHost = DEFAULT_CONNECT_PATH
-    }
-  }
   return {
     sandbox: {
-      API_BASE_URL: thisHost + SANDBOX_BASE_PATH,
-      CONNECT_BASE_URL: thisConnectHost
+      API_BASE_URL: `${host}/sandbox-${apiVersion}`,
+      CONNECT_BASE_URL: connectHost
     },
     live: {
-      API_BASE_URL: thisHost + LIVE_BASE_PATH,
-      CONNECT_BASE_URL: thisConnectHost
+      API_BASE_URL: `${host}/${apiVersion}`,
+      CONNECT_BASE_URL: connectHost
     }
   }
 }
