@@ -29,6 +29,9 @@ class ZaboSDK {
   }
 
   async init (o) {
+    this.env = this.checkZaboEnv(o.env)
+    this.apiVersion = this.checkApiVersion(o.apiVersion)
+
     if (typeof o.autoConnect !== 'undefined') {
       this.autoConnect = o.autoConnect
     } else {
@@ -40,12 +43,11 @@ class ZaboSDK {
         return this.throwConnectError(401, '[Zabo] Please provide a valid Zabo app API and Secret keys. More details at: https://zabo.com/docs#app-server-authentication')
       }
 
-      this.env = this.checkZaboEnv(o.env)
-
       this.api = new API({
         baseUrl: o.baseUrl,
         apiKey: o.apiKey,
         secretKey: o.secretKey,
+        apiVersion: this.apiVersion,
         env: this.env
       })
       await this.setEndpointAliases()
@@ -62,8 +64,6 @@ class ZaboSDK {
         return this.api.resources.teams.get()
       }
     } else {
-      this.env = this.checkZaboEnv(o.env)
-
       if (!o.clientId || typeof o.clientId !== 'string') {
         throw new SDKError(400, '[Zabo] Please provide a valid Zabo app clientId. More details at: https://zabo.com/docs')
       }
@@ -73,6 +73,7 @@ class ZaboSDK {
           baseUrl: o.baseUrl,
           connectUrl: o.connectUrl,
           clientId: o.clientId,
+          apiVersion: this.apiVersion,
           env: this.env
         })
         await this.setEndpointAliases()
@@ -115,6 +116,14 @@ class ZaboSDK {
     }
 
     return env
+  }
+
+  checkApiVersion (version) {
+    if (version && !['v0', 'v1'].includes(version)) {
+      return this.throwConnectError(400, '[Zabo] Please provide a valid apiVersion, should be \'v0\' or \'v1\'. More details at: https://zabo.com/docs')
+    }
+
+    return version
   }
 
   connect (config = {}) {
