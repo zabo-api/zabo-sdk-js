@@ -39,7 +39,7 @@ class API {
       )
     }
 
-    const urls = constants(this.baseUrl, this.connectUrl)[this.env]
+    const urls = constants(this.baseUrl, this.connectUrl, this.apiVersion)[this.env]
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios.create()
     this.axios.defaults.baseURL = this.baseUrl
@@ -83,7 +83,7 @@ class API {
         url += `?client_id=${this.clientId}`
         url += `&origin=${encodeURIComponent(window.location.host)}`
         url += `&zabo_env=${this.env}`
-        url += `&zabo_version=${process.env.PACKAGE_VERSION}`
+        url += `&zabo_version=${this.apiVersion || process.env.PACKAGE_VERSION}`
 
         const teamSession = await this.resources.teams.getSession()
         if (teamSession) {
