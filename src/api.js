@@ -59,7 +59,7 @@ class API {
     this._isWaitingForConnector = false
   }
 
-  async connect ({ provider } = {}) {
+  async connect ({ provider, params = {} } = {}) {
     let appId = null
 
     if (utils.isNode()) {
@@ -78,17 +78,25 @@ class API {
       try {
         await window.fetch(`${this.connectUrl}/health-check`)
 
-        let url = `${this.connectUrl}/connect`
-        url += (provider && typeof provider === 'string') ? `/${provider}` : ''
-        url += `?client_id=${this.clientId}`
-        url += `&origin=${encodeURIComponent(window.location.host)}`
-        url += `&zabo_env=${this.env}`
-        url += `&zabo_version=${this.apiVersion || process.env.PACKAGE_VERSION}`
+        let connectParams = {
+          client_id: this.clientId,
+          origin: encodeURIComponent(window.location.host),
+          zabo_env: this.env,
+          zabo_version: this.apiVersion || process.env.PACKAGE_VERSION
+        }
 
         const teamSession = await this.resources.teams.getSession()
         if (teamSession) {
-          url += `&otp=${teamSession.one_time_password}`
+          connectParams.otp = teamSession.one_time_password
         }
+
+        if (typeof params === 'object') {
+          connectParams = { ...connectParams, ...params }
+        }
+
+        let url = `${this.connectUrl}/connect`
+        url += (provider && typeof provider === 'string') ? `/${provider}` : ''
+        url += `?${new URLSearchParams(connectParams).toString()}`
 
         this.iframe = this._appendIframe('zabo-connect-widget')
         this.connector = window.open(url, this.iframe.name)
