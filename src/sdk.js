@@ -20,7 +20,9 @@ const API = require('./api')
 const utils = require('./utils')
 const { SDKError } = require('./err')
 
-// SDK main class definition
+/**
+ * SDK main class definition
+ */
 class ZaboSDK {
   constructor () {
     this.status = 'offline'
@@ -28,6 +30,11 @@ class ZaboSDK {
     this.autoConnect = true
   }
 
+  /**
+   * Initialize the Zabo SDK.
+   * @param {Object} o Zabo initialization config.
+   * @returns The Zabo SDK.
+   */
   async init (o) {
     this.env = this.checkZaboEnv(o.env)
     this.apiVersion = this.checkApiVersion(o.apiVersion)
@@ -93,11 +100,19 @@ class ZaboSDK {
     }
   }
 
+  /**
+   * Throw an error for the SDK.
+   * @param {Number} code A status code relating to the error.
+   * @param {String} message A message detailing the error.
+   */
   throwConnectError (code, message) {
     this.status = 'offline'
     throw new SDKError(code, message)
   }
 
+  /**
+   * Set up the API endpoints.
+   */
   async setEndpointAliases () {
     while (!this.api.resources) {
       await utils.sleep(500)
@@ -107,6 +122,11 @@ class ZaboSDK {
     Object.assign(this, apiResources)
   }
 
+  /**
+   * Checks if the environment is a valid environment.
+   * @param {String} env The environment to use.
+   * @returns The environment used, lowercased.
+   */
   checkZaboEnv (env) {
     env = env ? env.toLowerCase() : null
 
@@ -126,6 +146,14 @@ class ZaboSDK {
     return version
   }
 
+  /**
+   * Connect the SDK to the Zabo API.
+   * @param {{
+   *  provider?: string,
+   *  [key: string]: any
+   * }} config Zabo API connection config.
+   * @returns A connected SDK object for browsers, an appId for servers.
+   */
   connect (config = {}) {
     if (this.api && utils.isBrowser()) {
       this.api.connect(config)
@@ -142,18 +170,33 @@ class ZaboSDK {
     })
   }
 
+  /**
+   * Callback function for when a new connection is made to the API.
+   * @param {Function} fn The function to run on connections.
+   * @returns An instance of the SDK.
+   */
   onConnection (fn) {
     if (typeof fn !== 'function') { return }
     this.api._onConnection = fn.bind(this)
     return this
   }
 
+  /**
+   * Callback function for when an error occurs.
+   * @param {Function} fn The function to run on errors.
+   * @returns An instance of the SDK.
+   */
   onError (fn) {
     if (typeof fn !== 'function') { return }
     this.api._onError = fn.bind(this)
     return this
   }
 
+  /**
+   * Callback function for when events are triggered.
+   * @param {Function} fn The function to run on events.
+   * @returns An instance of the SDK.
+   */
   onEvent (fn) {
     if (typeof fn !== 'function') { return }
     this.api._onEvent = fn.bind(this)
