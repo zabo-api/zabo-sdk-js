@@ -87,12 +87,12 @@ function validateEnumParameter (name, value, options, optional = false) {
   }
 }
 
+function Paginator (obj) {
+  Object.assign(this, obj || {})
+}
+
 function createPaginator (payload, api) {
   const { list_cursor = {}, ...data } = payload || {}
-
-  function Paginator (obj) {
-    Object.assign(this, obj || {})
-  }
 
   Paginator.prototype.hasMore = list_cursor.has_more
   Paginator.prototype.limit = list_cursor.limit
@@ -100,6 +100,7 @@ function createPaginator (payload, api) {
     if (list_cursor.has_more && list_cursor.next_uri) {
       return api.request('GET', list_cursor.next_uri)
     }
+
     return new Paginator()
   }
 
