@@ -1,20 +1,129 @@
 declare function _exports(api: any): Transactions;
 export = _exports;
+export type Part = {
+    direction: 'sent' | 'received';
+    ticker: string;
+    provider_ticker: string;
+    amount: string;
+    asset_is_verified: boolean;
+    fiat_ticker: string;
+    fiat_value: string;
+    fiat_asset_is_verified: boolean;
+    other_parties: [string];
+};
+export type Fee = {
+    type: string;
+    ticker: string;
+    provider_ticker: string;
+    amount: string;
+    asset_is_verified: boolean;
+    fiat_ticker: string;
+    fiat_value: string;
+    fiat_asset_is_verified: boolean;
+    resource_type: string;
+};
+export type Transaction = {
+    id: string;
+    status: string;
+    transaction_type: string;
+    parts: [Part];
+    fees: [Fee];
+    misc: [any];
+    fiat_calculated_at: number;
+    initiated_at: number;
+    confirmed_at: number;
+    resource_type: string;
+};
+export type TransactionsResp = {
+    data: [Transaction];
+    delay: number;
+    last_updated_at: number;
+    request_id: string;
+};
+/**
+ * @typedef Part
+ * @property {'sent' | 'received'} direction
+ * @property {String} ticker
+ * @property {String} provider_ticker
+ * @property {String} amount
+ * @property {Boolean} asset_is_verified
+ * @property {String} fiat_ticker
+ * @property {String} fiat_value
+ * @property {Boolean} fiat_asset_is_verified
+ * @property {[String]} other_parties
+ *
+ * @typedef Fee
+ * @property {String} type
+ * @property {String} ticker
+ * @property {String} provider_ticker
+ * @property {String} amount
+ * @property {Boolean} asset_is_verified
+ * @property {String} fiat_ticker
+ * @property {String} fiat_value
+ * @property {Boolean} fiat_asset_is_verified
+ * @property {String} resource_type
+ *
+ * @typedef Transaction
+ * @property {String} id
+ * @property {String} status
+ * @property {String} transaction_type
+ * @property {[Part]} parts
+ * @property {[Fee]} fees
+ * @property {[any]} misc
+ * @property {Number} fiat_calculated_at
+ * @property {Number} initiated_at
+ * @property {Number} confirmed_at
+ * @property {String} resource_type
+ *
+ * @typedef TransactionsResp
+ * @property {[Transaction]} data
+ * @property {Number} delay
+ * @property {Number} last_updated_at
+ * @property {String} request_id
+ */
+/**
+ * Transactions API.
+ */
 declare class Transactions {
     constructor(api: any);
     api: any;
     account: any;
-    _setAccount(account: any): void;
+    /**
+     * @private
+     */
+    private _setAccount;
+    /**
+     * getOne fetches a specific transaction for the given account.
+     * @param {{
+     * userId: string,
+     * accountId?: string,
+     * txId: string,
+     * ticker: string,
+     * }} param0 Transaction request object.
+     * @returns {Promise<Transaction>} A transaction.
+     */
     getOne({ userId, accountId, txId }?: {
-        userId: any;
-        accountId: any;
-        txId: any;
-    }): Promise<any>;
+        userId: string;
+        accountId?: string;
+        txId: string;
+        ticker: string;
+    }): Promise<Transaction>;
+    /**
+     * getList fetches a list of transaction for the given account.
+     * @param {{
+     * userId: String,
+     * accountId?: String,
+     * ticker?: String,
+     * limit?: Number,
+     * cursor?: String
+     * }} param0 Transactions request object.
+     * @returns {Promise<TransactionsResp>} An API response with transactions within `data`.
+     */
     getList({ userId, accountId, ticker, limit, cursor }?: {
-        userId: any;
-        accountId: any;
+        userId: string;
+        accountId?: string;
         ticker?: string;
         limit?: number;
         cursor?: string;
-    }): Promise<any>;
+    }): Promise<TransactionsResp>;
 }

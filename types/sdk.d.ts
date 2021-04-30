@@ -1,17 +1,38 @@
 declare const _exports: ZaboSDK;
 export = _exports;
 /**
- * SDK main class definition
+ * SDK main class definition.
  */
 declare class ZaboSDK {
     status: string;
     api: API;
     autoConnect: boolean;
+    accounts: any;
     /**
-     * Initialize the Zabo SDK.
-     * @param {Object} o Zabo initialization config.
-     * @returns The Zabo SDK.
+     * @type {ReturnType<typeof import('./resources/blockchains')>} Transactions API
      */
+    blockchains: ReturnType<typeof import('./resources/blockchains')>;
+    /**
+     * @type {ReturnType<typeof import('./resources/currencies')>} Currencies API
+     */
+    currencies: ReturnType<typeof import('./resources/currencies')>;
+    /**
+     * @type {ReturnType<typeof import('./resources/providers')>} Providers API
+     */
+    providers: ReturnType<typeof import('./resources/providers')>;
+    /**
+     * @type {ReturnType<typeof import('./resources/teams')>} Teams API
+     */
+    teams: ReturnType<typeof import('./resources/teams')>;
+    /**
+     * @type {ReturnType<typeof import('./resources/trading')>} Trading API
+     */
+    trading: ReturnType<typeof import('./resources/trading')>;
+    /**
+     * @type {ReturnType<typeof import('./resources/transactions')>} Transactions API
+     */
+    transactions: ReturnType<typeof import('./resources/transactions')>;
+    users: any;
     init(o: any): Promise<any>;
     env: string | void;
     /**
@@ -21,7 +42,7 @@ declare class ZaboSDK {
      */
     throwConnectError(code: number, message: string): void;
     /**
-     * Set up the API endpoints.
+     * Set up the API endpoints on the SDK.
      */
     setEndpointAliases(): Promise<void>;
     /**
@@ -60,7 +81,7 @@ declare class ZaboSDK {
      * @returns An instance of the SDK.
      */
     onEvent(fn: Function): ZaboSDK;
-    getTeam(): Promise<any>;
+    getTeam(): any;
     get data(): any;
 }
 import API = require("./api");

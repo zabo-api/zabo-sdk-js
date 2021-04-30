@@ -21,20 +21,56 @@ const utils = require('./utils')
 const { SDKError } = require('./err')
 
 /**
- * SDK main class definition
+ * SDK main class definition.
  */
 class ZaboSDK {
   constructor () {
     this.status = 'offline'
     this.api = null
     this.autoConnect = true
+
+    /**
+     * @typedef {ReturnType<typeof import('./resources/accounts')>} Accounts
+     * @type Accounts
+     */
+    this.accounts = undefined
+    /**
+     * @typedef {ReturnType<typeof import('./resources/blockchains')>} Transactions
+     * @type Transactions
+     */
+    this.blockchains = undefined
+    /**
+     * @typedef {ReturnType<typeof import('./resources/currencies')>} Currencies
+     * @type Currencies
+     */
+    this.currencies = undefined
+    /**
+     * @typedef {ReturnType<typeof import('./resources/providers')>} Providers
+     * @type Providers
+     */
+    this.providers = undefined
+    /**
+     * @typedef {ReturnType<typeof import('./resources/teams')>} Teams
+     * @type Teams
+     */
+    this.teams = undefined
+    /**
+     * @typedef {ReturnType<typeof import('./resources/trading')>} Trading
+     * @type Trading
+     */
+    this.trading = undefined
+    /**
+     * @typedef {ReturnType<typeof import('./resources/transactions')>} Transactions
+     * @type Transactions
+     */
+    this.transactions = undefined
+    /**
+     * @typedef {ReturnType<typeof import('./resources/users')>} Users
+     * @type Users
+     */
+    this.users = undefined
   }
 
-  /**
-   * Initialize the Zabo SDK.
-   * @param {Object} o Zabo initialization config.
-   * @returns The Zabo SDK.
-   */
   async init (o) {
     this.env = this.checkZaboEnv(o.env)
     this.apiVersion = this.checkApiVersion(o.apiVersion)
@@ -111,7 +147,7 @@ class ZaboSDK {
   }
 
   /**
-   * Set up the API endpoints.
+   * Set up the API endpoints on the SDK.
    */
   async setEndpointAliases () {
     while (!this.api.resources) {
@@ -212,5 +248,7 @@ class ZaboSDK {
   }
 }
 
-// Export ZaboSDK class
+/**
+ * Export ZaboSDK class
+ */
 module.exports = new ZaboSDK()

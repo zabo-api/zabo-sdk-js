@@ -19,16 +19,82 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
+/**
+ * @typedef {{
+ *  direction?: 'sent' | 'received'
+ *  ticker?: String
+ *  provider_ticker?: String
+ *  amount?: String
+ *  asset_is_verified?: Boolean
+ *  fiat_ticker?: String
+ *  fiat_value?: String
+ *  fiat_asset_is_verified?: Boolean
+ *  other_parties?: [String]
+ * }} Part
+ *
+ * @typedef {{
+ *  type?: String
+ *  ticker?: String
+ *  provider_ticker?: String
+ *  amount?: String
+ *  asset_is_verified?: Boolean
+ *  fiat_ticker?: String
+ *  fiat_value?: String
+ *  fiat_asset_is_verified?: Boolean
+ *  resource_type?: String
+ * }} Fee
+ *
+ * @typedef {{
+ *  id?: String
+ *  status?: String
+ *  transaction_type?: String
+ *  parts?: [Part]
+ *  fees?: [Fee]
+ *  misc?: [any]
+ *  fiat_calculated_at?: Number
+ *  initiated_at?: Number
+ *  confirmed_at?: Number
+ *  resource_type?: String
+ * }} Transaction
+ *
+ * @typedef {{
+ *  data?: [Transaction]
+ *  delay?: Number
+ *  last_updated_at?: Number
+ *  request_id?: String
+ * }} TransactionsResp
+ * @property {[Transaction]} data
+ * @property {Number} delay
+ * @property {Number} last_updated_at
+ * @property {String} request_id
+ */
+
+/**
+ * Transactions API.
+ */
 class Transactions {
   constructor (api) {
     this.api = api
     this.account = null
   }
 
+  /**
+   * @private
+   */
   _setAccount (account) {
     this.account = account
   }
 
+  /**
+   * getOne fetches a specific transaction for the given account.
+   * @param {{
+   * userId: string,
+   * accountId?: string,
+   * txId: string,
+   * ticker: string,
+   * }} param0 Transaction request object.
+   * @returns {Promise<Transaction>} A transaction.
+   */
   async getOne ({ userId, accountId, txId } = {}) {
     if (utils.isNode()) {
       if (!userId) {
@@ -63,6 +129,17 @@ class Transactions {
     }
   }
 
+  /**
+   * getList fetches a list of transaction for the given account.
+   * @param {{
+   * userId: String,
+   * accountId?: String,
+   * ticker?: String,
+   * limit?: Number,
+   * cursor?: String
+   * }} param0 Transactions request object.
+   * @returns {Promise<TransactionsResp>} An API response with transactions within `data`.
+   */
   async getList ({ userId, accountId, ticker = '', limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit)
 
@@ -102,7 +179,9 @@ class Transactions {
   }
 }
 
-// Export class instance
+/**
+ * Export class instance
+ */
 module.exports = (api) => {
   return new Transactions(api)
 }
