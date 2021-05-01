@@ -1,81 +1,89 @@
 declare function _exports(api: any): Transactions;
 export = _exports;
 export type Part = {
-    direction: 'sent' | 'received';
-    ticker: string;
-    provider_ticker: string;
-    amount: string;
-    asset_is_verified: boolean;
-    fiat_ticker: string;
-    fiat_value: string;
-    fiat_asset_is_verified: boolean;
-    other_parties: [string];
+    direction?: 'sent' | 'received';
+    ticker?: string;
+    provider_ticker?: string;
+    amount?: string;
+    asset_is_verified?: boolean;
+    fiat_ticker?: string;
+    fiat_value?: string;
+    fiat_asset_is_verified?: boolean;
+    other_parties?: [string];
 };
 export type Fee = {
-    type: string;
-    ticker: string;
-    provider_ticker: string;
-    amount: string;
-    asset_is_verified: boolean;
-    fiat_ticker: string;
-    fiat_value: string;
-    fiat_asset_is_verified: boolean;
-    resource_type: string;
+    type?: string;
+    ticker?: string;
+    provider_ticker?: string;
+    amount?: string;
+    asset_is_verified?: boolean;
+    fiat_ticker?: string;
+    fiat_value?: string;
+    fiat_asset_is_verified?: boolean;
+    resource_type?: string;
 };
 export type Transaction = {
-    id: string;
-    status: string;
-    transaction_type: string;
-    parts: [Part];
-    fees: [Fee];
-    misc: [any];
-    fiat_calculated_at: number;
-    initiated_at: number;
-    confirmed_at: number;
-    resource_type: string;
+    id?: string;
+    status?: string;
+    transaction_type?: string;
+    parts?: [Part];
+    fees?: [Fee];
+    misc?: [any];
+    fiat_calculated_at?: number;
+    initiated_at?: number;
+    confirmed_at?: number;
+    resource_type?: string;
 };
 export type TransactionsResp = {
-    data: [Transaction];
-    delay: number;
-    last_updated_at: number;
-    request_id: string;
+    data?: [Transaction];
+    delay?: number;
+    last_updated_at?: number;
+    request_id?: string;
 };
 /**
- * @typedef Part
- * @property {'sent' | 'received'} direction
- * @property {String} ticker
- * @property {String} provider_ticker
- * @property {String} amount
- * @property {Boolean} asset_is_verified
- * @property {String} fiat_ticker
- * @property {String} fiat_value
- * @property {Boolean} fiat_asset_is_verified
- * @property {[String]} other_parties
+ * @typedef {{
+ *  direction?: 'sent' | 'received'
+ *  ticker?: String
+ *  provider_ticker?: String
+ *  amount?: String
+ *  asset_is_verified?: Boolean
+ *  fiat_ticker?: String
+ *  fiat_value?: String
+ *  fiat_asset_is_verified?: Boolean
+ *  other_parties?: [String]
+ * }} Part
  *
- * @typedef Fee
- * @property {String} type
- * @property {String} ticker
- * @property {String} provider_ticker
- * @property {String} amount
- * @property {Boolean} asset_is_verified
- * @property {String} fiat_ticker
- * @property {String} fiat_value
- * @property {Boolean} fiat_asset_is_verified
- * @property {String} resource_type
+ * @typedef {{
+ *  type?: String
+ *  ticker?: String
+ *  provider_ticker?: String
+ *  amount?: String
+ *  asset_is_verified?: Boolean
+ *  fiat_ticker?: String
+ *  fiat_value?: String
+ *  fiat_asset_is_verified?: Boolean
+ *  resource_type?: String
+ * }} Fee
  *
- * @typedef Transaction
- * @property {String} id
- * @property {String} status
- * @property {String} transaction_type
- * @property {[Part]} parts
- * @property {[Fee]} fees
- * @property {[any]} misc
- * @property {Number} fiat_calculated_at
- * @property {Number} initiated_at
- * @property {Number} confirmed_at
- * @property {String} resource_type
+ * @typedef {{
+ *  id?: String
+ *  status?: String
+ *  transaction_type?: String
+ *  parts?: [Part]
+ *  fees?: [Fee]
+ *  misc?: [any]
+ *  fiat_calculated_at?: Number
+ *  initiated_at?: Number
+ *  confirmed_at?: Number
+ *  resource_type?: String
+ * }} Transaction
  *
- * @typedef TransactionsResp
+ * @typedef {{
+ *  data?: [Transaction]
+ *  delay?: Number
+ *  last_updated_at?: Number
+ *  request_id?: String
+ * }} TransactionsResp
  * @property {[Transaction]} data
  * @property {Number} delay
  * @property {Number} last_updated_at

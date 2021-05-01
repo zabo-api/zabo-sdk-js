@@ -19,6 +19,9 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
+/**
+ * Teams API.
+ */
 class Teams {
   constructor (api) {
     this.api = api
