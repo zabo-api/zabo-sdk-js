@@ -61,22 +61,23 @@ const { SDKError } = require('../err')
  *  bytecode?: String
  * }} Contract
  *
- * @typedef GetTokensResp
- * @property {ListCursor} list_cursor
- * @property {[{
- *   contract?: {
- *     address?: Address
- *   }
- * }]} data
+ * @typedef {{
+ *  list_cursor?: ListCursor
+ *  data?: [{
+ *    contract?: {
+ *      address?: Address
+ *    }
+ *  }]
+ * }} GetTokensResp
  *
  * @typedef {{
  *   token?: Token,
  *   address?: String,
  *   balance?: String
- * }} Balance
+ * }} TokenBalance
  *
  * @typedef {{
- *  data?: [Balance] | Number
+ *  data?: [TokenBalance] | Number
  * }} GetBalancesResp
  *
  * @typedef {{
@@ -126,31 +127,35 @@ const { SDKError } = require('../err')
  *
  * @typedef {ETHTransaction & BTCTransaction} TransactionData
  *
- * @typedef GetTransactionsResp
- * @property {ListCursor} list_cursor
- * @property {[TransactionData]} data
+ * @typedef {{
+ *  list_cursor?: ListCursor
+ *  data?: [TransactionData]
+ * }} GetTransactionsResp
  *
- * @typedef GetTransactionResp
- * @property {TransactionData} data
+ * @typedef {{
+ *  data?: TransactionData
+ * }} GetTransactionResp
  *
- * @typedef GetTokenTransfersResp
- * @property {ListCursor} list_cursor
- * @property {[{
- *  transaction: ETHTransaction,
- *  token: Token,
- *  from_address: Address,
- *  to_address: Address,
- *  value: String
- * }]} data
+ * @typedef {{
+ *  list_cursor?: ListCursor
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ * }} GetTokenTransfersResp
  *
- * @typedef GetTokenTransferResp
- * @property {[{
- *  transaction: ETHTransaction,
- *  token: Token,
- *  from_address: Address,
- *  to_address: Address,
- *  value: String
- * }]} data
+ * @typedef {{
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ * }} GetTokenTransferResp
  */
 
 class Blockchains {

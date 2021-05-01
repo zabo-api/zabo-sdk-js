@@ -29,6 +29,12 @@ const { SDKError } = require('../err')
  *  name?: String
  *  display_name?: String
  *  logo?: String
+ *  auth_type?: String
+ *  available_currencies?: [{
+ *    type?: String
+ *    list?: [String]
+ *    resource_type?: String
+ *  }]
  *  type?: String
  *  scopes?: [String]
  *  resource_type?: String
@@ -39,6 +45,10 @@ const { SDKError } = require('../err')
  *  blockchain?: String
  *  provider?: Provider
  *  last_connected?: Number
+ *  created_at?: Number
+ *  updated_at?: Number
+ *  resource_type?: String
+ *  balances?: [Balance]
  * }} Account
  *
  * @typedef {{
@@ -86,11 +96,34 @@ const { SDKError } = require('../err')
  *  logo?: String
  *  updated_at?: Number
  *  misc?: any
+ *  resource_type?: String
  * }} Balance
  *
  * @typedef {{
  *  balances?: [Balance]
  * } & Account} GetAccountResp
+ *
+ * @typedef {{
+ *  data?: [Balance]
+ *  request_id?: String
+ * }} GetBalancesResp
+ *
+ * @typedef {{
+ *  currency?: import('./currencies').Currency
+ *  provider_ticker?: String
+ *  address?: String
+ *  request_id?: String
+ * }} CreateDepositAddressResp
+ *
+ * @typedef {{
+ *  data?: [{
+ *    ticker?: String
+ *    provider_ticker?: String
+ *    address?: String
+ *    resource_type?: String
+ *  }]
+ *  request_id?: String
+ * }} GetDepositAddressesResp
  */
 
 class Users {
@@ -214,6 +247,19 @@ class Users {
     }
   }
 
+  /**
+   * Returns the user balances for the requested currencies. When requesting balances from the client,
+   * the request should be made in the context of the connected account. When requesting from an application server,
+   * requests should be made in the context of a user. Cryptocurrencies available to your app can be queried
+   * using the currencies function documented below. If no currencies are specified, then all
+   * available currencies will be returned.
+   * @param {{
+   *  userId?: String
+   *  accountId?: String
+   *  tickers?: String
+   * }} param0 Request parameters.
+   * @returns {Promise<GetBalancesResp>} API response.
+   */
   async getBalances ({ userId, accountId, tickers } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-balance')
@@ -237,6 +283,16 @@ class Users {
     }
   }
 
+  /**
+   * This endpoint will create and return a deposit address for the specified account. If the currency
+   * is not supported by the connected provider, you will receive an 'unsupported' error.
+   * @param {{
+   *  userId?: String
+   *  accountId?: String
+   *  ticker?: String
+   * }} param0 Request parameters.
+   * @returns {Promise<CreateDepositAddressResp>} API response.
+   */
   async createDepositAddress ({ userId, accountId, ticker } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#create-a-deposit-address')
@@ -253,6 +309,16 @@ class Users {
     }
   }
 
+  /**
+   * This endpoint will retrieve all deposit addresses for the specified account. If the currency
+   * is not supported by the connected provider, you will receive an 'unsupported' error.
+   * @param {{
+   *  userId?: String
+   *  accountId?: String
+   *  ticker?: String
+   * }} param0 Request parameters.
+   * @returns {Promise<GetDepositAddressesResp>} API response.
+   */
   async getDepositAddresses ({ userId, accountId, ticker } = {}) {
     if (!userId) {
       throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-deposit-addresses')
