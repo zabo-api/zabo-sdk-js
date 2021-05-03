@@ -59,7 +59,7 @@ class API {
     this._isWaitingForConnector = false
   }
 
-  async connect ({ provider, params = {} } = {}) {
+  async connect ({ provider, params } = {}) {
     let appId = null
 
     if (utils.isNode()) {
@@ -73,25 +73,30 @@ class API {
       this.resources.teams.setId(appId)
       return appId
     } else {
+      if (provider && typeof provider !== 'string') {
+        throw new SDKError(400, '[Zabo] `provider` must be a string. More details at: https://zabo.com/docs/#preselected-provider-connections')
+      }
+
+      if (params && typeof params !== 'object') {
+        throw new SDKError(400, '[Zabo] `params` must be an object. More details at: https://zabo.com/docs/#new-account-connections')
+      }
+
       this._isConnecting = true
 
       try {
         await window.fetch(`${this.connectUrl}/health-check`)
 
-        let connectParams = {
+        const connectParams = {
           client_id: this.clientId,
           origin: encodeURIComponent(window.location.host),
           zabo_env: this.env,
-          zabo_version: this.apiVersion || process.env.PACKAGE_VERSION
+          zabo_version: this.apiVersion || process.env.PACKAGE_VERSION,
+          ...(params || {})
         }
 
         const teamSession = await this.resources.teams.getSession()
         if (teamSession) {
           connectParams.otp = teamSession.one_time_password
-        }
-
-        if (typeof params === 'object') {
-          connectParams = { ...connectParams, ...params }
         }
 
         let url = `${this.connectUrl}/connect`
