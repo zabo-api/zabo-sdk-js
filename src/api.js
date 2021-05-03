@@ -39,7 +39,7 @@ class API {
       )
     }
 
-    const urls = constants(this.baseUrl, this.connectUrl)[this.env]
+    const urls = constants(this.baseUrl, this.connectUrl, this.apiVersion)[this.env]
     this.baseUrl = urls.API_BASE_URL
     this.axios = axios.create()
     this.axios.defaults.baseURL = this.baseUrl
@@ -59,7 +59,7 @@ class API {
     this._isWaitingForConnector = false
   }
 
-  async connect ({ provider } = {}) {
+  async connect ({ provider, params } = {}) {
     let appId = null
 
     if (utils.isNode()) {
@@ -73,22 +73,35 @@ class API {
       this.resources.teams.setId(appId)
       return appId
     } else {
+      if (provider && typeof provider !== 'string') {
+        throw new SDKError(400, '[Zabo] `provider` must be a string. More details at: https://zabo.com/docs/#preselected-provider-connections')
+      }
+
+      if (params && typeof params !== 'object') {
+        throw new SDKError(400, '[Zabo] `params` must be an object. More details at: https://zabo.com/docs/#new-account-connections')
+      }
+
       this._isConnecting = true
 
       try {
         await window.fetch(`${this.connectUrl}/health-check`)
 
-        let url = `${this.connectUrl}/connect`
-        url += (provider && typeof provider === 'string') ? `/${provider}` : ''
-        url += `?client_id=${this.clientId}`
-        url += `&origin=${encodeURIComponent(window.location.host)}`
-        url += `&zabo_env=${this.env}`
-        url += `&zabo_version=${process.env.PACKAGE_VERSION}`
+        const connectParams = {
+          client_id: this.clientId,
+          origin: encodeURIComponent(window.location.host),
+          zabo_env: this.env,
+          zabo_version: this.apiVersion || process.env.PACKAGE_VERSION,
+          ...(params || {})
+        }
 
         const teamSession = await this.resources.teams.getSession()
         if (teamSession) {
-          url += `&otp=${teamSession.one_time_password}`
+          connectParams.otp = teamSession.one_time_password
         }
+
+        let url = `${this.connectUrl}/connect`
+        url += (provider && typeof provider === 'string') ? `/${provider}` : ''
+        url += `?${new URLSearchParams(connectParams).toString()}`
 
         this.iframe = this._appendIframe('zabo-connect-widget')
         this.connector = window.open(url, this.iframe.name)
