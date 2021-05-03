@@ -187,6 +187,7 @@ While instantiating your new Zabo SDK instance, you have a few configuration opt
 | apiKey        | API Key generated via the Developer Settings section at [Zabo Dashboard](https://zabo.com/login/). | Node |
 | secretKey     | Secret Key generated via the Developer Settings section at [Zabo Dashboard](https://zabo.com/login/). | Node |
 | autoConnect   | Optional boolean useful if you wish to stop the SDK from fetching the team data during Zabo.init(). Defaults to `true`. | Both |
+| apiVersion    | Optional parameter to specify the Zabo API version. Could be either `v0` or `v1`. Defaults to `v1`. | Both |
 
 ### Server vs Client
 The SDK can be used in either the client or server environment after a user connects their wallet, however, they have different functions available to them and utilize different authentication methods. See [the Zabo API docs](https://zabo.com/docs) for more information.
