@@ -335,6 +335,10 @@ class Blockchains {
   }
 }
 
+/**
+ * @typedef {Blockchains} BlockchainsAPI
+ * @type {(api) => BlockchainsAPI}
+ */
 module.exports = (api) => {
   return new Blockchains(api)
 }

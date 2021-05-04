@@ -76,6 +76,10 @@ class Teams {
   }
 }
 
+/**
+ * @typedef {Teams} TeamsAPI
+ * @type {(api) => TeamsAPI}
+ */
 module.exports = (api, appId) => {
   return new Teams(api, appId)
 }

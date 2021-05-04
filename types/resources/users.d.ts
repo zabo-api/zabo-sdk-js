@@ -1,4 +1,4 @@
-declare function _exports(api: any): Users;
+declare const _exports: (api: any) => UsersAPI;
 export = _exports;
 export type Application = {
     id?: string;
@@ -8,6 +8,14 @@ export type Provider = {
     name?: string;
     display_name?: string;
     logo?: string;
+    auth_type?: string;
+    available_currencies?: [
+        {
+            type?: string;
+            list?: [string];
+            resource_type?: string;
+        }
+    ];
     type?: string;
     scopes?: [string];
     resource_type?: string;
@@ -17,6 +25,10 @@ export type Account = {
     blockchain?: string;
     provider?: Provider;
     last_connected?: number;
+    created_at?: number;
+    updated_at?: number;
+    resource_type?: string;
+    balances?: [Balance];
 };
 export type User = {
     id?: string;
@@ -57,6 +69,7 @@ export type Balance = {
     logo?: string;
     updated_at?: number;
     misc?: any;
+    resource_type?: string;
 };
 export type GetAccountResp = {
     balances?: [Balance];
@@ -66,20 +79,23 @@ export type GetBalancesResp = {
     request_id?: string;
 };
 export type CreateDepositAddressResp = {
-    currency?: {
-        ticker?: string;
-        name?: string;
-        type?: string;
-        priority?: number;
-        logo?: string;
-        decimals?: number;
-        address?: string;
-        resource_type?: string;
-    };
+    currency?: import('./currencies').Currency;
     provider_ticker?: string;
     address?: string;
     request_id?: string;
 };
+export type GetDepositAddressesResp = {
+    data?: [
+        {
+            ticker?: string;
+            provider_ticker?: string;
+            address?: string;
+            resource_type?: string;
+        }
+    ];
+    request_id?: string;
+};
+export type UsersAPI = Users;
 /**
  * @typedef {{
  *  id?: String,
@@ -90,6 +106,12 @@ export type CreateDepositAddressResp = {
  *  name?: String
  *  display_name?: String
  *  logo?: String
+ *  auth_type?: String
+ *  available_currencies?: [{
+ *    type?: String
+ *    list?: [String]
+ *    resource_type?: String
+ *  }]
  *  type?: String
  *  scopes?: [String]
  *  resource_type?: String
@@ -100,6 +122,10 @@ export type CreateDepositAddressResp = {
  *  blockchain?: String
  *  provider?: Provider
  *  last_connected?: Number
+ *  created_at?: Number
+ *  updated_at?: Number
+ *  resource_type?: String
+ *  balances?: [Balance]
  * }} Account
  *
  * @typedef {{
@@ -147,6 +173,7 @@ export type CreateDepositAddressResp = {
  *  logo?: String
  *  updated_at?: Number
  *  misc?: any
+ *  resource_type?: String
  * }} Balance
  *
  * @typedef {{
@@ -159,20 +186,21 @@ export type CreateDepositAddressResp = {
  * }} GetBalancesResp
  *
  * @typedef {{
- *  currency?: {
- *    ticker?: String
- *    name?: String
- *    type?: String
- *    priority?: Number
- *    logo?: String
- *    decimals?: Number
- *    address?: String
- *    resource_type?: String
- *  }
+ *  currency?: import('./currencies').Currency
  *  provider_ticker?: String
  *  address?: String
  *  request_id?: String
  * }} CreateDepositAddressResp
+ *
+ * @typedef {{
+ *  data?: [{
+ *    ticker?: String
+ *    provider_ticker?: String
+ *    address?: String
+ *    resource_type?: String
+ *  }]
+ *  request_id?: String
+ * }} GetDepositAddressesResp
  */
 declare class Users {
     constructor(api: any);
@@ -239,7 +267,7 @@ declare class Users {
      *  accountId?: String
      *  tickers?: String
      * }} param0 Request parameters.
-     * @returns {Promise<GetBalancesResp>}
+     * @returns {Promise<GetBalancesResp>} API response.
      */
     getBalances({ userId, accountId, tickers }?: {
         userId?: string;
@@ -254,16 +282,26 @@ declare class Users {
      *  accountId?: String
      *  ticker?: String
      * }} param0 Request parameters.
-     * @returns {Promise<CreateDepositAddressResp>}
+     * @returns {Promise<CreateDepositAddressResp>} API response.
      */
     createDepositAddress({ userId, accountId, ticker }?: {
         userId?: string;
         accountId?: string;
         ticker?: string;
     }): Promise<CreateDepositAddressResp>;
+    /**
+     * This endpoint will retrieve all deposit addresses for the specified account. If the currency
+     * is not supported by the connected provider, you will receive an 'unsupported' error.
+     * @param {{
+     *  userId?: String
+     *  accountId?: String
+     *  ticker?: String
+     * }} param0 Request parameters.
+     * @returns {Promise<GetDepositAddressesResp>} API response.
+     */
     getDepositAddresses({ userId, accountId, ticker }?: {
-        userId: any;
-        accountId: any;
-        ticker: any;
-    }): Promise<any>;
+        userId?: string;
+        accountId?: string;
+        ticker?: string;
+    }): Promise<GetDepositAddressesResp>;
 }

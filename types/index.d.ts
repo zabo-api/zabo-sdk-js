@@ -1,5 +1,8 @@
-declare const _exports: ZaboAPI;
+declare const _exports: Zabo;
 export = _exports;
-export type ZaboAPI = {
-    transactions: number;
-};
+/**
+ * Zabo main class definition.
+ */
+declare class Zabo {
+    get version(): any;
+}

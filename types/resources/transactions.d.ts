@@ -1,4 +1,4 @@
-declare function _exports(api: any): Transactions;
+declare const _exports: (api: any) => TransactionsAPI;
 export = _exports;
 export type Part = {
     direction?: 'sent' | 'received';
@@ -40,6 +40,7 @@ export type TransactionsResp = {
     last_updated_at?: number;
     request_id?: string;
 };
+export type TransactionsAPI = Transactions;
 /**
  * @typedef {{
  *  direction?: 'sent' | 'received'
@@ -84,10 +85,6 @@ export type TransactionsResp = {
  *  last_updated_at?: Number
  *  request_id?: String
  * }} TransactionsResp
- * @property {[Transaction]} data
- * @property {Number} delay
- * @property {Number} last_updated_at
- * @property {String} request_id
  */
 /**
  * Transactions API.
@@ -103,10 +100,10 @@ declare class Transactions {
     /**
      * getOne fetches a specific transaction for the given account.
      * @param {{
-     * userId: string,
-     * accountId?: string,
-     * txId: string,
-     * ticker: string,
+     *  userId: string,
+     *  accountId?: string,
+     *  txId: string,
+     *  ticker: string,
      * }} param0 Transaction request object.
      * @returns {Promise<Transaction>} A transaction.
      */
@@ -119,11 +116,11 @@ declare class Transactions {
     /**
      * getList fetches a list of transaction for the given account.
      * @param {{
-     * userId: String,
-     * accountId?: String,
-     * ticker?: String,
-     * limit?: Number,
-     * cursor?: String
+     *  userId: String,
+     *  accountId?: String,
+     *  ticker?: String,
+     *  limit?: Number,
+     *  cursor?: String
      * }} param0 Transactions request object.
      * @returns {Promise<TransactionsResp>} An API response with transactions within `data`.
      */

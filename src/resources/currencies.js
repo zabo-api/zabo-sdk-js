@@ -119,6 +119,10 @@ class Currencies {
   }
 }
 
+/**
+ * @typedef {Currencies} CurrenciesAPI
+ * @type {(api) => CurrenciesAPI}
+ */
 module.exports = (api) => {
   return new Currencies(api)
 }

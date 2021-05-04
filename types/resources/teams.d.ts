@@ -1,5 +1,9 @@
-declare function _exports(api: any, appId: any): Teams;
+declare const _exports: (api: any) => TeamsAPI;
 export = _exports;
+export type TeamsAPI = Teams;
+/**
+ * Teams API.
+ */
 declare class Teams {
     constructor(api: any);
     api: any;

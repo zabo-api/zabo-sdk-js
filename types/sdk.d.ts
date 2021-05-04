@@ -1,5 +1,6 @@
-declare const _exports: ZaboSDK;
+declare const _exports: SDK;
 export = _exports;
+export type SDK = ZaboSDK;
 /**
  * SDK main class definition.
  */
@@ -7,34 +8,41 @@ declare class ZaboSDK {
     status: string;
     api: API;
     autoConnect: boolean;
-    accounts: any;
     /**
-     * @type {ReturnType<typeof import('./resources/blockchains')>} Transactions API
+     * @type {import('./resources/accounts').AccountsAPI}
      */
-    blockchains: ReturnType<typeof import('./resources/blockchains')>;
+    accounts: import('./resources/accounts').AccountsAPI;
     /**
-     * @type {ReturnType<typeof import('./resources/currencies')>} Currencies API
+     * @type {import('./resources/blockchains').BlockchainsAPI}
      */
-    currencies: ReturnType<typeof import('./resources/currencies')>;
+    blockchains: import('./resources/blockchains').BlockchainsAPI;
     /**
-     * @type {ReturnType<typeof import('./resources/providers')>} Providers API
+     * @type {import('./resources/currencies').CurrenciesAPI}
      */
-    providers: ReturnType<typeof import('./resources/providers')>;
+    currencies: import('./resources/currencies').CurrenciesAPI;
     /**
-     * @type {ReturnType<typeof import('./resources/teams')>} Teams API
+     * @type {import('./resources/providers').ProvidersAPI}
      */
-    teams: ReturnType<typeof import('./resources/teams')>;
+    providers: import('./resources/providers').ProvidersAPI;
     /**
-     * @type {ReturnType<typeof import('./resources/trading')>} Trading API
+     * @type {import('./resources/teams').TeamsAPI}
      */
-    trading: ReturnType<typeof import('./resources/trading')>;
+    teams: import('./resources/teams').TeamsAPI;
     /**
-     * @type {ReturnType<typeof import('./resources/transactions')>} Transactions API
+     * @type {import('./resources/trading').TradingAPI}
      */
-    transactions: ReturnType<typeof import('./resources/transactions')>;
-    users: any;
+    trading: import('./resources/trading').TradingAPI;
+    /**
+     * @type {import('./resources/transactions').TransactionsAPI}
+     */
+    transactions: import('./resources/transactions').TransactionsAPI;
+    /**
+     * @type {import('./resources/users').UsersAPI}
+     */
+    users: import('./resources/users').UsersAPI;
     init(o: any): Promise<any>;
     env: string | void;
+    apiVersion: any;
     /**
      * Throw an error for the SDK.
      * @param {Number} code A status code relating to the error.
@@ -51,11 +59,12 @@ declare class ZaboSDK {
      * @returns The environment used, lowercased.
      */
     checkZaboEnv(env: string): string | void;
+    checkApiVersion(version: any): any;
     /**
      * Connect the SDK to the Zabo API.
      * @param {{
-     * provider?: string,
-     * [key: string]: any
+     *  provider?: string,
+     *  [key: string]: any
      * }} config Zabo API connection config.
      * @returns A connected SDK object for browsers, an appId for servers.
      */
