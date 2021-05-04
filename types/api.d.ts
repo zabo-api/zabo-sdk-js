@@ -19,13 +19,13 @@ declare class API {
      * }} param0 Connection config.
      * @returns An `appId` on servers.
      */
-    connect({ provider }?: {
+    connect({ provider, params }?: {
         provider?: string;
     }): Promise<any>;
-    iframe: HTMLElement;
-    connector: Window;
+    iframe: any;
+    connector: any;
     /**
-     *
+     * Send an API request.
      * @param {String} method HTTP method to use for the request.
      * @param {String} path The endpoint for the API.
      * @param {Object} data Additional data to send for the request.
@@ -41,14 +41,14 @@ declare class API {
     };
     _watchConnector(teamSession: any): void;
     _setListeners(teamSession: any): void;
-    ws: WebSocket;
+    ws: any;
     _removeListeners(): void;
     _onMessage(emitter: any, { origin, data }: {
         origin: any;
         data: any;
     }): void;
     _setAccountSession(cookie: any): boolean;
-    _appendIframe(name: any): HTMLElement;
+    _appendIframe(name: any): any;
     _closeConnector(): void;
     _triggerCallback(type: any, data: any): void;
 }

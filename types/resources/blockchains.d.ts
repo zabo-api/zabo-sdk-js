@@ -1,4 +1,4 @@
-declare function _exports(api: any): Blockchains;
+declare const _exports: (api: any) => BlockchainsAPI;
 export = _exports;
 export type ListCursor = {
     limit: number;
@@ -37,8 +37,8 @@ export type Contract = {
     bytecode?: string;
 };
 export type GetTokensResp = {
-    list_cursor: ListCursor;
-    data: [
+    list_cursor?: ListCursor;
+    data?: [
         {
             contract?: {
                 address?: Address;
@@ -46,13 +46,13 @@ export type GetTokensResp = {
         }
     ];
 };
-export type Balance = {
+export type TokenBalance = {
     token?: Token;
     address?: string;
     balance?: string;
 };
 export type GetBalancesResp = {
-    data?: [Balance] | number;
+    data?: [TokenBalance] | number;
 };
 export type ETHTransaction = {
     hash?: string;
@@ -100,15 +100,15 @@ export type BTCTransaction = {
 };
 export type TransactionData = ETHTransaction & BTCTransaction;
 export type GetTransactionsResp = {
-    list_cursor: ListCursor;
-    data: [TransactionData];
+    list_cursor?: ListCursor;
+    data?: [TransactionData];
 };
 export type GetTransactionResp = {
-    data: TransactionData;
+    data?: TransactionData;
 };
 export type GetTokenTransfersResp = {
-    list_cursor: ListCursor;
-    data: [
+    list_cursor?: ListCursor;
+    data?: [
         {
             transaction: ETHTransaction;
             token: Token;
@@ -119,7 +119,7 @@ export type GetTokenTransfersResp = {
     ];
 };
 export type GetTokenTransferResp = {
-    data: [
+    data?: [
         {
             transaction: ETHTransaction;
             token: Token;
@@ -129,6 +129,7 @@ export type GetTokenTransferResp = {
         }
     ];
 };
+export type BlockchainsAPI = Blockchains;
 /**
  * @typedef {{
  *   limit: Number
@@ -171,22 +172,23 @@ export type GetTokenTransferResp = {
  *  bytecode?: String
  * }} Contract
  *
- * @typedef GetTokensResp
- * @property {ListCursor} list_cursor
- * @property {[{
- *   contract?: {
- *     address?: Address
- *   }
- * }]} data
+ * @typedef {{
+ *  list_cursor?: ListCursor
+ *  data?: [{
+ *    contract?: {
+ *      address?: Address
+ *    }
+ *  }]
+ * }} GetTokensResp
  *
  * @typedef {{
  *   token?: Token,
  *   address?: String,
  *   balance?: String
- * }} Balance
+ * }} TokenBalance
  *
  * @typedef {{
- *  data?: [Balance] | Number
+ *  data?: [TokenBalance] | Number
  * }} GetBalancesResp
  *
  * @typedef {{
@@ -236,31 +238,35 @@ export type GetTokenTransferResp = {
  *
  * @typedef {ETHTransaction & BTCTransaction} TransactionData
  *
- * @typedef GetTransactionsResp
- * @property {ListCursor} list_cursor
- * @property {[TransactionData]} data
+ * @typedef {{
+ *  list_cursor?: ListCursor
+ *  data?: [TransactionData]
+ * }} GetTransactionsResp
  *
- * @typedef GetTransactionResp
- * @property {TransactionData} data
+ * @typedef {{
+ *  data?: TransactionData
+ * }} GetTransactionResp
  *
- * @typedef GetTokenTransfersResp
- * @property {ListCursor} list_cursor
- * @property {[{
- *  transaction: ETHTransaction,
- *  token: Token,
- *  from_address: Address,
- *  to_address: Address,
- *  value: String
- * }]} data
+ * @typedef {{
+ *  list_cursor?: ListCursor
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ * }} GetTokenTransfersResp
  *
- * @typedef GetTokenTransferResp
- * @property {[{
- *  transaction: ETHTransaction,
- *  token: Token,
- *  from_address: Address,
- *  to_address: Address,
- *  value: String
- * }]} data
+ * @typedef {{
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ * }} GetTokenTransferResp
  */
 declare class Blockchains {
     constructor(api: any);

@@ -7,6 +7,6 @@ export function uuidValidate(uuid: any): boolean;
 export function validateListParameters(limit: any, cursor: any): void;
 export function validateEnumParameter(name: any, value: any, options: any, optional?: boolean): void;
 export function createPaginator(payload: any, api: any): any;
-export function sleep(milliseconds: any): any;
+export function sleep(milliseconds: any): Promise<any>;
 export const isBrowser: Function;
 export const isNode: Function;

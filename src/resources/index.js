@@ -18,7 +18,7 @@
  * The API endpoints.
  * @param {import('../api')} api An API object.
  * @param {Boolean} isNode Is the SDK running on Node.js.
- * @return {any}
+ * @returns {Object}
  */
 module.exports = async (api, isNode) => {
   if (isNode) {

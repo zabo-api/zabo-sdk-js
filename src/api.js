@@ -63,10 +63,6 @@ class API {
 
   /**
    * Connect to the Zabo API.
-   * @param {{
-   * provider?: string
-   * }} param0 Connection config.
-   * @returns An `appId` on servers.
    */
   async connect ({ provider, params } = {}) {
     let appId = null
@@ -125,7 +121,7 @@ class API {
   }
 
   /**
-   *
+   * Send an API request.
    * @param {String} method HTTP method to use for the request.
    * @param {String} path The endpoint for the API.
    * @param {Object} data Additional data to send for the request.
@@ -335,5 +331,8 @@ class API {
   }
 }
 
-// Export API class
+/**
+ * Export API functions.
+ * @type {API}
+ */
 module.exports = API

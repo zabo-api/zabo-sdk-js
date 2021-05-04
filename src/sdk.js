@@ -30,43 +30,42 @@ class ZaboSDK {
     this.autoConnect = true
 
     /**
-     * @typedef {ReturnType<typeof import('./resources/accounts')>} Accounts
-     * @type Accounts
+     * @type {import('./resources/accounts').AccountsAPI}
      */
     this.accounts = undefined
+
     /**
-     * @typedef {ReturnType<typeof import('./resources/blockchains')>} Transactions
-     * @type Transactions
+     * @type {import('./resources/blockchains').BlockchainsAPI}
      */
     this.blockchains = undefined
+
     /**
-     * @typedef {ReturnType<typeof import('./resources/currencies')>} Currencies
-     * @type Currencies
+     * @type {import('./resources/currencies').CurrenciesAPI}
      */
     this.currencies = undefined
+
     /**
-     * @typedef {ReturnType<typeof import('./resources/providers')>} Providers
-     * @type Providers
+     * @type {import('./resources/providers').ProvidersAPI}
      */
     this.providers = undefined
+
     /**
-     * @typedef {ReturnType<typeof import('./resources/teams')>} Teams
-     * @type Teams
+     * @type {import('./resources/teams').TeamsAPI}
      */
     this.teams = undefined
+
     /**
-     * @typedef {ReturnType<typeof import('./resources/trading')>} Trading
-     * @type Trading
+     * @type {import('./resources/trading').TradingAPI}
      */
     this.trading = undefined
+
     /**
-     * @typedef {ReturnType<typeof import('./resources/transactions')>} Transactions
-     * @type Transactions
+     * @type {import('./resources/transactions').TransactionsAPI}
      */
     this.transactions = undefined
+
     /**
-     * @typedef {ReturnType<typeof import('./resources/users')>} Users
-     * @type Users
+     * @type {import('./resources/users').UsersAPI}
      */
     this.users = undefined
   }
@@ -249,6 +248,7 @@ class ZaboSDK {
 }
 
 /**
- * Export ZaboSDK class
+ * @typedef {ZaboSDK} SDK
+ * @type {SDK}
  */
 module.exports = new ZaboSDK()

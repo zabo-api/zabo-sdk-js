@@ -336,6 +336,10 @@ class Users {
   }
 }
 
+/**
+ * @typedef {Users} UsersAPI
+ * @type {(api) => UsersAPI}
+ */
 module.exports = (api) => {
   return new Users(api)
 }

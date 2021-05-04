@@ -74,6 +74,10 @@ class Providers {
   }
 }
 
+/**
+ * @typedef {Providers} ProvidersAPI
+ * @type {(api) => ProvidersAPI}
+ */
 module.exports = (api) => {
   return new Providers(api)
 }

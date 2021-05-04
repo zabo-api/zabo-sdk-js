@@ -176,7 +176,8 @@ class Transactions {
 }
 
 /**
- * Export class instance
+ * @typedef {Transactions} TransactionsAPI
+ * @type {(api) => TransactionsAPI}
  */
 module.exports = (api) => {
   return new Transactions(api)
