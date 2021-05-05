@@ -57,12 +57,7 @@ const { SDKError } = require('../err')
  *  resource_type?: String
  * }} Transaction
  *
- * @typedef {{
- *  data?: [Transaction]
- *  delay?: Number
- *  last_updated_at?: Number
- *  request_id?: String
- * }} TransactionsResp
+ * @typedef {[Transaction]} TransactionsResp
  */
 
 /**

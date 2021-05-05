@@ -1,15 +1,9 @@
 declare const _exports: (api: any) => AccountsAPI;
 export = _exports;
-export type GetAccountBalances = {
-    data?: [import('./users').Balance];
-    request_id?: string;
-};
+export type GetAccountBalances = [import('./users').Balance];
 export type AccountsAPI = Accounts;
 /**
- * @typedef {{
- *  data?: [import('./users').Balance]
- *  request_id?: String
- * }} GetAccountBalances
+ * @typedef {[import('./users').Balance]} GetAccountBalances
  */
 /**
  * Accounts API.

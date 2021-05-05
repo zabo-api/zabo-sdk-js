@@ -14,13 +14,10 @@ declare class API {
     _isWaitingForConnector: boolean;
     /**
      * Connect to the Zabo API.
-     * @param {{
-     * provider?: string
-     * }} param0 Connection config.
-     * @returns An `appId` on servers.
      */
     connect({ provider, params }?: {
-        provider?: string;
+        provider: any;
+        params: any;
     }): Promise<any>;
     iframe: any;
     connector: any;

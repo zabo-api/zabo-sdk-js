@@ -34,6 +34,8 @@ class Zabo {
    *  apiKey?: String
    *  secretKey?: String
    *  autoConnect?: Boolean
+   *  apiVersion?: 'v0' | 'v1' | {}
+   *  [key: String]?: any
    * }} config Zabo initialization config.
    * @returns {Promise<SDK>} The Zabo SDK.
    */

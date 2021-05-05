@@ -21,10 +21,7 @@
 const { SDKError } = require('../err')
 
 /**
- * @typedef {{
- *  data?: [import('./users').Balance]
- *  request_id?: String
- * }} GetAccountBalances
+ * @typedef {[import('./users').Balance]} GetAccountBalances
  */
 
 /**

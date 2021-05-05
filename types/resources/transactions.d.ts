@@ -34,12 +34,7 @@ export type Transaction = {
     confirmed_at?: number;
     resource_type?: string;
 };
-export type TransactionsResp = {
-    data?: [Transaction];
-    delay?: number;
-    last_updated_at?: number;
-    request_id?: string;
-};
+export type TransactionsResp = [Transaction];
 export type TransactionsAPI = Transactions;
 /**
  * @typedef {{
@@ -79,12 +74,7 @@ export type TransactionsAPI = Transactions;
  *  resource_type?: String
  * }} Transaction
  *
- * @typedef {{
- *  data?: [Transaction]
- *  delay?: Number
- *  last_updated_at?: Number
- *  request_id?: String
- * }} TransactionsResp
+ * @typedef {[Transaction]} TransactionsResp
  */
 /**
  * Transactions API.
