@@ -50,11 +50,7 @@ export type AddAccountResp = {
 };
 export type RemoveAccountResp = AddAccountResp;
 export type GetOneUserResp = User;
-export type GetListUsersResp = {
-    total?: number;
-    data?: [User];
-    request_id?: string;
-};
+export type GetListUsersResp = [User];
 export type Balance = {
     ticker?: string;
     provider_ticker?: string;
@@ -74,27 +70,21 @@ export type Balance = {
 export type GetAccountResp = {
     balances?: [Balance];
 } & Account;
-export type GetBalancesResp = {
-    data?: [Balance];
-    request_id?: string;
-};
+export type GetBalancesResp = [Balance];
 export type CreateDepositAddressResp = {
     currency?: import('./currencies').Currency;
     provider_ticker?: string;
     address?: string;
     request_id?: string;
 };
-export type GetDepositAddressesResp = {
-    data?: [
-        {
-            ticker?: string;
-            provider_ticker?: string;
-            address?: string;
-            resource_type?: string;
-        }
-    ];
-    request_id?: string;
-};
+export type GetDepositAddressesResp = [
+    {
+        ticker?: string;
+        provider_ticker?: string;
+        address?: string;
+        resource_type?: string;
+    }
+];
 export type UsersAPI = Users;
 /**
  * @typedef {{
@@ -153,11 +143,7 @@ export type UsersAPI = Users;
  *
  * @typedef {User} GetOneUserResp
  *
- * @typedef {{
- *  total?: Number
- *  data?: [User]
- *  request_id?: String
- * }} GetListUsersResp
+ * @typedef {[User]} GetListUsersResp
  *
  * @typedef {{
  *  ticker?: String
@@ -180,10 +166,7 @@ export type UsersAPI = Users;
  *  balances?: [Balance]
  * } & Account} GetAccountResp
  *
- * @typedef {{
- *  data?: [Balance]
- *  request_id?: String
- * }} GetBalancesResp
+ * @typedef {[Balance]} GetBalancesResp
  *
  * @typedef {{
  *  currency?: import('./currencies').Currency
@@ -192,15 +175,12 @@ export type UsersAPI = Users;
  *  request_id?: String
  * }} CreateDepositAddressResp
  *
- * @typedef {{
- *  data?: [{
- *    ticker?: String
- *    provider_ticker?: String
- *    address?: String
- *    resource_type?: String
- *  }]
- *  request_id?: String
- * }} GetDepositAddressesResp
+ * @typedef {[{
+ *  ticker?: String
+ *  provider_ticker?: String
+ *  address?: String
+ *  resource_type?: String
+ * }]} GetDepositAddressesResp
  */
 declare class Users {
     constructor(api: any);

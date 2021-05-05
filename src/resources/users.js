@@ -76,11 +76,7 @@ const { SDKError } = require('../err')
  *
  * @typedef {User} GetOneUserResp
  *
- * @typedef {{
- *  total?: Number
- *  data?: [User]
- *  request_id?: String
- * }} GetListUsersResp
+ * @typedef {[User]} GetListUsersResp
  *
  * @typedef {{
  *  ticker?: String
@@ -103,10 +99,7 @@ const { SDKError } = require('../err')
  *  balances?: [Balance]
  * } & Account} GetAccountResp
  *
- * @typedef {{
- *  data?: [Balance]
- *  request_id?: String
- * }} GetBalancesResp
+ * @typedef {[Balance]} GetBalancesResp
  *
  * @typedef {{
  *  currency?: import('./currencies').Currency
@@ -115,15 +108,12 @@ const { SDKError } = require('../err')
  *  request_id?: String
  * }} CreateDepositAddressResp
  *
- * @typedef {{
- *  data?: [{
- *    ticker?: String
- *    provider_ticker?: String
- *    address?: String
- *    resource_type?: String
- *  }]
- *  request_id?: String
- * }} GetDepositAddressesResp
+ * @typedef {[{
+ *  ticker?: String
+ *  provider_ticker?: String
+ *  address?: String
+ *  resource_type?: String
+ * }]} GetDepositAddressesResp
  */
 
 class Users {

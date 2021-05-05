@@ -21,13 +21,6 @@ const { SDKError } = require('../err')
 
 /**
  * @typedef {{
- *   limit: Number
- *   has_more: Boolean
- *   self_uri: String
- *   next_uri: String
- * }} ListCursor
- *
- * @typedef {{
  *  hex: String
  *  nonce?: Number
  *  name?: String
@@ -61,14 +54,16 @@ const { SDKError } = require('../err')
  *  bytecode?: String
  * }} Contract
  *
- * @typedef {{
- *  list_cursor?: ListCursor
- *  data?: [{
- *    contract?: {
- *      address?: Address
- *    }
- *  }]
- * }} GetTokensResp
+ * @typedef {[{
+ *  contract?: {
+ *    address?: Address
+ *  }
+ *  ticker?: String
+ *  name?: String
+ *  decimals?: Number
+ *  total_supply?: String
+ *  is_erc20: Boolean
+ * }]} GetTokensResp
  *
  * @typedef {{
  *   token?: Token,
@@ -76,9 +71,7 @@ const { SDKError } = require('../err')
  *   balance?: String
  * }} TokenBalance
  *
- * @typedef {{
- *  data?: [TokenBalance] | Number
- * }} GetBalancesResp
+ * @typedef {[TokenBalance] | Number} GetBalancesResp
  *
  * @typedef {{
  *  hash?: String
@@ -127,35 +120,25 @@ const { SDKError } = require('../err')
  *
  * @typedef {ETHTransaction & BTCTransaction} TransactionData
  *
- * @typedef {{
- *  list_cursor?: ListCursor
- *  data?: [TransactionData]
- * }} GetTransactionsResp
+ * @typedef {[TransactionData]} GetTransactionsResp
  *
- * @typedef {{
- *  data?: TransactionData
- * }} GetTransactionResp
+ * @typedef {TransactionData} GetTransactionResp
  *
- * @typedef {{
- *  list_cursor?: ListCursor
- *  data?: [{
- *    transaction: ETHTransaction,
- *    token: Token,
- *    from_address: Address,
- *    to_address: Address,
- *    value: String
- *  }]
- * }} GetTokenTransfersResp
+ * @typedef {[{
+ *  transaction: ETHTransaction,
+ *  token: Token,
+ *  from_address: Address,
+ *  to_address: Address,
+ *  value: String
+ * }]} GetTokenTransfersResp
  *
- * @typedef {{
- *  data?: [{
- *    transaction: ETHTransaction,
- *    token: Token,
- *    from_address: Address,
- *    to_address: Address,
- *    value: String
- *  }]
- * }} GetTokenTransferResp
+ * @typedef {[{
+ *  transaction: ETHTransaction,
+ *  token: Token,
+ *  from_address: Address,
+ *  to_address: Address,
+ *  value: String
+ * }]} GetTokenTransferResp
  */
 
 class Blockchains {
@@ -214,7 +197,7 @@ class Blockchains {
    * returned for all tokens that share the same name.
    * **NOTE:** The name is case-sensitive!
    * @param {'ethereum' | {}} blockchain The blockchain name.
-   * @param {String} tokenName The name of the token.
+   * @param {String?} tokenName The name of the token.
    * @returns {Promise<GetTokensResp>} API response.
    */
   async getTokens (blockchain, tokenName) {

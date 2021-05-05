@@ -20,10 +20,7 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 /**
- * @typedef {{
- *  list_cursor?: import('./blockchains').ListCursor
- *  data?: [import('./users').Provider]
- * }} GetListProvidersResp
+ * @typedef {[import('./users').Provider]} GetListProvidersResp
  *
  * @typedef {import('./users').Provider} GetOneProviderResp
  */

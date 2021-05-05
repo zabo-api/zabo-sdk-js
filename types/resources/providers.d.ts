@@ -1,16 +1,10 @@
 declare const _exports: (api: any) => ProvidersAPI;
 export = _exports;
-export type GetListProvidersResp = {
-    list_cursor?: import('./blockchains').ListCursor;
-    data?: [import('./users').Provider];
-};
+export type GetListProvidersResp = [import('./users').Provider];
 export type GetOneProviderResp = import('./users').Provider;
 export type ProvidersAPI = Providers;
 /**
- * @typedef {{
- *  list_cursor?: import('./blockchains').ListCursor
- *  data?: [import('./users').Provider]
- * }} GetListProvidersResp
+ * @typedef {[import('./users').Provider]} GetListProvidersResp
  *
  * @typedef {import('./users').Provider} GetOneProviderResp
  */
