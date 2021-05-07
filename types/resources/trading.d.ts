@@ -19,6 +19,7 @@ export type Order = {
     filled_size?: string;
     fill_fees?: string;
     settled?: boolean;
+    request_id?: string;
 };
 export type GetSymbolsResp = [
     {
@@ -63,6 +64,7 @@ export type TradingAPI = Trading;
  *  filled_size?: String
  *  fill_fees?: String
  *  settled?: Boolean
+ *  request_id?: String
  * }} Order
  *
  * @typedef {[{

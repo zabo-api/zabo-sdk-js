@@ -39,6 +39,7 @@ const { SDKError } = require('../err')
  *  filled_size?: String
  *  fill_fees?: String
  *  settled?: Boolean
+ *  request_id?: String
  * }} Order
  *
  * @typedef {[{
