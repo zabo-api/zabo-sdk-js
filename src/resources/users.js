@@ -60,7 +60,7 @@ const { SDKError } = require('../err')
  *  request_id?: String
  * }} User
  *
- * @typedef {User} CreateAccountResp
+ * @typedef {User} CreateUserResp
  *
  * @typedef {{
  *  id?: String
@@ -125,8 +125,8 @@ class Users {
    * This function creates a new user for your application. A user connects their cryptocurrency
    * wallet via the Zabo Client API, and then you can create a user from your server.
    * From there, your application server can have access this user's account data.
-   * @param {Account} account Account data.
-   * @returns {Promise<CreateAccountResp>} API response.
+   * @param {any} account Account data.
+   * @returns {Promise<CreateUserResp>} API response.
    */
   async create (account = {}) {
     if (!account.id) {
@@ -145,8 +145,8 @@ class Users {
   /**
    * This function inserts an additional account into a given user object.
    * Useful when your application makes it possible for the same user to connect with multiple providers.
-   * @param {Object} user The user object received from zabo.users.create() response.
-   * @param {Object} account The account object received when the user connected. This object must contain a valid token.
+   * @param {any} user The user object received from zabo.users.create() response.
+   * @param {any} account The account object received when the user connected. This object must contain a valid token.
    * @returns {Promise<AddAccountResp>} API response.
    */
   async addAccount (user = {}, account = {}) {

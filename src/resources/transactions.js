@@ -50,7 +50,7 @@ const { SDKError } = require('../err')
  *  transaction_type?: String
  *  parts?: [Part]
  *  fees?: [Fee]
- *  misc?: [any]
+ *  misc?: any
  *  fiat_calculated_at?: Number
  *  initiated_at?: Number
  *  confirmed_at?: Number
@@ -79,10 +79,10 @@ class Transactions {
   /**
    * getOne fetches a specific transaction for the given account.
    * @param {{
-   *  userId: string,
-   *  accountId?: string,
-   *  txId: string,
-   *  ticker: string,
+   *  userId?: String
+   *  accountId?: String
+   *  txId: String
+   *  ticker: String
    * }} param0 Transaction request object.
    * @returns {Promise<Transaction>} A transaction.
    */
@@ -123,10 +123,10 @@ class Transactions {
   /**
    * getList fetches a list of transaction for the given account.
    * @param {{
-   *  userId: String,
-   *  accountId?: String,
-   *  ticker?: String,
-   *  limit?: Number,
+   *  userId: String
+   *  accountId?: String
+   *  ticker?: String
+   *  limit?: Number
    *  cursor?: String
    * }} param0 Transactions request object.
    * @returns {Promise<TransactionsResp>} An API response with transactions within `data`.
