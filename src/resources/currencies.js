@@ -98,8 +98,10 @@ class Currencies {
    * Any supported assets can be used for the tickers parameter. This parameter is optional
    * and, if left out, all supported cryptocurrencies/assets will be returned.
    * @param {{
-   *  tickers?: [String]
    *  toCrypto?: Boolean
+   *  limit?: Number
+   *  cursor?: String
+   *  tickers?: [String] | String
    * }} param0 Request parameters.
    * @returns {Promise<GetExchangeRatesResp>} API response.
    */

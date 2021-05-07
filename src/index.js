@@ -58,6 +58,7 @@ class Zabo {
 }
 
 /**
- * @type {Zabo}
+ * @typedef {Zabo} UNIQUENAME
+ * @type {UNIQUENAME}
  */
 module.exports = new Zabo()
