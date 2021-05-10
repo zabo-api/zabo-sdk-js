@@ -6,7 +6,8 @@ export type TeamsAPI = Teams;
  */
 declare class Teams {
     constructor(api: any);
-    api: any;
+    /** @private */
+    private api;
     id: any;
     data: any;
     setId(id: any): void;

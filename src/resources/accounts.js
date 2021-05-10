@@ -29,6 +29,7 @@ const { SDKError } = require('../err')
  */
 class Accounts {
   constructor (api) {
+    /** @private */
     this.api = api
     this.id = null
     this.data = null

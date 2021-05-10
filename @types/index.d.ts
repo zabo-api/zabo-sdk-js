@@ -16,7 +16,7 @@ declare class Zabo {
      *  autoConnect?: Boolean
      *  apiVersion?: 'v0' | 'v1' | {}
      * }} config Zabo initialization config.
-     * @returns {Promise<typeof import('./sdk')>} The Zabo SDK.
+     * @returns {Promise<SDK>} The Zabo SDK.
      */
     init(config?: {
         clientId?: string;
@@ -25,11 +25,11 @@ declare class Zabo {
         secretKey?: string;
         autoConnect?: boolean;
         apiVersion?: 'v0' | 'v1' | {};
-    }): Promise<typeof import('./sdk')>;
+    }): Promise<SDK>;
     /**
      * Get an instance of the ZaboSDK.
-     * @returns {typeof import('./sdk')} An instance of ZaboSDK.
+     * @returns {SDK} An instance of ZaboSDK.
      */
-    get instance(): typeof import('./sdk');
+    get instance(): SDK;
     get version(): any;
 }

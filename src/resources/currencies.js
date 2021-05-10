@@ -53,6 +53,7 @@ const { SDKError } = require('../err')
  */
 class Currencies {
   constructor (api) {
+    /** @private */
     this.api = api
   }
 

@@ -237,7 +237,8 @@ export type BlockchainsAPI = Blockchains;
  */
 declare class Blockchains {
     constructor(api: any);
-    api: any;
+    /** @private */
+    private api;
     /**
      * Fetches information regarding the requested block number.
      * If the endpoint is called without a block number, then the latest block Zabo has will be returned.

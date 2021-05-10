@@ -143,6 +143,7 @@ const { SDKError } = require('../err')
 
 class Blockchains {
   constructor (api) {
+    /** @private */
     this.api = api
   }
 

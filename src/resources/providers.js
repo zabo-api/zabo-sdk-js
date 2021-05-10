@@ -30,6 +30,7 @@ const { SDKError } = require('../err')
  */
 class Providers {
   constructor (api) {
+    /** @private */
     this.api = api
   }
 

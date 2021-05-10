@@ -56,7 +56,8 @@ export type CurrenciesAPI = Currencies;
  */
 declare class Currencies {
     constructor(api: any);
-    api: any;
+    /** @private */
+    private api;
     /**
      * This endpoint will return the full list of currencies available in the system.
      * Use the providers endpoint to see the currencies supported by each provider.
