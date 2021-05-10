@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "description": "Zabo SDK for JS",
   "main": "dist/index.js",
+  "typings": "./@types",
   "scripts": {
     "getv": "echo $npm_package_version",
     "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha -r jsdom-global/register --recursive test/ --exit --timeout 10000",
@@ -60,7 +61,6 @@
     "fs": false,
     "child_process": false
   },
-  "typings": "./types",
   "standard": {
     "env": [
       "jest"

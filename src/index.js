@@ -31,9 +31,8 @@ class Zabo {
    *  secretKey?: String
    *  autoConnect?: Boolean
    *  apiVersion?: 'v0' | 'v1' | {}
-   *  [key: String]?: any?
    * }} config Zabo initialization config.
-   * @returns {Promise<sdk.SDK>} The Zabo SDK.
+   * @returns {Promise<any>} The Zabo SDK.
    */
   async init (config = {}) {
     await sdk.init(config)
@@ -42,7 +41,7 @@ class Zabo {
 
   /**
    * Get an instance of the ZaboSDK.
-   * @returns {sdk.SDK} An instance of ZaboSDK.
+   * @returns {any} An instance of ZaboSDK.
    */
   get instance () {
     return sdk
