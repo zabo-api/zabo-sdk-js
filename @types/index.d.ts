@@ -1,7 +1,7 @@
 declare const _exports: ZaboClass;
 export = _exports;
 export type ZaboClass = Zabo;
-export type SDK = sdk.SDK
+export type SDK = typeof import('./sdk');
 /**
  * Zabo main class definition.
  */
@@ -15,9 +15,8 @@ declare class Zabo {
      *  secretKey?: String
      *  autoConnect?: Boolean
      *  apiVersion?: 'v0' | 'v1' | {}
-     *  [key: String]?: any?
      * }} config Zabo initialization config.
-     * @returns {Promise<sdk.SDK>} The Zabo SDK.
+     * @returns {Promise<typeof import('./sdk')>} The Zabo SDK.
      */
     init(config?: {
         clientId?: string;
@@ -26,13 +25,11 @@ declare class Zabo {
         secretKey?: string;
         autoConnect?: boolean;
         apiVersion?: 'v0' | 'v1' | {};
-        any?: any;
-    }): Promise<sdk.SDK>;
+    }): Promise<typeof import('./sdk')>;
     /**
      * Get an instance of the ZaboSDK.
-     * @returns {sdk.SDK} An instance of ZaboSDK.
+     * @returns {typeof import('./sdk')} An instance of ZaboSDK.
      */
-    get instance(): any;
+    get instance(): typeof import('./sdk');
     get version(): any;
 }
-import sdk = require('./sdk')

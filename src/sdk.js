@@ -247,8 +247,4 @@ class ZaboSDK {
   }
 }
 
-/**
- * @typedef {ZaboSDK} SDK
- * @type {SDK}
- */
 module.exports = new ZaboSDK()

@@ -1,6 +1,5 @@
-declare const _exports: SDK;
+declare const _exports: ZaboSDK;
 export = _exports;
-export type SDK = ZaboSDK;
 /**
  * SDK main class definition.
  */
