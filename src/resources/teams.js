@@ -24,6 +24,7 @@ const { SDKError } = require('../err')
  */
 class Teams {
   constructor (api) {
+    /** @private */
     this.api = api
     this.id = null
     this.data = null

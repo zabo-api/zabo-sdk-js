@@ -75,6 +75,7 @@ const { SDKError } = require('../err')
  */
 class Trading {
   constructor (api) {
+    /** @private */
     this.api = api
     this.account = null
   }

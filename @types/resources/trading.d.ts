@@ -99,7 +99,8 @@ export type TradingAPI = Trading;
  */
 declare class Trading {
     constructor(api: any);
-    api: any;
+    /** @private */
+    private api;
     account: any;
     /**
      * @private

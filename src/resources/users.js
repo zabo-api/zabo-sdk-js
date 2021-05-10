@@ -118,6 +118,7 @@ const { SDKError } = require('../err')
 
 class Users {
   constructor (api) {
+    /** @private */
     this.api = api
   }
 

@@ -13,7 +13,8 @@ export type ProvidersAPI = Providers;
  */
 declare class Providers {
     constructor(api: any);
-    api: any;
+    /** @private */
+    private api;
     /**
      * This endpoint will return the list of all providers available for an application as
      * well as the scopes and currencies available for that particular provider.

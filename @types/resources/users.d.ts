@@ -184,7 +184,8 @@ export type UsersAPI = Users;
  */
 declare class Users {
     constructor(api: any);
-    api: any;
+    /** @private */
+    private api;
     /**
      * This function creates a new user for your application. A user connects their cryptocurrency
      * wallet via the Zabo Client API, and then you can create a user from your server.

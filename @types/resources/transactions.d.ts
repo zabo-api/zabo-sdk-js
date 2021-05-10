@@ -81,7 +81,8 @@ export type TransactionsAPI = Transactions;
  */
 declare class Transactions {
     constructor(api: any);
-    api: any;
+    /** @private */
+    private api;
     account: any;
     /**
      * @private

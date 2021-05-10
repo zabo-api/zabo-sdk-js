@@ -10,7 +10,8 @@ export type AccountsAPI = Accounts;
  */
 declare class Accounts {
     constructor(api: any);
-    api: any;
+    /** @private */
+    private api;
     id: any;
     data: any;
     /**
