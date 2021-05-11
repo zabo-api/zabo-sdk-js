@@ -29,7 +29,8 @@ describe('Zabo SDK Transactions Resource', () => {
   it('transactions.getOne() should fail if `userId` is not provided', async function () {
     const response = await transactions.getOne({
       accountId: '7a1e6a76-f7d0-4b8c-8c16-8972041c970a',
-      txId: 'b2a020df-1057-4847-8aaf-eb1f524e3518'
+      txId: 'b2a020df-1057-4847-8aaf-eb1f524e3518',
+      ticker: 'ETH'
     }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -40,7 +41,8 @@ describe('Zabo SDK Transactions Resource', () => {
   it('transactions.getOne() should fail if `accountId` is not provided', async function () {
     const response = await transactions.getOne({
       userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
-      txId: 'b2a020df-1057-4847-8aaf-eb1f524e3518'
+      txId: 'b2a020df-1057-4847-8aaf-eb1f524e3518',
+      ticker: 'ETH'
     }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -51,7 +53,8 @@ describe('Zabo SDK Transactions Resource', () => {
   it('transactions.getOne() should fail if `txId` is not provided', async function () {
     const response = await transactions.getOne({
       userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
-      accountId: '7a1e6a76-f7d0-4b8c-8c16-8972041c970a'
+      accountId: '7a1e6a76-f7d0-4b8c-8c16-8972041c970a',
+      ticker: 'ETH'
     }).should.be.rejected()
 
     response.should.be.an.Error()
@@ -110,7 +113,8 @@ describe('Zabo SDK Transactions Resource', () => {
     const data = {
       userId: '35b6b5dd-90a4-478e-b7b4-8712370f3333',
       accountId: 'ff0dc466-547b-45f6-a34c-f45463489e2f',
-      txId: '932e2040-32ce-4f3a-a67b-f1f37bcb74ba'
+      txId: '932e2040-32ce-4f3a-a67b-f1f37bcb74ba',
+      ticker: 'ETH'
     }
     const tx = await transactions.getOne(data)
 
