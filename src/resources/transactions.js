@@ -29,7 +29,11 @@ class Transactions {
     this.account = account
   }
 
-  async getOne ({ userId, accountId, txId } = {}) {
+  async getOne ({ userId, accountId, txId, ticker } = {}) {
+    if (!ticker) {
+      throw new SDKError(400, '[Zabo] Missing `ticker` parameter. See: https://zabo.com/docs/#get-a-specific-transaction')
+    }
+
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -44,7 +48,7 @@ class Transactions {
       }
 
       try {
-        return this.api.request('GET', `/users/${userId}/accounts/${accountId}/transactions/${txId}`)
+        return this.api.request('GET', `/users/${userId}/accounts/${accountId}/transactions/${txId}?ticker=${ticker}`)
       } catch (err) {
         throw new SDKError(err.error_type, err.message, err.request_id)
       }
@@ -57,7 +61,7 @@ class Transactions {
     }
 
     try {
-      return this.api.request('GET', `/accounts/${this.account.id}/transactions/${txId}`)
+      return this.api.request('GET', `/accounts/${this.account.id}/transactions/${txId}?ticker=${ticker}`)
     } catch (err) {
       throw new SDKError(err.error_type, err.message, err.request_id)
     }
