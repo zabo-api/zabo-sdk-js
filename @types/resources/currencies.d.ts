@@ -19,7 +19,7 @@ export type ExchangeRate = {
     resource_type?: string;
 };
 export type GetListCurrenciesResp = {
-    data: [Currency];
+    data?: [Currency];
     request_id?: string;
 };
 export type GetOneCurrencyResp = {
@@ -52,7 +52,7 @@ export type CurrenciesAPI = Currencies;
  * }} ExchangeRate
  *
  * @typedef {{
- *  data?: [Currency?]
+ *  data?: [Currency]
  *  request_id?: String
  * }} GetListCurrenciesResp
  *

@@ -35,7 +35,7 @@ const { SDKError } = require('../err')
  *    list?: [String]
  *    resource_type?: String
  *  }]
- *  available_scopes: [
+ *  available_scopes?: [
  *    {
  *      name?: String
  *      display_name?: String
@@ -128,7 +128,7 @@ const { SDKError } = require('../err')
  *  request_id?: String
  * }} CreateDepositAddressResp
  *
- * @typedef {
+ * @typedef {{
  *  data?: [
  *    {
  *      ticker?: String
@@ -138,7 +138,7 @@ const { SDKError } = require('../err')
  *    }
  *  ]
  *  request_id?: String
- * } GetDepositAddressesResp
+ * }} GetDepositAddressesResp
  */
 
 class Users {

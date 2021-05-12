@@ -41,8 +41,8 @@ const { SDKError } = require('../err')
  * }} ExchangeRate
  *
  * @typedef {{
- *  data: [Currency]
- *  request_id: String
+ *  data?: [Currency]
+ *  request_id?: String
  * }} GetListCurrenciesResp
  *
  * @typedef {{

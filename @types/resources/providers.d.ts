@@ -2,7 +2,7 @@ declare const _exports: (api: any) => ProvidersAPI;
 export = _exports;
 export type GetListProvidersResp = {
     data?: [import('./users').Provider];
-    request_id?: String;
+    request_id?: string;
 };
 export type GetOneProviderResp = {
     request_id?: string;
