@@ -35,8 +35,18 @@ const { SDKError } = require('../err')
  *    list?: [String]
  *    resource_type?: String
  *  }]
- *  type?: String
+ *  available_scopes: [
+ *    {
+ *      name?: String
+ *      display_name?: String
+ *      description?: String
+ *    }
+ *  ]
+ *  status?: any
  *  scopes?: [String]
+ *  is_beta?: Boolean
+ *  connect_notice?: String
+ *  status_notice?: String
  *  resource_type?: String
  * }} Provider
  *
@@ -76,7 +86,11 @@ const { SDKError } = require('../err')
  *
  * @typedef {User} GetOneUserResp
  *
- * @typedef {[User]} GetListUsersResp
+ * @typedef {{
+ *  data?: [User]
+ *  total?: Number
+ *  request_id?: String
+ * }} GetListUsersResp
  *
  * @typedef {{
  *  ticker?: String
@@ -91,29 +105,40 @@ const { SDKError } = require('../err')
  *  fiat_asset_is_verified?: Boolean
  *  logo?: String
  *  updated_at?: Number
- *  misc?: any
+ *  misc?: [String]
  *  resource_type?: String
  * }} Balance
  *
  * @typedef {{
  *  balances?: [Balance]
+ *  request_id?: String
  * } & Account} GetAccountResp
  *
- * @typedef {[Balance]} GetBalancesResp
+ * @typedef {{
+ *  data?: [Balance]
+ *  delay?: Number
+ *  request_id?: String
+ * }} GetBalancesResp
  *
  * @typedef {{
- *  currency?: import('./currencies').Currency
- *  provider_ticker?: String
- *  address?: String
- *  request_id?: String
- * }} CreateDepositAddressResp
- *
- * @typedef {[{
- *  ticker?: String
+ *  asset?: import('./currencies').Currency
  *  provider_ticker?: String
  *  address?: String
  *  resource_type?: String
- * }]} GetDepositAddressesResp
+ *  request_id?: String
+ * }} CreateDepositAddressResp
+ *
+ * @typedef {
+ *  data?: [
+ *    {
+ *      ticker?: String
+ *      provider_ticker?: String
+ *      address?: String
+ *      resource_type?: String
+ *    }
+ *  ]
+ *  request_id?: String
+ * } GetDepositAddressesResp
  */
 
 class Users {
@@ -278,9 +303,9 @@ class Users {
    * This endpoint will create and return a deposit address for the specified account. If the currency
    * is not supported by the connected provider, you will receive an 'unsupported' error.
    * @param {{
-   *  userId?: String
-   *  accountId?: String
-   *  ticker?: String
+   *  userId: String
+   *  accountId: String
+   *  ticker: String
    * }} param0 Request parameters.
    * @returns {Promise<CreateDepositAddressResp>} API response.
    */
@@ -304,9 +329,9 @@ class Users {
    * This endpoint will retrieve all deposit addresses for the specified account. If the currency
    * is not supported by the connected provider, you will receive an 'unsupported' error.
    * @param {{
-   *  userId?: String
-   *  accountId?: String
-   *  ticker?: String
+   *  userId: String
+   *  accountId: String
+   *  ticker: String
    * }} param0 Request parameters.
    * @returns {Promise<GetDepositAddressesResp>} API response.
    */

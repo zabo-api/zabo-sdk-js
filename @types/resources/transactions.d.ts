@@ -28,13 +28,20 @@ export type Transaction = {
     transaction_type?: string;
     parts?: [Part];
     fees?: [Fee];
-    misc?: any;
+    misc?: [string];
     fiat_calculated_at?: number;
     initiated_at?: number;
     confirmed_at?: number;
     resource_type?: string;
+    request_id?: string;
 };
-export type TransactionsResp = [Transaction];
+export type GetListTransactionsResp = {
+    data?: [Transaction];
+    delay?: number;
+    last_updated_at?: number;
+    has_errors?: boolean;
+    request_id?: string;
+};
 export type TransactionsAPI = Transactions;
 /**
  * @typedef {{
@@ -67,14 +74,21 @@ export type TransactionsAPI = Transactions;
  *  transaction_type?: String
  *  parts?: [Part]
  *  fees?: [Fee]
- *  misc?: any
+ *  misc?: [String]
  *  fiat_calculated_at?: Number
  *  initiated_at?: Number
  *  confirmed_at?: Number
  *  resource_type?: String
+ *  request_id?: String
  * }} Transaction
  *
- * @typedef {[Transaction]} TransactionsResp
+ * @typedef {{
+ *  data?: [Transaction]
+ *  delay?: Number
+ *  last_updated_at?: Number
+ *  has_errors?: Boolean
+ *  request_id?: String
+ * }} GetListTransactionsResp
  */
 /**
  * Transactions API.
@@ -94,15 +108,15 @@ declare class Transactions {
      *  userId?: String
      *  accountId?: String
      *  txId: String
-     *  ticker: String
+     *  ticker?: String
      * }} param0 Transaction request object.
      * @returns {Promise<Transaction>} A transaction.
      */
-    getOne({ userId, accountId, txId }?: {
+    getOne({ userId, accountId, txId, ticker }?: {
         userId?: string;
         accountId?: string;
         txId: string;
-        ticker: string;
+        ticker?: string;
     }): Promise<Transaction>;
     /**
      * getList fetches a list of transaction for the given account.
@@ -113,7 +127,7 @@ declare class Transactions {
      *  limit?: Number
      *  cursor?: String
      * }} param0 Transactions request object.
-     * @returns {Promise<TransactionsResp>} An API response with transactions within `data`.
+     * @returns {Promise<GetListTransactionsResp>} An API response with transactions within `data`.
      */
     getList({ userId, accountId, ticker, limit, cursor }?: {
         userId: string;
@@ -121,5 +135,5 @@ declare class Transactions {
         ticker?: string;
         limit?: number;
         cursor?: string;
-    }): Promise<TransactionsResp>;
+    }): Promise<GetListTransactionsResp>;
 }

@@ -16,8 +16,18 @@ export type Provider = {
             resource_type?: string;
         }
     ];
+    available_scopes?: [
+        {
+            name?: string;
+            display_name?: string;
+            description?: string;
+        }
+    ];
+    status?: any;
     type?: string;
-    scopes?: [string];
+    is_beta?: boolean;
+    connect_notice?: string;
+    status_notice?: string;
     resource_type?: string;
 };
 export type Account = {
@@ -50,7 +60,11 @@ export type AddAccountResp = {
 };
 export type RemoveAccountResp = AddAccountResp;
 export type GetOneUserResp = User;
-export type GetListUsersResp = [User];
+export type GetListUsersResp = {
+    data?: [User];
+    total?: number;
+    request_id?: string;
+};
 export type Balance = {
     ticker?: string;
     provider_ticker?: string;
@@ -64,27 +78,36 @@ export type Balance = {
     fiat_asset_is_verified?: boolean;
     logo?: string;
     updated_at?: number;
-    misc?: any;
+    misc?: [string];
     resource_type?: string;
 };
 export type GetAccountResp = {
     balances?: [Balance];
+    request_id?: string;
 } & Account;
-export type GetBalancesResp = [Balance];
+export type GetBalancesResp = {
+    data?: [Balance];
+    delay?: number;
+    request_id?: string;
+}
 export type CreateDepositAddressResp = {
-    currency?: import('./currencies').Currency;
+    asset?: import('./currencies').Currency;
     provider_ticker?: string;
     address?: string;
+    resource_type?: string;
     request_id?: string;
 };
-export type GetDepositAddressesResp = [
-    {
-        ticker?: string;
-        provider_ticker?: string;
-        address?: string;
-        resource_type?: string;
-    }
-];
+export type GetDepositAddressesResp = {
+    data?: [
+        {
+            ticker?: string;
+            provider_ticker?: string;
+            address?: string;
+            resource_type?: string;
+        }
+    ];
+    request_id?: string;
+}
 export type UsersAPI = Users;
 /**
  * @typedef {{
@@ -102,7 +125,14 @@ export type UsersAPI = Users;
  *    list?: [String]
  *    resource_type?: String
  *  }]
- *  type?: String
+ *  available_scopes: [
+ *    {
+ *      name?: String
+ *      display_name?: String
+ *      description?: String
+ *    }
+ *  ]
+ *  status?: any
  *  scopes?: [String]
  *  resource_type?: String
  * }} Provider
@@ -143,7 +173,11 @@ export type UsersAPI = Users;
  *
  * @typedef {User} GetOneUserResp
  *
- * @typedef {[User]} GetListUsersResp
+ * @typedef {{
+ *  data?: [User]
+ *  total?: Number
+ *  request_id?: String
+ * }} GetListUsersResp
  *
  * @typedef {{
  *  ticker?: String
@@ -164,14 +198,20 @@ export type UsersAPI = Users;
  *
  * @typedef {{
  *  balances?: [Balance]
+ *  request_id?: String
  * } & Account} GetAccountResp
  *
- * @typedef {[Balance]} GetBalancesResp
+ * @typedef {{
+ *  data?: [Balance]
+ *  delay?: Number
+ *  request_id?: String
+ * }} GetBalancesResp
  *
  * @typedef {{
- *  currency?: import('./currencies').Currency
+ *  asset?: import('./currencies').Currency
  *  provider_ticker?: String
  *  address?: String
+ *  resource_type?: String
  *  request_id?: String
  * }} CreateDepositAddressResp
  *
@@ -244,45 +284,45 @@ declare class Users {
      * using the currencies function documented below. If no currencies are specified, then all
      * available currencies will be returned.
      * @param {{
-     *  userId?: String
-     *  accountId?: String
+     *  userId: String
+     *  accountId: String
      *  tickers?: String
      * }} param0 Request parameters.
      * @returns {Promise<GetBalancesResp>} API response.
      */
     getBalances({ userId, accountId, tickers }?: {
-        userId?: string;
-        accountId?: string;
+        userId: string;
+        accountId: string;
         tickers?: string;
     }): Promise<GetBalancesResp>;
     /**
      * This endpoint will create and return a deposit address for the specified account. If the currency
      * is not supported by the connected provider, you will receive an 'unsupported' error.
      * @param {{
-     *  userId?: String
-     *  accountId?: String
-     *  ticker?: String
+     *  userId: String
+     *  accountId: String
+     *  ticker: String
      * }} param0 Request parameters.
      * @returns {Promise<CreateDepositAddressResp>} API response.
      */
     createDepositAddress({ userId, accountId, ticker }?: {
-        userId?: string;
-        accountId?: string;
-        ticker?: string;
+        userId: string;
+        accountId: string;
+        ticker: string;
     }): Promise<CreateDepositAddressResp>;
     /**
      * This endpoint will retrieve all deposit addresses for the specified account. If the currency
      * is not supported by the connected provider, you will receive an 'unsupported' error.
      * @param {{
-     *  userId?: String
-     *  accountId?: String
-     *  ticker?: String
+     *  userId: String
+     *  accountId: String
+     *  ticker: String
      * }} param0 Request parameters.
      * @returns {Promise<GetDepositAddressesResp>} API response.
      */
     getDepositAddresses({ userId, accountId, ticker }?: {
-        userId?: string;
-        accountId?: string;
-        ticker?: string;
+        userId: string;
+        accountId: string;
+        ticker: string;
     }): Promise<GetDepositAddressesResp>;
 }

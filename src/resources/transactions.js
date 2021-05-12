@@ -50,14 +50,21 @@ const { SDKError } = require('../err')
  *  transaction_type?: String
  *  parts?: [Part]
  *  fees?: [Fee]
- *  misc?: any
+ *  misc?: [String]
  *  fiat_calculated_at?: Number
  *  initiated_at?: Number
  *  confirmed_at?: Number
  *  resource_type?: String
+ *  request_id?: String
  * }} Transaction
  *
- * @typedef {[Transaction]} TransactionsResp
+ * @typedef {{
+ *  data?: [Transaction]
+ *  delay?: Number
+ *  last_updated_at?: Number
+ *  has_errors?: Boolean
+ *  request_id?: String
+ * }} GetListTransactionsResp
  */
 
 /**
@@ -83,11 +90,11 @@ class Transactions {
    *  userId?: String
    *  accountId?: String
    *  txId: String
-   *  ticker: String
+   *  ticker?: String
    * }} param0 Transaction request object.
    * @returns {Promise<Transaction>} A transaction.
    */
-  async getOne ({ userId, accountId, txId } = {}) {
+  async getOne ({ userId, accountId, txId, ticker } = {}) {
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')

@@ -1,12 +1,22 @@
 declare const _exports: (api: any) => ProvidersAPI;
 export = _exports;
-export type GetListProvidersResp = [import('./users').Provider];
-export type GetOneProviderResp = import('./users').Provider;
+export type GetListProvidersResp = {
+    data?: [import('./users').Provider];
+    request_id?: String;
+};
+export type GetOneProviderResp = {
+    request_id?: string;
+} & import('./users').Provider;
 export type ProvidersAPI = Providers;
 /**
- * @typedef {[import('./users').Provider]} GetListProvidersResp
+ * @typedef {{
+ *  data?: [import('./users').Provider]
+ *  request_id?: String
+ * }} GetListProvidersResp
  *
- * @typedef {import('./users').Provider} GetOneProviderResp
+ * @typedef {{
+ *  request_id?: String
+ * } & import('./users').Provider} GetOneProviderResp
  */
 /**
  * Providers API.

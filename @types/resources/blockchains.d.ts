@@ -6,13 +6,11 @@ export type Address = {
     name?: string;
 };
 export type Token = {
-    contract: {
-        address: string;
-    };
-    symbol?: string;
+    contract?: Contract;
+    ticker?: string;
     name?: string;
-    decimals: number;
-    total_supply: string;
+    decimals?: number;
+    total_supply?: string;
     is_erc20: boolean;
 };
 export type Block = {
@@ -25,6 +23,7 @@ export type Block = {
     timestamp?: number;
     version?: number;
     nonce?: string;
+    request_id?: string;
 };
 export type Contract = {
     address?: Address;
@@ -32,9 +31,7 @@ export type Contract = {
 };
 export type GetTokensResp = [
     {
-        contract?: {
-            address?: Address;
-        };
+        contract?: Contract;
         ticker?: string;
         name?: string;
         decimals?: number;
@@ -44,10 +41,13 @@ export type GetTokensResp = [
 ];
 export type TokenBalance = {
     token?: Token;
-    address?: string;
+    address?: Address;
     balance?: string;
 };
-export type GetBalancesResp = [TokenBalance] | number;
+export type GetBalancesResp = {
+    data?: [TokenBalance] | number;
+    request_id?: string;
+};
 export type ETHTransaction = {
     hash?: string;
     block_number?: number;
@@ -59,6 +59,8 @@ export type ETHTransaction = {
     gas_used?: number;
     input?: string;
     status?: number;
+    protocol_information?: any;
+    value_transfers?: any;
 };
 export type BTCNode = {
     node: {
@@ -93,8 +95,13 @@ export type BTCTransaction = {
     inputs?: [BTCNode];
 };
 export type TransactionData = ETHTransaction & BTCTransaction;
-export type GetTransactionsResp = [TransactionData];
-export type GetTransactionResp = TransactionData;
+export type GetTransactionsResp = {
+    data?: [TransactionData];
+    request_id?: string;
+};
+export type GetTransactionResp = TransactionData & {
+    request_id?: string;
+};
 export type GetTokenTransfersResp = [
     {
         transaction: ETHTransaction;
@@ -142,6 +149,7 @@ export type BlockchainsAPI = Blockchains;
  *  timestamp?: Number
  *  version?: Number
  *  nonce?: String
+ *  request_id?: String
  * }} Block
  *
  * @typedef {{
@@ -150,9 +158,7 @@ export type BlockchainsAPI = Blockchains;
  * }} Contract
  *
  * @typedef {[{
- *  contract?: {
- *    address?: Address
- *  }
+ *  contract?: Contract
  *  ticker?: String
  *  name?: String
  *  decimals?: Number
@@ -161,12 +167,15 @@ export type BlockchainsAPI = Blockchains;
  * }]} GetTokensResp
  *
  * @typedef {{
- *   token?: Token,
- *   address?: String,
+ *   token?: Token
+ *   address?: String
  *   balance?: String
  * }} TokenBalance
  *
- * @typedef {[TokenBalance] | Number} GetBalancesResp
+ * @typedef {{
+ *  data?: [TokenBalance] | Number
+ *  request_id?: String
+ * }} GetBalancesResp
  *
  * @typedef {{
  *  hash?: String
@@ -179,6 +188,8 @@ export type BlockchainsAPI = Blockchains;
  *  gas_used?: Number
  *  input?: String
  *  status?: Number
+ *  protocol_information?: any
+ *  value_transfers?: any
  * }} ETHTransaction
  *
  * @typedef {{
@@ -215,9 +226,14 @@ export type BlockchainsAPI = Blockchains;
  *
  * @typedef {ETHTransaction & BTCTransaction} TransactionData
  *
- * @typedef {[TransactionData]} GetTransactionsResp
+ * @typedef {{
+ *  data?: [TransactionData]
+ *  request_id?: String
+ * }} GetTransactionsResp
  *
- * @typedef {TransactionData} GetTransactionResp
+ * @typedef {{
+ *  request_id?: String
+ * } & TransactionData} GetTransactionResp
  *
  * @typedef {[{
  *  transaction: ETHTransaction,

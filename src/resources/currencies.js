@@ -27,6 +27,7 @@ const { SDKError } = require('../err')
  *  priority?: Number
  *  logo?: String
  *  decimals?: Number
+ *  supporting_providers?: [String]
  *  address?: String
  *  resource_type?: String
  * }} Currency
@@ -39,13 +40,19 @@ const { SDKError } = require('../err')
  *  resource_type?: String
  * }} ExchangeRate
  *
- * @typedef {[Currency]} GetListCurrenciesResp
+ * @typedef {{
+ *  data: [Currency]
+ *  request_id: String
+ * }} GetListCurrenciesResp
  *
  * @typedef {{
  *  request_id?: String
  * } & Currency} GetOneCurrencyResp
  *
- * @typedef {[ExchangeRate]} GetExchangeRatesResp
+ * @typedef {{
+ *  data?: [ExchangeRate]
+ *  request_id?: String
+ * }} GetExchangeRatesResp
  */
 
 /**
@@ -102,7 +109,7 @@ class Currencies {
    *  toCrypto?: Boolean
    *  limit?: Number
    *  cursor?: String
-   *  tickers?: [String] | String
+   *  tickers?: Array<String> | String
    * }} param0 Request parameters.
    * @returns {Promise<GetExchangeRatesResp>} API response.
    */
