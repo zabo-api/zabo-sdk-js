@@ -45,7 +45,6 @@ const { SDKError } = require('../err')
  *  timestamp?: Number
  *  version?: Number
  *  nonce?: String
- *  request_id?: String
  * }} Block
  *
  * @typedef {{
@@ -53,14 +52,17 @@ const { SDKError } = require('../err')
  *  bytecode?: String
  * }} Contract
  *
- * @typedef {[{
- *  contract?: Contract
- *  ticker?: String
- *  name?: String
- *  decimals?: Number
- *  total_supply?: String
- *  is_erc20: Boolean
- * }]} GetTokensResp
+ * @typedef {{
+ *  data?: [{
+ *    contract?: Contract
+ *    ticker?: String
+ *    name?: String
+ *    decimals?: Number
+ *    total_supply?: String
+ *    is_erc20: Boolean
+ *  }]
+ *  request_id?: String
+ * }} GetTokensResp
  *
  * @typedef {{
  *   token?: Token
@@ -131,21 +133,27 @@ const { SDKError } = require('../err')
  *  request_id?: String
  * } & TransactionData} GetTransactionResp
  *
- * @typedef {[{
- *  transaction: ETHTransaction,
- *  token: Token,
- *  from_address: Address,
- *  to_address: Address,
- *  value: String
- * }]} GetTokenTransfersResp
+ * @typedef {{
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ *  request_id?: String
+ * }} GetTokenTransfersResp
  *
- * @typedef {[{
- *  transaction: ETHTransaction,
- *  token: Token,
- *  from_address: Address,
- *  to_address: Address,
- *  value: String
- * }]} GetTokenTransferResp
+ * @typedef {{
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ *  request_id?: String
+ * }} GetTokenTransferResp
  */
 
 class Blockchains {
@@ -160,7 +168,7 @@ class Blockchains {
    * **NOTE:** Zabo lags the head of the blockchain by 10 blocks.
    * @param {'ethereum' | 'bitcoin' | {}} blockchain The blockchain name.
    * @param {Number} blockNumber Block number.
-   * @returns {Promise<Block>} API response.
+   * @returns {Promise<Block & { request_id?: String }>} API response.
    */
   async getBlock (blockchain, blockNumber) {
     utils.validateEnumParameter('blockchain', blockchain, ['bitcoin', 'ethereum'])
@@ -182,7 +190,7 @@ class Blockchains {
    * The address is required, and there must a smart contract deployed at the given address.
    * @param {('ethereum' | {})} blockchain The blockchain name.
    * @param {String} address The address for the contract.
-   * @returns {Promise<Contract>} API response.
+   * @returns {Promise<Contract & { request_id?: String }>} API response.
    */
   async getContract (blockchain, address) {
     utils.validateEnumParameter('blockchain', blockchain, ['ethereum'])

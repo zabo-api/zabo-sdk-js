@@ -67,10 +67,11 @@ const { SDKError } = require('../err')
  *  created_at?: Number
  *  updated_at?: Number
  *  resource_type?: String
- *  request_id?: String
  * }} User
  *
- * @typedef {User} CreateUserResp
+ * @typedef {{
+ *  request_id?: String
+ * } & User} CreateUserResp
  *
  * @typedef {{
  *  id?: String
@@ -84,7 +85,9 @@ const { SDKError } = require('../err')
  *
  * @typedef {AddAccountResp} RemoveAccountResp
  *
- * @typedef {User} GetOneUserResp
+ * @typedef {{
+ *  request_id?: String
+ * } & User} GetOneUserResp
  *
  * @typedef {{
  *  data?: [User]
@@ -110,7 +113,6 @@ const { SDKError } = require('../err')
  * }} Balance
  *
  * @typedef {{
- *  balances?: [Balance]
  *  request_id?: String
  * } & Account} GetAccountResp
  *

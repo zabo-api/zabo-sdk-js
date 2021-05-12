@@ -21,12 +21,15 @@ export type Order = {
     settled?: boolean;
     request_id?: string;
 };
-export type GetSymbolsResp = [
-    {
-        base_currency?: string;
-        quote_currency?: string;
-    }
-];
+export type GetSymbolsResp = {
+    data?: [
+        {
+            base_currency?: string;
+            quote_currency?: string;
+        }
+    ];
+    request_id?: string;
+};
 export type GetTickerInfoResp = {
     last_price?: string;
     last_size?: string;
@@ -38,11 +41,20 @@ export type GetTickerInfoResp = {
     timestamp?: number;
     request_id?: string;
 };
-export type GetOrdersResp = [Order];
-export type GetOrderResp = Order;
+export type GetOrdersResp = {
+    data?: [Order];
+    request_id?: string;
+};
+export type GetOrderResp = {
+    data?: Order;
+    request_id?: string;
+};
 export type CreateOrderResp = Pick<Order, 'id' | 'base_currency' | 'quote_currency' | 'buy_or_sell' | 'type' | 'provide_liquidity_only' | 'created_at' | 'status'>;
-export type CancelOrdersResp = [string];
-export type CancelOrderResp = [string];
+export type CancelOrdersResp = {
+    data?: [string];
+    request_id?: string;
+};
+export type CancelOrderResp = CancelOrdersResp;
 export type TradingAPI = Trading;
 /**
  * @typedef {{
@@ -67,10 +79,13 @@ export type TradingAPI = Trading;
  *  request_id?: String
  * }} Order
  *
- * @typedef {[{
- *  base_currency?: String
- *  quote_currency?: String
- * }]} GetSymbolsResp
+ * @typedef {{
+ *  data?: [{
+ *    base_currency?: String
+ *    quote_currency?: String
+ *  }]
+ *  request_id?: String
+ * }} GetSymbolsResp
  *
  * @typedef {{
  *  last_price?: String
@@ -84,13 +99,22 @@ export type TradingAPI = Trading;
  *  request_id?: String
  * }} GetTickerInfoResp
  *
- * @typedef {[Order]} GetOrdersResp
+ * @typedef {{
+ *  data?: [Order]
+ *  request_id?: String
+ * }} GetOrdersResp
  *
- * @typedef {Order} GetOrderResp
+ * @typedef {{
+ *  data?: Order
+ *  request_id?: String
+ * }} GetOrderResp
  *
  * @typedef {Pick<Order, 'id' | 'base_currency' | 'quote_currency' | 'buy_or_sell' | 'type' | 'provide_liquidity_only' | 'created_at' | 'status'>} CreateOrderResp
  *
- * @typedef {[String]} CancelOrdersResp
+ * @typedef {{
+ *  data?: [String]
+ *  request_id?: String
+ * }} CancelOrdersResp
  *
  * @typedef {CancelOrdersResp} CancelOrderResp
  */
@@ -180,5 +204,5 @@ declare class Trading {
      */
     cancelOrder({ orderId }?: {
         orderId: string;
-    }): Promise<CancelOrdersResp>;
+    }): Promise<CancelOrderResp>;
 }

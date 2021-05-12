@@ -23,22 +23,24 @@ export type Block = {
     timestamp?: number;
     version?: number;
     nonce?: string;
-    request_id?: string;
 };
 export type Contract = {
     address?: Address;
     bytecode?: string;
 };
-export type GetTokensResp = [
-    {
-        contract?: Contract;
-        ticker?: string;
-        name?: string;
-        decimals?: number;
-        total_supply?: string;
-        is_erc20: boolean;
-    }
-];
+export type GetTokensResp = {
+    data?: [
+        {
+            contract?: Contract;
+            ticker?: string;
+            name?: string;
+            decimals?: number;
+            total_supply?: string;
+            is_erc20: boolean;
+        }
+    ];
+    request_id?: string;
+};
 export type TokenBalance = {
     token?: Token;
     address?: Address;
@@ -102,24 +104,30 @@ export type GetTransactionsResp = {
 export type GetTransactionResp = {
     request_id?: string;
 } & TransactionData;
-export type GetTokenTransfersResp = [
-    {
-        transaction: ETHTransaction;
-        token: Token;
-        from_address: Address;
-        to_address: Address;
-        value: string;
-    }
-];
-export type GetTokenTransferResp = [
-    {
-        transaction: ETHTransaction;
-        token: Token;
-        from_address: Address;
-        to_address: Address;
-        value: string;
-    }
-];
+export type GetTokenTransfersResp = {
+    data?: [
+        {
+            transaction: ETHTransaction;
+            token: Token;
+            from_address: Address;
+            to_address: Address;
+            value: string;
+        }
+    ];
+    request_id?: string;
+};
+export type GetTokenTransferResp = {
+    data?: [
+        {
+            transaction: ETHTransaction;
+            token: Token;
+            from_address: Address;
+            to_address: Address;
+            value: string;
+        }
+    ];
+    request_id?: string;
+};
 export type BlockchainsAPI = Blockchains;
 /**
  * @typedef {{
@@ -147,7 +155,6 @@ export type BlockchainsAPI = Blockchains;
  *  timestamp?: Number
  *  version?: Number
  *  nonce?: String
- *  request_id?: String
  * }} Block
  *
  * @typedef {{
@@ -155,14 +162,17 @@ export type BlockchainsAPI = Blockchains;
  *  bytecode?: String
  * }} Contract
  *
- * @typedef {[{
- *  contract?: Contract
- *  ticker?: String
- *  name?: String
- *  decimals?: Number
- *  total_supply?: String
- *  is_erc20: Boolean
- * }]} GetTokensResp
+ * @typedef {{
+ *  data?: [{
+ *    contract?: Contract
+ *    ticker?: String
+ *    name?: String
+ *    decimals?: Number
+ *    total_supply?: String
+ *    is_erc20: Boolean
+ *  }]
+ *  request_id?: String
+ * }} GetTokensResp
  *
  * @typedef {{
  *   token?: Token
@@ -233,21 +243,27 @@ export type BlockchainsAPI = Blockchains;
  *  request_id?: String
  * } & TransactionData} GetTransactionResp
  *
- * @typedef {[{
- *  transaction: ETHTransaction,
- *  token: Token,
- *  from_address: Address,
- *  to_address: Address,
- *  value: String
- * }]} GetTokenTransfersResp
+ * @typedef {{
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ *  request_id?: String
+ * }} GetTokenTransfersResp
  *
- * @typedef {[{
- *  transaction: ETHTransaction,
- *  token: Token,
- *  from_address: Address,
- *  to_address: Address,
- *  value: String
- * }]} GetTokenTransferResp
+ * @typedef {{
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ *  request_id?: String
+ * }} GetTokenTransferResp
  */
 declare class Blockchains {
     constructor(api: any);
@@ -259,17 +275,21 @@ declare class Blockchains {
      * **NOTE:** Zabo lags the head of the blockchain by 10 blocks.
      * @param {'ethereum' | 'bitcoin' | {}} blockchain The blockchain name.
      * @param {Number} blockNumber Block number.
-     * @returns {Promise<Block>} API response.
+     * @returns {Promise<Block & { request_id?: String }>} API response.
      */
-    getBlock(blockchain: 'ethereum' | 'bitcoin' | {}, blockNumber: number): Promise<Block>;
+    getBlock(blockchain: 'ethereum' | 'bitcoin' | {}, blockNumber: number): Promise<Block & {
+        request_id?: string;
+    }>;
     /**
      * This function returns the address and bytecode for the contract at a given address.
      * The address is required, and there must a smart contract deployed at the given address.
      * @param {('ethereum' | {})} blockchain The blockchain name.
      * @param {String} address The address for the contract.
-     * @returns {Promise<Contract>} API response.
+     * @returns {Promise<Contract & { request_id?: String }>} API response.
      */
-    getContract(blockchain: ('ethereum' | {}), address: string): Promise<Contract>;
+    getContract(blockchain: ('ethereum' | {}), address: string): Promise<Contract & {
+        request_id?: string;
+    }>;
     /**
      * This function returns a list of tokens on the Ethereum blockchain in general,
      * or a specific token if the name is provided.

@@ -21,7 +21,10 @@
 const { SDKError } = require('../err')
 
 /**
- * @typedef {[import('./users').Balance]} GetAccountBalances
+ * @typedef {{
+ *  data?: [import('./users').Balance]
+ *  request_id?: String
+ * }} GetAccountBalancesResp
  */
 
 /**
@@ -87,7 +90,7 @@ class Accounts {
    * @param {{
    *  tickers?: [String]
    * }} param0 Request parameters.
-   * @returns {Promise<GetAccountBalances>} API response.
+   * @returns {Promise<GetAccountBalancesResp>} API response.
    */
   async getBalances ({ tickers } = {}) {
     if (!this.id) {

@@ -1,9 +1,15 @@
 declare const _exports: (api: any) => AccountsAPI;
 export = _exports;
-export type GetAccountBalances = [import('./users').Balance];
+export type GetAccountBalancesResp = {
+    data?: [import('./users').Balance];
+    request_id?: string;
+};
 export type AccountsAPI = Accounts;
 /**
- * @typedef {[import('./users').Balance]} GetAccountBalances
+ * @typedef {{
+ *  data?: [import('./users').Balance]
+ *  request_id?: String
+ * }} GetAccountBalancesResp
  */
 /**
  * Accounts API.
@@ -34,11 +40,11 @@ declare class Accounts {
      * @param {{
      *  tickers?: [String]
      * }} param0 Request parameters.
-     * @returns {Promise<GetAccountBalances>} API response.
+     * @returns {Promise<GetAccountBalancesResp>} API response.
      */
     getBalances({ tickers }?: {
         tickers?: [string];
-    }): Promise<GetAccountBalances>;
+    }): Promise<GetAccountBalancesResp>;
     /**
      * This endpoint will create and return a deposit address for the specified account.
      * If the currency is not supported by the connected provider, you will receive an 'unsupported' error.

@@ -46,9 +46,10 @@ export type User = {
     created_at?: number;
     updated_at?: number;
     resource_type?: string;
-    request_id?: string;
 };
-export type CreateUserResp = User;
+export type CreateUserResp = {
+    request_id?: string;
+} & User;
 export type AddAccountResp = {
     id?: string;
     application?: Application;
@@ -59,7 +60,9 @@ export type AddAccountResp = {
     request_id?: string;
 };
 export type RemoveAccountResp = AddAccountResp;
-export type GetOneUserResp = User;
+export type GetOneUserResp = {
+    request_id?: string;
+} & User;
 export type GetListUsersResp = {
     data?: [User];
     total?: number;
@@ -82,7 +85,6 @@ export type Balance = {
     resource_type?: string;
 };
 export type GetAccountResp = {
-    balances?: [Balance];
     request_id?: string;
 } & Account;
 export type GetBalancesResp = {
@@ -157,10 +159,11 @@ export type UsersAPI = Users;
  *  created_at?: Number
  *  updated_at?: Number
  *  resource_type?: String
- *  request_id?: String
  * }} User
  *
- * @typedef {User} CreateUserResp
+ * @typedef {{
+ *  request_id?: String
+ * } & User} CreateUserResp
  *
  * @typedef {{
  *  id?: String
@@ -174,7 +177,9 @@ export type UsersAPI = Users;
  *
  * @typedef {AddAccountResp} RemoveAccountResp
  *
- * @typedef {User} GetOneUserResp
+ * @typedef {{
+ *  request_id?: String
+ * } & User} GetOneUserResp
  *
  * @typedef {{
  *  data?: [User]
@@ -200,7 +205,6 @@ export type UsersAPI = Users;
  * }} Balance
  *
  * @typedef {{
- *  balances?: [Balance]
  *  request_id?: String
  * } & Account} GetAccountResp
  *
