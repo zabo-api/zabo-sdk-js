@@ -125,7 +125,7 @@ export type UsersAPI = Users;
  *    list?: [String]
  *    resource_type?: String
  *  }]
- *  available_scopes: [
+ *  available_scopes?: [
  *    {
  *      name?: String
  *      display_name?: String
