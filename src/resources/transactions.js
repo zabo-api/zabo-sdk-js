@@ -137,7 +137,7 @@ class Transactions {
    *  limit?: Number
    *  cursor?: String
    * }} param0 Transactions request object.
-   * @returns {Promise<TransactionsResp>} An API response with transactions within `data`.
+   * @returns {Promise<GetListTransactionsResp>} An API response with transactions within `data`.
    */
   async getList ({ userId, accountId, ticker = '', limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit)

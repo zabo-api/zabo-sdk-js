@@ -6,37 +6,40 @@ export = _exports;
 declare class ZaboSDK {
     status: string;
     /** @private */
-    private api: API;
+    private api;
     autoConnect: boolean;
     /**
+     * Account functions.
      * @type {import('./resources/accounts').AccountsAPI}
      */
     accounts: import('./resources/accounts').AccountsAPI;
     /**
+     * Blockchain functions.
      * @type {import('./resources/blockchains').BlockchainsAPI}
      */
     blockchains: import('./resources/blockchains').BlockchainsAPI;
     /**
+     * Currency functions.
      * @type {import('./resources/currencies').CurrenciesAPI}
      */
     currencies: import('./resources/currencies').CurrenciesAPI;
     /**
+     * Provider functions.
      * @type {import('./resources/providers').ProvidersAPI}
      */
     providers: import('./resources/providers').ProvidersAPI;
     /**
-     * @type {import('./resources/teams').TeamsAPI}
-     */
-    teams: import('./resources/teams').TeamsAPI;
-    /**
+     * Trading functions. Client-side only.
      * @type {import('./resources/trading').TradingAPI}
      */
     trading: import('./resources/trading').TradingAPI;
     /**
+     * Transaction functions.
      * @type {import('./resources/transactions').TransactionsAPI}
      */
     transactions: import('./resources/transactions').TransactionsAPI;
     /**
+     * User functions.
      * @type {import('./resources/users').UsersAPI}
      */
     users: import('./resources/users').UsersAPI;
@@ -97,4 +100,3 @@ declare class ZaboSDK {
     getTeam(): Promise<any>;
     get data(): any;
 }
-import API = require("./api");

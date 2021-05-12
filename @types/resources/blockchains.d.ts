@@ -99,9 +99,9 @@ export type GetTransactionsResp = {
     data?: [TransactionData];
     request_id?: string;
 };
-export type GetTransactionResp = TransactionData & {
+export type GetTransactionResp = {
     request_id?: string;
-};
+} & TransactionData;
 export type GetTokenTransfersResp = [
     {
         transaction: ETHTransaction;
@@ -129,13 +129,11 @@ export type BlockchainsAPI = Blockchains;
  * }} Address
  *
  * @typedef {{
- *  contract: {
- *    address: String
- *  },
- *  symbol?: String
+ *  contract?: Contract
+ *  ticker?: String
  *  name?: String
- *  decimals: Number
- *  total_supply: String
+ *  decimals?: Number
+ *  total_supply?: String
  *  is_erc20: Boolean
  * }} Token
  *
@@ -168,7 +166,7 @@ export type BlockchainsAPI = Blockchains;
  *
  * @typedef {{
  *   token?: Token
- *   address?: String
+ *   address?: Address
  *   balance?: String
  * }} TokenBalance
  *

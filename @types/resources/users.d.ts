@@ -24,7 +24,7 @@ export type Provider = {
         }
     ];
     status?: any;
-    type?: string;
+    scopes?: [string];
     is_beta?: boolean;
     connect_notice?: string;
     status_notice?: string;
@@ -89,7 +89,7 @@ export type GetBalancesResp = {
     data?: [Balance];
     delay?: number;
     request_id?: string;
-}
+};
 export type CreateDepositAddressResp = {
     asset?: import('./currencies').Currency;
     provider_ticker?: string;
@@ -107,7 +107,7 @@ export type GetDepositAddressesResp = {
         }
     ];
     request_id?: string;
-}
+};
 export type UsersAPI = Users;
 /**
  * @typedef {{
@@ -134,6 +134,9 @@ export type UsersAPI = Users;
  *  ]
  *  status?: any
  *  scopes?: [String]
+ *  is_beta?: Boolean
+ *  connect_notice?: String
+ *  status_notice?: String
  *  resource_type?: String
  * }} Provider
  *
@@ -192,7 +195,7 @@ export type UsersAPI = Users;
  *  fiat_asset_is_verified?: Boolean
  *  logo?: String
  *  updated_at?: Number
- *  misc?: any
+ *  misc?: [String]
  *  resource_type?: String
  * }} Balance
  *
@@ -215,12 +218,17 @@ export type UsersAPI = Users;
  *  request_id?: String
  * }} CreateDepositAddressResp
  *
- * @typedef {[{
- *  ticker?: String
- *  provider_ticker?: String
- *  address?: String
- *  resource_type?: String
- * }]} GetDepositAddressesResp
+ * @typedef {{
+ *  data?: [
+ *    {
+ *      ticker?: String
+ *      provider_ticker?: String
+ *      address?: String
+ *      resource_type?: String
+ *    }
+ *  ]
+ *  request_id?: String
+ * }} GetDepositAddressesResp
  */
 declare class Users {
     constructor(api: any);
@@ -284,15 +292,15 @@ declare class Users {
      * using the currencies function documented below. If no currencies are specified, then all
      * available currencies will be returned.
      * @param {{
-     *  userId: String
-     *  accountId: String
+     *  userId?: String
+     *  accountId?: String
      *  tickers?: String
      * }} param0 Request parameters.
      * @returns {Promise<GetBalancesResp>} API response.
      */
     getBalances({ userId, accountId, tickers }?: {
-        userId: string;
-        accountId: string;
+        userId?: string;
+        accountId?: string;
         tickers?: string;
     }): Promise<GetBalancesResp>;
     /**
