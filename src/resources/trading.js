@@ -42,10 +42,13 @@ const { SDKError } = require('../err')
  *  request_id?: String
  * }} Order
  *
- * @typedef {[{
- *  base_currency?: String
- *  quote_currency?: String
- * }]} GetSymbolsResp
+ * @typedef {{
+ *  data?: [{
+ *    base_currency?: String
+ *    quote_currency?: String
+ *  }]
+ *  request_id?: String
+ * }} GetSymbolsResp
  *
  * @typedef {{
  *  last_price?: String
@@ -59,13 +62,22 @@ const { SDKError } = require('../err')
  *  request_id?: String
  * }} GetTickerInfoResp
  *
- * @typedef {[Order]} GetOrdersResp
+ * @typedef {{
+ *  data?: [Order]
+ *  request_id?: String
+ * }} GetOrdersResp
  *
- * @typedef {Order} GetOrderResp
+ * @typedef {{
+ *  data?: Order
+ *  request_id?: String
+ * }} GetOrderResp
  *
  * @typedef {Pick<Order, 'id' | 'base_currency' | 'quote_currency' | 'buy_or_sell' | 'type' | 'provide_liquidity_only' | 'created_at' | 'status'>} CreateOrderResp
  *
- * @typedef {[String]} CancelOrdersResp
+ * @typedef {{
+ *  data?: [String]
+ *  request_id?: String
+ * }} CancelOrdersResp
  *
  * @typedef {CancelOrdersResp} CancelOrderResp
  */

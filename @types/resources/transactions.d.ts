@@ -33,7 +33,6 @@ export type Transaction = {
     initiated_at?: number;
     confirmed_at?: number;
     resource_type?: string;
-    request_id?: string;
 };
 export type GetListTransactionsResp = {
     data?: [Transaction];
@@ -79,7 +78,6 @@ export type TransactionsAPI = Transactions;
  *  initiated_at?: Number
  *  confirmed_at?: Number
  *  resource_type?: String
- *  request_id?: String
  * }} Transaction
  *
  * @typedef {{
@@ -110,14 +108,16 @@ declare class Transactions {
      *  txId: String
      *  ticker?: String
      * }} param0 Transaction request object.
-     * @returns {Promise<Transaction>} A transaction.
+     * @returns {Promise<Transaction & { request_id?: String }>} A transaction.
      */
     getOne({ userId, accountId, txId, ticker }?: {
         userId?: string;
         accountId?: string;
         txId: string;
         ticker?: string;
-    }): Promise<Transaction>;
+    }): Promise<Transaction & {
+        request_id?: string;
+    }>;
     /**
      * getList fetches a list of transaction for the given account.
      * @param {{

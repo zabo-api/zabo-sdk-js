@@ -55,7 +55,6 @@ const { SDKError } = require('../err')
  *  initiated_at?: Number
  *  confirmed_at?: Number
  *  resource_type?: String
- *  request_id?: String
  * }} Transaction
  *
  * @typedef {{
@@ -92,7 +91,7 @@ class Transactions {
    *  txId: String
    *  ticker?: String
    * }} param0 Transaction request object.
-   * @returns {Promise<Transaction>} A transaction.
+   * @returns {Promise<Transaction & { request_id?: String }>} A transaction.
    */
   async getOne ({ userId, accountId, txId, ticker } = {}) {
     if (utils.isNode()) {
