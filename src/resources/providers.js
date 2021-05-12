@@ -20,9 +20,14 @@ const utils = require('../utils')
 const { SDKError } = require('../err')
 
 /**
- * @typedef {[import('./users').Provider]} GetListProvidersResp
+ * @typedef {{
+ *  data?: [import('./users').Provider]
+ *  request_id?: String
+ * }} GetListProvidersResp
  *
- * @typedef {import('./users').Provider} GetOneProviderResp
+ * @typedef {{
+ *  request_id?: String
+ * } & import('./users').Provider} GetOneProviderResp
  */
 
 /**

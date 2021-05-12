@@ -27,13 +27,11 @@ const { SDKError } = require('../err')
  * }} Address
  *
  * @typedef {{
- *  contract: {
- *    address: String
- *  },
- *  symbol?: String
+ *  contract?: Contract
+ *  ticker?: String
  *  name?: String
- *  decimals: Number
- *  total_supply: String
+ *  decimals?: Number
+ *  total_supply?: String
  *  is_erc20: Boolean
  * }} Token
  *
@@ -47,6 +45,7 @@ const { SDKError } = require('../err')
  *  timestamp?: Number
  *  version?: Number
  *  nonce?: String
+ *  request_id?: String
  * }} Block
  *
  * @typedef {{
@@ -55,9 +54,7 @@ const { SDKError } = require('../err')
  * }} Contract
  *
  * @typedef {[{
- *  contract?: {
- *    address?: Address
- *  }
+ *  contract?: Contract
  *  ticker?: String
  *  name?: String
  *  decimals?: Number
@@ -66,12 +63,15 @@ const { SDKError } = require('../err')
  * }]} GetTokensResp
  *
  * @typedef {{
- *   token?: Token,
- *   address?: String,
+ *   token?: Token
+ *   address?: Address
  *   balance?: String
  * }} TokenBalance
  *
- * @typedef {[TokenBalance] | Number} GetBalancesResp
+ * @typedef {{
+ *  data?: [TokenBalance] | Number
+ *  request_id?: String
+ * }} GetBalancesResp
  *
  * @typedef {{
  *  hash?: String
@@ -84,6 +84,8 @@ const { SDKError } = require('../err')
  *  gas_used?: Number
  *  input?: String
  *  status?: Number
+ *  protocol_information?: any
+ *  value_transfers?: any
  * }} ETHTransaction
  *
  * @typedef {{
@@ -120,9 +122,14 @@ const { SDKError } = require('../err')
  *
  * @typedef {ETHTransaction & BTCTransaction} TransactionData
  *
- * @typedef {[TransactionData]} GetTransactionsResp
+ * @typedef {{
+ *  data?: [TransactionData]
+ *  request_id?: String
+ * }} GetTransactionsResp
  *
- * @typedef {TransactionData} GetTransactionResp
+ * @typedef {{
+ *  request_id?: String
+ * } & TransactionData} GetTransactionResp
  *
  * @typedef {[{
  *  transaction: ETHTransaction,

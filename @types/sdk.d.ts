@@ -5,7 +5,8 @@ export = _exports;
  */
 declare class ZaboSDK {
     status: string;
-    api: API;
+    /** @private */
+    private api: API;
     autoConnect: boolean;
     /**
      * @type {import('./resources/accounts').AccountsAPI}
@@ -89,7 +90,11 @@ declare class ZaboSDK {
      * @returns An instance of the SDK.
      */
     onEvent(fn: Function): ZaboSDK;
-    getTeam(): any;
+    /**
+     * This function will return your team resource. You must have access rights to the team.
+     * @returns {Promise<any>} Your team.
+     */
+    getTeam(): Promise<any>;
     get data(): any;
 }
 import API = require("./api");

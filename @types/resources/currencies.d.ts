@@ -7,6 +7,7 @@ export type Currency = {
     priority?: number;
     logo?: string;
     decimals?: number;
+    supporting_providers?: [string];
     address?: string;
     resource_type?: string;
 };
@@ -17,11 +18,17 @@ export type ExchangeRate = {
     timestamp?: number;
     resource_type?: string;
 };
-export type GetListCurrenciesResp = [Currency];
+export type GetListCurrenciesResp = {
+    data: [Currency];
+    request_id?: string;
+};
 export type GetOneCurrencyResp = {
     request_id?: string;
 } & Currency;
-export type GetExchangeRatesResp = [ExchangeRate];
+export type GetExchangeRatesResp = {
+    data?: [ExchangeRate];
+    request_id?: string;
+};
 export type CurrenciesAPI = Currencies;
 /**
  * @typedef {{
@@ -31,6 +38,7 @@ export type CurrenciesAPI = Currencies;
  *  priority?: Number
  *  logo?: String
  *  decimals?: Number
+ *  supporting_providers?: [String]
  *  address?: String
  *  resource_type?: String
  * }} Currency
@@ -43,13 +51,19 @@ export type CurrenciesAPI = Currencies;
  *  resource_type?: String
  * }} ExchangeRate
  *
- * @typedef {[Currency]} GetListCurrenciesResp
+ * @typedef {{
+ *  data?: [Currency?]
+ *  request_id?: String
+ * }} GetListCurrenciesResp
  *
  * @typedef {{
  *  request_id?: String
  * } & Currency} GetOneCurrencyResp
  *
- * @typedef {[ExchangeRate]} GetExchangeRatesResp
+ * @typedef {{
+ *  data?: [ExchangeRate]
+ *  request_id?: String
+ * }} GetExchangeRatesResp
  */
 /**
  * Currencies API.
@@ -86,7 +100,7 @@ declare class Currencies {
      *  toCrypto?: Boolean
      *  limit?: Number
      *  cursor?: String
-     *  tickers?: [String] | String
+     *  tickers?: Array<String> | String
      * }} param0 Request parameters.
      * @returns {Promise<GetExchangeRatesResp>} API response.
      */
@@ -94,6 +108,6 @@ declare class Currencies {
         toCrypto?: boolean;
         limit?: number;
         cursor?: string;
-        tickers?: [string] | string;
+        tickers?: Array<string> | string;
     }): Promise<GetExchangeRatesResp>;
 }
