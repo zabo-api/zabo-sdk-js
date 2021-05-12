@@ -1,5 +1,8 @@
 {
-  "include": ["src/**/*.js"],
+  "include": ["./src/**/*.js"],
+  "exclude": [
+    "./src/index.js",
+  ],
   "compilerOptions": {
     "lib": ["ES6"],
     "allowJs": true,
