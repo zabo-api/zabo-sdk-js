@@ -110,8 +110,26 @@ function sleep (milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
-const isBrowser = new Function("return typeof window !== 'undefined'") // eslint-disable-line
-const isNode = new Function("return typeof global !== 'undefined'") // eslint-disable-line
+const isBrowser = () => {
+  return (typeof window !== 'undefined' && ({}).toString.call(window) === '[object Window]')
+}
+
+const isReactNative = () => {
+  return typeof navigator !== 'undefined' && navigator.product === 'ReactNative'
+}
+
+const isNode = () => {
+  return typeof global !== 'undefined' && ({}).toString.call(global) === '[object global]'
+}
+
+const getUrlParam = (name, url) => {
+  name = name.replace(/[\[\]]/g, '\\$&')
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
+  const results = regex.exec(url)
+  if (!results) return null
+  if (!results[2]) return ''
+  return decodeURIComponent(results[2].replace(/\+/g, ' '))
+}
 
 module.exports = {
   generateHMACSignature,
@@ -125,5 +143,7 @@ module.exports = {
   createPaginator,
   sleep,
   isBrowser,
-  isNode
+  isNode,
+  isReactNative,
+  getUrlParam
 }
