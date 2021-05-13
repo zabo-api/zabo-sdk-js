@@ -43,7 +43,6 @@ const { SDKError } = require('../err')
  *    }
  *  ]
  *  status?: any
- *  scopes?: [String]
  *  is_beta?: Boolean
  *  connect_notice?: String
  *  status_notice?: String

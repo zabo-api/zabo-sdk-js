@@ -24,7 +24,6 @@ export type Provider = {
         }
     ];
     status?: any;
-    scopes?: [string];
     is_beta?: boolean;
     connect_notice?: string;
     status_notice?: string;
@@ -135,7 +134,6 @@ export type UsersAPI = Users;
  *    }
  *  ]
  *  status?: any
- *  scopes?: [String]
  *  is_beta?: Boolean
  *  connect_notice?: String
  *  status_notice?: String
