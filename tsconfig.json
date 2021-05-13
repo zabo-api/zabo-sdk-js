@@ -2,12 +2,14 @@
   "include": ["./src/**/*.js"],
   "exclude": [
     "./src/index.js",
+    "node_modules",
+    "dist"
   ],
   "compilerOptions": {
     "lib": ["ES6"],
     "allowJs": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "@types"
+    "outDir": "./dist/@types"
   }
 }
