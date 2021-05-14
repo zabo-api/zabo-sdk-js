@@ -85,7 +85,7 @@ class Currencies {
 
   /**
    * This endpoint provides information about a specific currency.
-   * @param {String} ticker 3-letter identifier for this currency or asset.
+   * @param {String} ticker Identifier for this currency or asset.
    * @returns {Promise<GetOneCurrencyResp>} API response.
    */
   async getOne (ticker) {

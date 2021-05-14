@@ -187,7 +187,7 @@ class Blockchains {
 
   /**
    * This function returns the address and bytecode for the contract at a given address.
-   * The address is required, and there must a smart contract deployed at the given address.
+   * The address is required, and there must be a smart contract deployed at the given address.
    * @param {('ethereum' | {})} blockchain The blockchain name.
    * @param {String} address The address for the contract.
    * @returns {Promise<Contract & { request_id?: String }>} API response.

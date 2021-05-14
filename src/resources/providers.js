@@ -60,7 +60,7 @@ class Providers {
 
   /**
    * This endpoint will return the requested provider resource.
-   * **Note:** The provider name is the all lowercase 'computer' name for the provider, not the display name.
+   * **Note:** The provider name is the 'computer' name for the provider, not the display name.
    * @param {String} name Name of the provider.
    * @returns {Promise<GetOneProviderResp>} API response.
    */
