@@ -122,15 +122,6 @@ const isNode = () => {
   return typeof global !== 'undefined' && ({}).toString.call(global) === '[object global]'
 }
 
-const getUrlParam = (name, url) => {
-  name = name.replace(/[\[\]]/g, '\\$&')
-  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
-  const results = regex.exec(url)
-  if (!results) return null
-  if (!results[2]) return ''
-  return decodeURIComponent(results[2].replace(/\+/g, ' '))
-}
-
 module.exports = {
   generateHMACSignature,
   setCookie,
@@ -144,6 +135,5 @@ module.exports = {
   sleep,
   isBrowser,
   isNode,
-  isReactNative,
-  getUrlParam
+  isReactNative
 }

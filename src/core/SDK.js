@@ -75,9 +75,11 @@ class ZaboSDK {
       })
 
       try {
-        const account = await this.accounts.get()
-        this.transactions._setAccount(account)
-        this.trading._setAccount(account)
+        if (utils.getZaboSession()) {
+          const account = await this.accounts.get()
+          this.transactions._setAccount(account)
+          this.trading._setAccount(account)
+        }
       } catch (err) {
         console.info('[Zabo] No account connected yet.')
       }
