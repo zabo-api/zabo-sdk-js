@@ -23,17 +23,6 @@ const ZaboSDK = require('./core/SDK')
  * SDK main class definition.
  */
 class SDK extends ZaboSDK {
-  constructor () {
-    super()
-
-    /** Zabo API connection status. */
-    this.status = 'offline'
-
-    /** @private */
-    this.api = null
-    this.autoConnect = true
-  }
-
   /**
    * Initialize the Zabo SDK.
    * @param {Object} params Zabo initialization config.
