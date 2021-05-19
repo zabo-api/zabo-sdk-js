@@ -19,13 +19,21 @@
 const API = require('./api')
 const ZaboSDK = require('./core/SDK')
 
+/**
+ * SDK main class definition.
+ */
 class SDK extends ZaboSDK {
+  /**
+   * Initialize the Zabo SDK.
+   * @param {Object} params Zabo initialization config.
+   */
   async initAPI (params) {
     this.api = new API({
       apiVersion: this.apiVersion,
       env: this.env,
       ...params
     })
+
     await this.setEndpointAliases()
   }
 }

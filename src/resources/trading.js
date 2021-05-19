@@ -19,16 +19,91 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
+/**
+ * @typedef {{
+ *  id?: String
+ *  base_currency?: String
+ *  quote_currency?: String
+ *  base_amount?: String
+ *  buy_or_sell?: 'buy' | 'sell'
+ *  quote_amount?: String
+ *  price?: String
+ *  time_in_force?: String
+ *  ttl?: Number
+ *  provide_liquidity_only?: Boolean
+ *  type?: 'limit' | 'market'
+ *  status?: String
+ *  created_at?: Number
+ *  done_at?: Number
+ *  done_reason?: String
+ *  filled_size?: String
+ *  fill_fees?: String
+ *  settled?: Boolean
+ *  request_id?: String
+ * }} Order
+ *
+ * @typedef {{
+ *  data?: [{
+ *    base_currency?: String
+ *    quote_currency?: String
+ *  }]
+ *  request_id?: String
+ * }} GetSymbolsResp
+ *
+ * @typedef {{
+ *  last_price?: String
+ *  last_size?: String
+ *  ask?: String
+ *  ask_size?: String
+ *  bid?: String
+ *  bid_size?: String
+ *  volume?: String
+ *  timestamp?: Number
+ *  request_id?: String
+ * }} GetTickerInfoResp
+ *
+ * @typedef {{
+ *  data?: [Order]
+ *  request_id?: String
+ * }} GetOrdersResp
+ *
+ * @typedef {{
+ *  data?: Order
+ *  request_id?: String
+ * }} GetOrderResp
+ *
+ * @typedef {Pick<Order, 'id' | 'base_currency' | 'quote_currency' | 'buy_or_sell' | 'type' | 'provide_liquidity_only' | 'created_at' | 'status'>} CreateOrderResp
+ *
+ * @typedef {{
+ *  data?: [String]
+ *  request_id?: String
+ * }} CancelOrdersResp
+ *
+ * @typedef {CancelOrdersResp} CancelOrderResp
+ */
+
+/**
+ * Trading API.
+ */
 class Trading {
   constructor (api) {
+    /** @private */
     this.api = api
     this.account = null
   }
 
+  /**
+   * @private
+   */
   _setAccount (account) {
     this.account = account
   }
 
+  /**
+   * This function returns the trading tickers available at the given account's provider.
+   * These pairs can be used in the remaining calls to the Zabo Trading API.
+   * @returns {Promise<GetSymbolsResp>} API response.
+   */
   async getSymbols () {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
@@ -41,6 +116,15 @@ class Trading {
     }
   }
 
+  /**
+   * This function returns the current market information available for the currency pair,
+   * at the provider, for the given account.
+   * @param {{
+   *  baseCurrency: String
+   *  quoteCurrency: String
+   * }} param0 Request parameters.
+   * @returns {Promise<GetTickerInfoResp>} API response.
+   */
   async getTickerInfo ({ baseCurrency, quoteCurrency } = {}) {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
@@ -57,6 +141,10 @@ class Trading {
     }
   }
 
+  /**
+   * This function returns all active orders for the given account.
+   * @returns {Promise<GetOrdersResp>} API response.
+   */
   async getOrders () {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
@@ -69,6 +157,13 @@ class Trading {
     }
   }
 
+  /**
+   * This function returns the specific order for the given order id.
+   * @param {{
+   *  orderId: String
+   * }} param0 Request parameters.
+   * @returns {Promise<GetOrderResp>} API response.
+   */
   async getOrder ({ orderId } = {}) {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
@@ -85,6 +180,21 @@ class Trading {
     }
   }
 
+  /**
+   * This function creates a new trade order.
+   * @param {{
+   *  baseCurrency: String
+   *  baseAmount?: String
+   *  quoteCurrency: String
+   *  quoteAmount?: String
+   *  buyOrSell: 'buy' | 'sell'
+   *  priceLimit?: String
+   *  timeInForce?: String
+   *  ttl?: Number
+   *  provideLiquidityOnly?: Boolean
+   * }} param0 Request parameters.
+   * @returns {Promise<CreateOrderResp>} API response.
+   */
   async createOrder ({ baseCurrency, quoteCurrency, buyOrSell, priceLimit, baseAmount, quoteAmount, provideLiquidityOnly, timeInForce, ttl } = {}) {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
@@ -120,6 +230,10 @@ class Trading {
     }
   }
 
+  /**
+   * This function cancels all open orders.
+   * @returns {Promise<CancelOrdersResp>} API response.
+   */
   async cancelOrders () {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
@@ -132,6 +246,13 @@ class Trading {
     }
   }
 
+  /**
+   * This function cancels the order with the given order id.
+   * @param {{
+   *  orderId: String
+   * }} param0 Request parameters.
+   * @returns {Promise<CancelOrderResp>} API response.
+   */
   async cancelOrder ({ orderId } = {}) {
     if (!this.account || !this.account.id) {
       throw new SDKError(400, '[Zabo] Not connected. See: https://zabo.com/docs#connecting-a-user')
@@ -149,6 +270,10 @@ class Trading {
   }
 }
 
+/**
+ * @typedef {Trading} TradingAPI
+ * @type {(api) => TradingAPI}
+ */
 module.exports = (api) => {
   return new Trading(api)
 }

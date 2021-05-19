@@ -18,13 +18,31 @@
 
 const sdk = require('./sdk')
 
-// Zabo main class definition
+/**
+ * Zabo main class definition.
+ */
 class Zabo {
+  /**
+   * Initialize the Zabo SDK.
+   * @param {{
+   *  clientId?: String
+   *  env: 'live' | 'sandbox'
+   *  apiKey?: String
+   *  secretKey?: String
+   *  autoConnect?: Boolean
+   *  apiVersion?: 'v0' | 'v1' | {}
+   * }} config Zabo initialization config.
+   * @returns {Promise<any>} The Zabo SDK.
+   */
   async init (config = {}) {
     await sdk.init(config)
     return sdk
   }
 
+  /**
+   * Get an instance of the ZaboSDK.
+   * @returns {any} An instance of ZaboSDK.
+   */
   get instance () {
     return sdk
   }
@@ -34,5 +52,8 @@ class Zabo {
   }
 }
 
-// Export Zabo instance
+/**
+ * @typedef {Zabo} ZaboClass
+ * @type {ZaboClass}
+ */
 module.exports = new Zabo()

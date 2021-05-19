@@ -19,12 +19,56 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
-// SDK main class definition
+/**
+ * Zabo main SDK class definition.
+ */
 class ZaboSDK {
   constructor () {
     this.status = 'offline'
     this.api = null
     this.autoConnect = true
+
+    /**
+     * Account functions.
+     * @type {import('../resources/accounts').AccountsAPI}
+     */
+    this.accounts = undefined
+
+    /**
+     * Blockchain functions.
+     * @type {import('../resources/blockchains').BlockchainsAPI}
+     */
+    this.blockchains = undefined
+
+    /**
+     * Currency functions.
+     * @type {import('../resources/currencies').CurrenciesAPI}
+     */
+    this.currencies = undefined
+
+    /**
+     * Provider functions.
+     * @type {import('../resources/providers').ProvidersAPI}
+     */
+    this.providers = undefined
+
+    /**
+     * Trading functions. Client-side only.
+     * @type {import('../resources/trading').TradingAPI}
+     */
+    this.trading = undefined
+
+    /**
+     * Transaction functions.
+     * @type {import('../resources/transactions').TransactionsAPI}
+     */
+    this.transactions = undefined
+
+    /**
+     * User functions.
+     * @type {import('../resources/users').UsersAPI}
+     */
+    this.users = undefined
   }
 
   async initAPI () {

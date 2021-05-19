@@ -19,8 +19,12 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
+/**
+ * Teams API.
+ */
 class Teams {
   constructor (api) {
+    /** @private */
     this.api = api
     this.id = null
     this.data = null
@@ -73,6 +77,10 @@ class Teams {
   }
 }
 
+/**
+ * @typedef {Teams} TeamsAPI
+ * @type {(api) => TeamsAPI}
+ */
 module.exports = (api, appId) => {
   return new Teams(api, appId)
 }
