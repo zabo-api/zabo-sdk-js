@@ -26,7 +26,6 @@ class SDK extends ZaboSDK {
   /**
    * Initialize the Zabo SDK.
    * @param {Object} params Zabo initialization config.
-   * @returns The Zabo SDK.
    */
   async initAPI (params) {
     this.api = new API({
