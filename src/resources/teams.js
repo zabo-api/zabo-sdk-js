@@ -55,8 +55,7 @@ class Teams {
       }
 
       try {
-        const origin = encodeURIComponent(window ? window.location.host : '')
-        this.data = await this.api.request('GET', `/teams/info?client_id=${this.api.clientId}&origin=${origin}`, '', true)
+        this.data = await this.api.request('GET', `/teams/info?client_id=${this.api.clientId}`, '', true)
       } catch (err) {
         throw new SDKError(err.error_type, err.message, err.request_id)
       }
