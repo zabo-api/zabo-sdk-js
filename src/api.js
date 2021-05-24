@@ -28,7 +28,9 @@ const { SDKError } = require('./err')
 const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS'
 const CONNECTION_FAILURE = 'CONNECTION_FAILURE'
 
-// Main API class definition
+/**
+ * Main API class definition
+ */
 class API {
   constructor (options) {
     Object.assign(this, options)
@@ -59,6 +61,9 @@ class API {
     this._isWaitingForConnector = false
   }
 
+  /**
+   * Connect to the Zabo API.
+   */
   async connect ({ provider, params } = {}) {
     let appId = null
 
@@ -115,6 +120,14 @@ class API {
     }
   }
 
+  /**
+   * Send an API request.
+   * @param {String} method HTTP method to use for the request.
+   * @param {String} path The endpoint for the API.
+   * @param {Object} data Additional data to send for the request.
+   * @param {Boolean} isPublic If the endpoint requires authentication.
+   * @returns
+   */
   async request (method, path, data, isPublic = false) {
     const request = this._buildRequest(method, path, data, isPublic)
 
@@ -318,5 +331,8 @@ class API {
   }
 }
 
-// Export API class
+/**
+ * Export API functions.
+ * @type {API}
+ */
 module.exports = API

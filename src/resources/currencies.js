@@ -19,11 +19,60 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
+/**
+ * @typedef {{
+ *  ticker?: String
+ *  name?: String
+ *  type?: String
+ *  priority?: Number
+ *  logo?: String
+ *  decimals?: Number
+ *  supporting_providers?: [String]
+ *  address?: String
+ *  resource_type?: String
+ * }} Currency
+ *
+ * @typedef {{
+ *  from?: String
+ *  to?: String
+ *  rate?: String
+ *  timestamp?: Number
+ *  resource_type?: String
+ * }} ExchangeRate
+ *
+ * @typedef {{
+ *  data?: [Currency]
+ *  request_id?: String
+ * }} GetListCurrenciesResp
+ *
+ * @typedef {{
+ *  request_id?: String
+ * } & Currency} GetOneCurrencyResp
+ *
+ * @typedef {{
+ *  data?: [ExchangeRate]
+ *  request_id?: String
+ * }} GetExchangeRatesResp
+ */
+
+/**
+ * Currencies API.
+ */
 class Currencies {
   constructor (api) {
+    /** @private */
     this.api = api
   }
 
+  /**
+   * This endpoint will return the full list of currencies available in the system.
+   * Use the providers endpoint to see the currencies supported by each provider.
+   * @param {{
+   *  limit?: Number
+   *  cursor?: String
+   * }} param0 Request parameters.
+   * @returns {Promise<GetListCurrenciesResp>} API response.
+   */
   async getList ({ limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit)
 
@@ -34,6 +83,11 @@ class Currencies {
     }
   }
 
+  /**
+   * This endpoint provides information about a specific currency.
+   * @param {String} ticker Identifier for this currency or asset.
+   * @returns {Promise<GetOneCurrencyResp>} API response.
+   */
   async getOne (ticker) {
     if (!ticker) {
       throw new SDKError(400, '[Zabo] Missing `ticker` input. See: https://zabo.com/docs#get-specific-currency')
@@ -46,6 +100,19 @@ class Currencies {
     }
   }
 
+  /**
+   * This function returns a list of exchange rates for the available cryptocurrencies/assets
+   * for a given fiat currency. Currently, USD is the only fiat currency available.
+   * Any supported assets can be used for the tickers parameter. This parameter is optional
+   * and, if left out, all supported cryptocurrencies/assets will be returned.
+   * @param {{
+   *  toCrypto?: Boolean
+   *  limit?: Number
+   *  cursor?: String
+   *  tickers?: Array<String> | String
+   * }} param0 Request parameters.
+   * @returns {Promise<GetExchangeRatesResp>} API response.
+   */
   async getExchangeRates ({ toCrypto = false, limit = 25, cursor = '', tickers = '' } = {}) {
     utils.validateListParameters(limit)
 
@@ -62,6 +129,10 @@ class Currencies {
   }
 }
 
+/**
+ * @typedef {Currencies} CurrenciesAPI
+ * @type {(api) => CurrenciesAPI}
+ */
 module.exports = (api) => {
   return new Currencies(api)
 }

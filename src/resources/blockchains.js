@@ -19,11 +19,157 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
+/**
+ * @typedef {{
+ *  hex: String
+ *  nonce?: Number
+ *  name?: String
+ * }} Address
+ *
+ * @typedef {{
+ *  contract?: Contract
+ *  ticker?: String
+ *  name?: String
+ *  decimals?: Number
+ *  total_supply?: String
+ *  is_erc20: Boolean
+ * }} Token
+ *
+ * @typedef {{
+ *  number?: Number
+ *  hash?: String
+ *  size?: Number
+ *  gas_limit?: Number
+ *  gas_used?: Number
+ *  transaction_count?: Number
+ *  timestamp?: Number
+ *  version?: Number
+ *  nonce?: String
+ * }} Block
+ *
+ * @typedef {{
+ *  address?: Address
+ *  bytecode?: String
+ * }} Contract
+ *
+ * @typedef {{
+ *  data?: [{
+ *    contract?: Contract
+ *    ticker?: String
+ *    name?: String
+ *    decimals?: Number
+ *    total_supply?: String
+ *    is_erc20: Boolean
+ *  }]
+ *  request_id?: String
+ * }} GetTokensResp
+ *
+ * @typedef {{
+ *   token?: Token
+ *   address?: Address
+ *   balance?: String
+ * }} TokenBalance
+ *
+ * @typedef {{
+ *  data?: [TokenBalance] | Number
+ *  request_id?: String
+ * }} GetBalancesResp
+ *
+ * @typedef {{
+ *  hash?: String
+ *  block_number?: Number
+ *  from_address?: Address
+ *  to_address?: Address
+ *  value?: String
+ *  gas?: Number
+ *  gas_price?: String
+ *  gas_used?: Number
+ *  input?: String
+ *  status?: Number
+ *  protocol_information?: any
+ *  value_transfers?: any
+ * }} ETHTransaction
+ *
+ * @typedef {{
+ *  node: {
+ *    output_script?: String
+ *    output_script_type?: String
+ *    addresses?: [{
+ *      address?: Address
+ *      index?: Number
+ *    }],
+ *    input_script?: String
+ *    input_sequence?: String
+ *    required_signatures?: Number
+ *    output_value?: Number
+ *  },
+ *  output_transaction?: {
+ *    hash?: String
+ *    block_number?: Number
+ *    outputs?: any
+ *    inputs?: any
+ *    size?: Number
+ *    lock_time?: Number
+ *    is_coinbase?: Boolean
+ *  },
+ *  output_index?: Number
+ *  input_transaction?: any
+ *  input_index?: any
+ * }} BTCNode
+ *
+ * @typedef {{
+ *  outputs?: [BTCNode]
+ *  inputs?: [BTCNode]
+ * }} BTCTransaction
+ *
+ * @typedef {ETHTransaction & BTCTransaction} TransactionData
+ *
+ * @typedef {{
+ *  data?: [TransactionData]
+ *  request_id?: String
+ * }} GetTransactionsResp
+ *
+ * @typedef {{
+ *  request_id?: String
+ * } & TransactionData} GetTransactionResp
+ *
+ * @typedef {{
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ *  request_id?: String
+ * }} GetTokenTransfersResp
+ *
+ * @typedef {{
+ *  data?: [{
+ *    transaction: ETHTransaction,
+ *    token: Token,
+ *    from_address: Address,
+ *    to_address: Address,
+ *    value: String
+ *  }]
+ *  request_id?: String
+ * }} GetTokenTransferResp
+ */
+
 class Blockchains {
   constructor (api) {
+    /** @private */
     this.api = api
   }
 
+  /**
+   * Fetches information regarding the requested block number.
+   * If the endpoint is called without a block number, then the latest block Zabo has will be returned.
+   * **NOTE:** Zabo lags the head of the blockchain by 10 blocks.
+   * @param {'ethereum' | 'bitcoin' | {}} blockchain The blockchain name.
+   * @param {Number} blockNumber Block number.
+   * @returns {Promise<Block & { request_id?: String }>} API response.
+   */
   async getBlock (blockchain, blockNumber) {
     utils.validateEnumParameter('blockchain', blockchain, ['bitcoin', 'ethereum'])
 
@@ -39,6 +185,13 @@ class Blockchains {
     }
   }
 
+  /**
+   * This function returns the address and bytecode for the contract at a given address.
+   * The address is required, and there must be a smart contract deployed at the given address.
+   * @param {('ethereum' | {})} blockchain The blockchain name.
+   * @param {String} address The address for the contract.
+   * @returns {Promise<Contract & { request_id?: String }>} API response.
+   */
   async getContract (blockchain, address) {
     utils.validateEnumParameter('blockchain', blockchain, ['ethereum'])
 
@@ -53,6 +206,16 @@ class Blockchains {
     }
   }
 
+  /**
+   * This function returns a list of tokens on the Ethereum blockchain in general,
+   * or a specific token if the name is provided.
+   * Names are not unique so, if a name is provided in the path, a list is still
+   * returned for all tokens that share the same name.
+   * **NOTE:** The name is case-sensitive!
+   * @param {'ethereum' | {}} blockchain The blockchain name.
+   * @param {String?} tokenName The name of the token.
+   * @returns {Promise<GetTokensResp>} API response.
+   */
   async getTokens (blockchain, tokenName) {
     utils.validateEnumParameter('blockchain', blockchain, ['ethereum'])
 
@@ -68,6 +231,14 @@ class Blockchains {
     }
   }
 
+  /**
+   * This function returns a list of balances of the assets which the given address
+   * or extended public key holds. If the response is for a Bitcoin network request,
+   * then the data response is simply the address', or xpub key's, balance in satoshis.
+   * @param {'ethereum' | 'bitcoin' | {}} blockchain The blockchain name.
+   * @param {String} address The blockchain address.
+   * @returns {Promise<GetBalancesResp>} API response.
+   */
   async getBalances (blockchain, address) {
     utils.validateEnumParameter('blockchain', blockchain, ['bitcoin', 'ethereum'])
 
@@ -82,6 +253,12 @@ class Blockchains {
     }
   }
 
+  /**
+   * This function returns a list of transactions executed by the given address or extended public key.
+   * @param {'ethereum' | 'bitcoin' | {}} blockchain The blockchain name.
+   * @param {String} address The blockchain address.
+   * @returns {Promise<GetTransactionsResp>} API response.
+   */
   async getTransactions (blockchain, address) {
     utils.validateEnumParameter('blockchain', blockchain, ['bitcoin', 'ethereum'])
 
@@ -96,6 +273,12 @@ class Blockchains {
     }
   }
 
+  /**
+   * This function returns a single transaction object related to the hash included in the request.
+   * @param {'ethereum' | 'bitcoin' | {}} blockchain The blockchain name.
+   * @param {String} transactionHash The transaction hash.
+   * @returns {Promise<GetTransactionResp>} API response.
+   */
   async getTransaction (blockchain, transactionHash) {
     utils.validateEnumParameter('blockchain', blockchain, ['bitcoin', 'ethereum'])
 
@@ -110,6 +293,12 @@ class Blockchains {
     }
   }
 
+  /**
+   * This function returns a list of token transfers directly involving the given address or extended public key.
+   * @param {'ethereum' | {}} blockchain The blockchain name.
+   * @param {String} address The blockchain address.
+   * @returns {Promise<GetTokenTransfersResp>} API response.
+   */
   async getTokenTransfers (blockchain, address) {
     utils.validateEnumParameter('blockchain', blockchain, ['ethereum'])
 
@@ -124,6 +313,12 @@ class Blockchains {
     }
   }
 
+  /**
+   * This function returns the token transfers which executed as a result of the given transaction hash.
+   * @param {'ethereum' | {}} blockchain The blockchain name.
+   * @param {String} transactionHash The transaction hash.
+   * @returns {Promise<GetTokenTransferResp>} API response.
+   */
   async getTokenTransfer (blockchain, transactionHash) {
     utils.validateEnumParameter('blockchain', blockchain, ['ethereum'])
 
@@ -139,6 +334,10 @@ class Blockchains {
   }
 }
 
+/**
+ * @typedef {Blockchains} BlockchainsAPI
+ * @type {(api) => BlockchainsAPI}
+ */
 module.exports = (api) => {
   return new Blockchains(api)
 }

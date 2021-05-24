@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/**
+ * The API endpoints.
+ * @param {import('../api')} api An API object.
+ * @param {Boolean} isNode Is the SDK running on Node.js.
+ * @returns {any}
+ */
 module.exports = async (api, isNode) => {
   if (isNode) {
     return {

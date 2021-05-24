@@ -32,7 +32,6 @@ class SDKError extends Error {
   }
 }
 
-// Export Zabo Error class
 module.exports = {
   SDKError
 }

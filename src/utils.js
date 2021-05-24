@@ -87,12 +87,12 @@ function validateEnumParameter (name, value, options, optional = false) {
   }
 }
 
+function Paginator (obj) {
+  Object.assign(this, obj || {})
+}
+
 function createPaginator (payload, api) {
   const { list_cursor = {}, ...data } = payload || {}
-
-  function Paginator (obj) {
-    Object.assign(this, obj || {})
-  }
 
   Paginator.prototype.hasMore = list_cursor.has_more
   Paginator.prototype.limit = list_cursor.limit
@@ -100,6 +100,7 @@ function createPaginator (payload, api) {
     if (list_cursor.has_more && list_cursor.next_uri) {
       return api.request('GET', list_cursor.next_uri)
     }
+
     return new Paginator()
   }
 
@@ -110,8 +111,17 @@ function sleep (milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
-const isBrowser = new Function("return typeof window !== 'undefined'") // eslint-disable-line
-const isNode = new Function("return typeof global !== 'undefined'") // eslint-disable-line
+const isBrowser = () => {
+  return (typeof window !== 'undefined' && ({}).toString.call(window) === '[object Window]')
+}
+
+const isReactNative = () => {
+  return typeof navigator !== 'undefined' && navigator.product === 'ReactNative'
+}
+
+const isNode = () => {
+  return typeof global !== 'undefined' && ({}).toString.call(global) === '[object global]'
+}
 
 module.exports = {
   generateHMACSignature,
@@ -125,5 +135,6 @@ module.exports = {
   createPaginator,
   sleep,
   isBrowser,
-  isNode
+  isNode,
+  isReactNative
 }

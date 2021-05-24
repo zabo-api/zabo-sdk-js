@@ -19,17 +19,81 @@
 const utils = require('../utils')
 const { SDKError } = require('../err')
 
+/**
+ * @typedef {{
+ *  direction?: 'sent' | 'received'
+ *  ticker?: String
+ *  provider_ticker?: String
+ *  amount?: String
+ *  asset_is_verified?: Boolean
+ *  fiat_ticker?: String
+ *  fiat_value?: String
+ *  fiat_asset_is_verified?: Boolean
+ *  other_parties?: [String]
+ * }} Part
+ *
+ * @typedef {{
+ *  type?: String
+ *  ticker?: String
+ *  provider_ticker?: String
+ *  amount?: String
+ *  asset_is_verified?: Boolean
+ *  fiat_ticker?: String
+ *  fiat_value?: String
+ *  fiat_asset_is_verified?: Boolean
+ *  resource_type?: String
+ * }} Fee
+ *
+ * @typedef {{
+ *  id?: String
+ *  status?: String
+ *  transaction_type?: String
+ *  parts?: [Part]
+ *  fees?: [Fee]
+ *  misc?: [String]
+ *  fiat_calculated_at?: Number
+ *  initiated_at?: Number
+ *  confirmed_at?: Number
+ *  resource_type?: String
+ * }} Transaction
+ *
+ * @typedef {{
+ *  data?: [Transaction]
+ *  delay?: Number
+ *  last_updated_at?: Number
+ *  has_errors?: Boolean
+ *  request_id?: String
+ * }} GetListTransactionsResp
+ */
+
+/**
+ * Transactions API.
+ */
 class Transactions {
   constructor (api) {
+    /** @private */
     this.api = api
     this.account = null
   }
 
+  /**
+   * @private
+   */
   _setAccount (account) {
     this.account = account
   }
 
-  async getOne ({ userId, accountId, txId } = {}) {
+  /**
+   * getOne fetches a specific transaction for the given account.
+   * @param {{
+   *  userId?: String
+   *  accountId?: String
+   *  txId: String
+   *  ticker?: String
+   * }} param0 Transaction request object.
+   * @returns {Promise<Transaction & { request_id?: String }>} A transaction.
+   */
+  async getOne ({ userId, accountId, txId, ticker } = {}) {
     if (utils.isNode()) {
       if (!userId) {
         throw new SDKError(400, '[Zabo] Missing `userId` parameter. See: https://zabo.com/docs#get-a-specific-transaction')
@@ -63,6 +127,17 @@ class Transactions {
     }
   }
 
+  /**
+   * getList fetches a list of transaction for the given account.
+   * @param {{
+   *  userId: String
+   *  accountId?: String
+   *  ticker?: String
+   *  limit?: Number
+   *  cursor?: String
+   * }} param0 Transactions request object.
+   * @returns {Promise<GetListTransactionsResp>} An API response with transactions within `data`.
+   */
   async getList ({ userId, accountId, ticker = '', limit = 25, cursor = '' } = {}) {
     utils.validateListParameters(limit)
 
@@ -102,7 +177,10 @@ class Transactions {
   }
 }
 
-// Export class instance
+/**
+ * @typedef {Transactions} TransactionsAPI
+ * @type {(api) => TransactionsAPI}
+ */
 module.exports = (api) => {
   return new Transactions(api)
 }
