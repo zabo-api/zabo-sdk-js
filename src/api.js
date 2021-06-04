@@ -293,7 +293,7 @@ class API {
       iframe.style.width = '100%'
       iframe.style.height = '100%'
       iframe.frameBorder = 0
-      iframe.allow = 'usb *'
+      iframe.allow = 'usb *; hid *'
       iframe.name = name
 
       document.body.appendChild(iframe)
