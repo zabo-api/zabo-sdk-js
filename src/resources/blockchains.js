@@ -338,6 +338,7 @@ class Blockchains {
  * @typedef {Blockchains} BlockchainsAPI
  * @type {(api) => BlockchainsAPI}
  */
-module.exports = (api) => {
+function BlockchainsAPI (api) {
   return new Blockchains(api)
 }
+module.exports = BlockchainsAPI

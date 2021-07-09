@@ -181,6 +181,7 @@ class Transactions {
  * @typedef {Transactions} TransactionsAPI
  * @type {(api) => TransactionsAPI}
  */
-module.exports = (api) => {
+function TransactionsAPI (api) {
   return new Transactions(api)
 }
+module.exports = TransactionsAPI

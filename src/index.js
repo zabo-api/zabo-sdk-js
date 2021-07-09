@@ -56,4 +56,5 @@ class Zabo {
  * @typedef {Zabo} ZaboClass
  * @type {ZaboClass}
  */
-module.exports = new Zabo()
+const ZaboInstance = new Zabo()
+module.exports = ZaboInstance
