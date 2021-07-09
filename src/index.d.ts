@@ -1,6 +1,13 @@
-declare const _exports: ZaboClass;
-export = _exports
-export type ZaboClass = Zabo;
+export = ZaboInstance;
+/**
+ * @typedef {Zabo} ZaboClass
+ * @type {ZaboClass}
+ */
+declare const ZaboInstance: ZaboClass;
+declare namespace ZaboInstance {
+    export { ZaboClass };
+}
+type ZaboClass = Zabo;
 /**
  * Zabo main class definition.
  */

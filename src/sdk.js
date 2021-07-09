@@ -37,5 +37,5 @@ class SDK extends ZaboSDK {
     await this.setEndpointAliases()
   }
 }
-
-module.exports = new SDK()
+const SDKInstance = new SDK()
+module.exports = SDKInstance

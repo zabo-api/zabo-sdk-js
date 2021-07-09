@@ -20,7 +20,7 @@ const DEFAULT_API_HOST = 'https://api.zabo.com'
 const DEFAULT_CONNECT_PATH = 'https://connect.zabo.com'
 const DEFAULT_API_VERSION = 'v1'
 
-module.exports = (host, connectHost, apiVersion) => {
+function Constants (host, connectHost, apiVersion) {
   host = host || DEFAULT_API_HOST
   connectHost = connectHost || DEFAULT_CONNECT_PATH
   apiVersion = apiVersion || DEFAULT_API_VERSION
@@ -36,3 +36,4 @@ module.exports = (host, connectHost, apiVersion) => {
     }
   }
 }
+module.exports = Constants

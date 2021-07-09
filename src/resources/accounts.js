@@ -175,6 +175,7 @@ class Accounts {
  * @typedef {Accounts} AccountsAPI
  * @type {(api) => AccountsAPI}
  */
-module.exports = (api) => {
+function AccountsAPI (api) {
   return new Accounts(api)
 }
+module.exports = AccountsAPI

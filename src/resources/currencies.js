@@ -133,6 +133,7 @@ class Currencies {
  * @typedef {Currencies} CurrenciesAPI
  * @type {(api) => CurrenciesAPI}
  */
-module.exports = (api) => {
+function CurrenciesAPI (api) {
   return new Currencies(api)
 }
+module.exports = CurrenciesAPI

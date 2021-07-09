@@ -274,6 +274,7 @@ class Trading {
  * @typedef {Trading} TradingAPI
  * @type {(api) => TradingAPI}
  */
-module.exports = (api) => {
+function TradingAPI (api) {
   return new Trading(api)
 }
+module.exports = TradingAPI

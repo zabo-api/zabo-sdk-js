@@ -20,7 +20,7 @@
  * @param {Boolean} isNode Is the SDK running on Node.js.
  * @returns {any}
  */
-module.exports = async (api, isNode) => {
+async function Resources (api, isNode) {
   if (isNode) {
     return {
       users: require('./users')(api),
@@ -43,3 +43,4 @@ module.exports = async (api, isNode) => {
 
   return resources
 }
+module.exports = Resources

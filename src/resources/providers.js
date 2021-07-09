@@ -81,6 +81,7 @@ class Providers {
  * @typedef {Providers} ProvidersAPI
  * @type {(api) => ProvidersAPI}
  */
-module.exports = (api) => {
+function ProvidersAPI (api) {
   return new Providers(api)
 }
+module.exports = ProvidersAPI
