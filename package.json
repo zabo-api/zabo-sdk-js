@@ -42,7 +42,7 @@
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "babel-loader": "^8.0.6",
-    "jsdom": "15.2.1",
+    "jsdom": "16.5.0",
     "jsdom-global": "3.0.2",
     "mocha": "^6.2.0",
     "should": "^13.2.3",
